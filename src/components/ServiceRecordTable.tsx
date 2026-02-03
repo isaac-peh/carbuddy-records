@@ -19,7 +19,6 @@ import {
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -199,307 +198,233 @@ const ServiceRecordTable = () => {
   };
 
   return (
-    <Card className="bg-card border-border shadow-card">
-      <CardHeader className="pb-4">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <CardTitle className="text-lg font-semibold text-foreground flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-              <FileText className="w-4 h-4 text-primary" />
-            </div>
-            Service Records
-            <Badge variant="secondary" className="ml-2">
-              {filteredRecords.length} records
-            </Badge>
-          </CardTitle>
-
-          <div className="flex flex-col sm:flex-row gap-3">
-            {/* Search */}
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-              <Input
-                type="text"
-                placeholder="Search services, parts..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 w-full sm:w-64 bg-secondary border-border"
-              />
-            </div>
-
-            {/* Filter */}
-            <Select value={filterType} onValueChange={setFilterType}>
-              <SelectTrigger className="w-full sm:w-48 bg-secondary border-border">
-                <Filter className="w-4 h-4 mr-2 text-muted-foreground" />
-                <SelectValue placeholder="Filter by type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Services</SelectItem>
-                <SelectItem value="maintenance">Maintenance</SelectItem>
-                <SelectItem value="tire">Tire Service</SelectItem>
-                <SelectItem value="brake">Brake Service</SelectItem>
-                <SelectItem value="charging">Charging System</SelectItem>
-                <SelectItem value="detailing">Detailing</SelectItem>
-              </SelectContent>
-            </Select>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+            <FileText className="w-5 h-5 text-primary" />
+          </div>
+          <div>
+            <h2 className="text-xl font-semibold text-foreground">Service Records</h2>
+            <p className="text-sm text-muted-foreground">{filteredRecords.length} records found</p>
           </div>
         </div>
-      </CardHeader>
 
-      <CardContent className="p-0">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b border-border bg-secondary/50">
-                <th className="text-left py-3 px-4 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                  Workshop
-                </th>
-                <th className="text-left py-3 px-4 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                  Service Type
-                </th>
-                <th className="text-left py-3 px-4 text-xs font-semibold text-muted-foreground uppercase tracking-wider hidden md:table-cell">
-                  Parts Changed
-                </th>
-                <th className="text-left py-3 px-4 text-xs font-semibold text-muted-foreground uppercase tracking-wider hidden lg:table-cell">
-                  Work Done
-                </th>
-                <th className="text-left py-3 px-4 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                  Date
-                </th>
-                <th className="text-left py-3 px-4 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                  Mileage
-                </th>
-                <th className="w-10"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredRecords.map((record) => {
-                const ServiceIcon = getServiceIcon(record.serviceType);
-                const isExpanded = expandedRow === record.id;
+        <div className="flex flex-col sm:flex-row gap-3">
+          {/* Search */}
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input
+              type="text"
+              placeholder="Search services, parts..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10 w-full sm:w-64 bg-secondary/50 border-0"
+            />
+          </div>
 
-                return (
-                  <>
-                    <tr
-                      key={record.id}
-                      className={`border-b border-border/50 hover:bg-secondary/30 transition-colors cursor-pointer ${
-                        isExpanded ? "bg-secondary/50" : ""
-                      }`}
-                      onClick={() => toggleExpand(record.id)}
-                    >
-                      {/* Workshop */}
-                      <td className="py-4 px-4">
-                        <div className="flex items-center gap-3">
-                          <div
-                            className={`w-10 h-10 rounded-lg ${record.workshopColor} flex items-center justify-center text-white font-bold text-sm`}
-                          >
-                            {record.workshopLogo}
-                          </div>
-                          <div>
-                            <p className="text-sm font-medium text-foreground">
-                              {record.workshopName}
-                            </p>
-                            <p className="text-xs text-muted-foreground flex items-center gap-1">
-                              <MapPin className="w-3 h-3" />
-                              {record.location}
-                            </p>
-                          </div>
-                        </div>
-                      </td>
-
-                      {/* Service Type */}
-                      <td className="py-4 px-4">
-                        <div className="flex items-center gap-2">
-                          <div className="w-8 h-8 rounded-md bg-accent/10 flex items-center justify-center">
-                            <ServiceIcon className="w-4 h-4 text-accent" />
-                          </div>
-                          <span className="text-sm text-foreground">
-                            {record.serviceType}
-                          </span>
-                        </div>
-                      </td>
-
-                      {/* Parts Changed */}
-                      <td className="py-4 px-4 hidden md:table-cell">
-                        <div className="flex flex-wrap gap-1 max-w-xs">
-                          {record.partsChanged.slice(0, 2).map((part, i) => (
-                            <Badge
-                              key={i}
-                              variant="outline"
-                              className="text-xs bg-secondary"
-                            >
-                              {part.length > 20 ? `${part.slice(0, 20)}...` : part}
-                            </Badge>
-                          ))}
-                          {record.partsChanged.length > 2 && (
-                            <Badge variant="secondary" className="text-xs">
-                              +{record.partsChanged.length - 2}
-                            </Badge>
-                          )}
-                        </div>
-                      </td>
-
-                      {/* Work Done */}
-                      <td className="py-4 px-4 hidden lg:table-cell">
-                        <div className="flex flex-wrap gap-1 max-w-xs">
-                          {record.workDone.slice(0, 2).map((work, i) => (
-                            <span
-                              key={i}
-                              className="text-xs text-muted-foreground"
-                            >
-                              {work}
-                              {i < Math.min(record.workDone.length - 1, 1) && ", "}
-                            </span>
-                          ))}
-                          {record.workDone.length > 2 && (
-                            <span className="text-xs text-accent">
-                              +{record.workDone.length - 2} more
-                            </span>
-                          )}
-                        </div>
-                      </td>
-
-                      {/* Date */}
-                      <td className="py-4 px-4">
-                        <div className="flex items-center gap-2">
-                          <Calendar className="w-4 h-4 text-muted-foreground" />
-                          <span className="text-sm text-foreground">
-                            {record.date}
-                          </span>
-                        </div>
-                      </td>
-
-                      {/* Mileage */}
-                      <td className="py-4 px-4">
-                        <div className="flex items-center gap-2">
-                          <Gauge className="w-4 h-4 text-muted-foreground" />
-                          <span className="text-sm font-medium text-foreground">
-                            {record.mileage.toLocaleString()} km
-                          </span>
-                        </div>
-                      </td>
-
-                      {/* Expand Button */}
-                      <td className="py-4 px-4">
-                        <Button variant="ghost" size="icon" className="h-8 w-8">
-                          {isExpanded ? (
-                            <ChevronUp className="w-4 h-4" />
-                          ) : (
-                            <ChevronDown className="w-4 h-4" />
-                          )}
-                        </Button>
-                      </td>
-                    </tr>
-
-                    {/* Expanded Details */}
-                    {isExpanded && (
-                      <tr key={`${record.id}-expanded`}>
-                        <td colSpan={7} className="bg-secondary/30 border-b border-border">
-                          <div className="p-6 animate-fade-in">
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                              {/* Parts Changed */}
-                              <div className="space-y-2">
-                                <h4 className="text-sm font-semibold text-foreground flex items-center gap-2">
-                                  <Settings className="w-4 h-4 text-accent" />
-                                  Parts Changed
-                                </h4>
-                                <ul className="space-y-1">
-                                  {record.partsChanged.map((part, i) => (
-                                    <li
-                                      key={i}
-                                      className="text-sm text-muted-foreground flex items-center gap-2"
-                                    >
-                                      <CheckCircle className="w-3 h-3 text-success" />
-                                      {part}
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-
-                              {/* Work Done */}
-                              <div className="space-y-2">
-                                <h4 className="text-sm font-semibold text-foreground flex items-center gap-2">
-                                  <Wrench className="w-4 h-4 text-accent" />
-                                  Work Performed
-                                </h4>
-                                <ul className="space-y-1">
-                                  {record.workDone.map((work, i) => (
-                                    <li
-                                      key={i}
-                                      className="text-sm text-muted-foreground flex items-center gap-2"
-                                    >
-                                      <CheckCircle className="w-3 h-3 text-success" />
-                                      {work}
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-
-                              {/* Service Details */}
-                              <div className="space-y-3">
-                                <h4 className="text-sm font-semibold text-foreground flex items-center gap-2">
-                                  <FileText className="w-4 h-4 text-accent" />
-                                  Service Details
-                                </h4>
-                                <div className="space-y-2">
-                                  <div className="flex justify-between text-sm">
-                                    <span className="text-muted-foreground">Technician:</span>
-                                    <span className="text-foreground font-medium">
-                                      {record.technician}
-                                    </span>
-                                  </div>
-                                  <div className="flex justify-between text-sm">
-                                    <span className="text-muted-foreground">Duration:</span>
-                                    <span className="text-foreground font-medium flex items-center gap-1">
-                                      <Clock className="w-3 h-3" />
-                                      {record.duration}
-                                    </span>
-                                  </div>
-                                  <div className="flex justify-between text-sm">
-                                    <span className="text-muted-foreground">Invoice:</span>
-                                    <span className="text-accent font-medium">
-                                      {record.invoiceNumber}
-                                    </span>
-                                  </div>
-                                  <div className="flex justify-between text-sm">
-                                    <span className="text-muted-foreground">Cost:</span>
-                                    <span className="text-foreground font-bold">
-                                      RM {record.cost.toLocaleString()}
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-
-                              {/* Notes */}
-                              <div className="space-y-2">
-                                <h4 className="text-sm font-semibold text-foreground flex items-center gap-2">
-                                  <FileText className="w-4 h-4 text-accent" />
-                                  Technician Notes
-                                </h4>
-                                <p className="text-sm text-muted-foreground bg-card p-3 rounded-lg border border-border">
-                                  "{record.notes}"
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                    )}
-                  </>
-                );
-              })}
-            </tbody>
-          </table>
-
-          {filteredRecords.length === 0 && (
-            <div className="text-center py-12">
-              <Search className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-              <p className="text-muted-foreground">No service records found</p>
-              <p className="text-sm text-muted-foreground">
-                Try adjusting your search or filter
-              </p>
-            </div>
-          )}
+          {/* Filter */}
+          <Select value={filterType} onValueChange={setFilterType}>
+            <SelectTrigger className="w-full sm:w-48 bg-secondary/50 border-0">
+              <Filter className="w-4 h-4 mr-2 text-muted-foreground" />
+              <SelectValue placeholder="Filter by type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Services</SelectItem>
+              <SelectItem value="maintenance">Maintenance</SelectItem>
+              <SelectItem value="tire">Tire Service</SelectItem>
+              <SelectItem value="brake">Brake Service</SelectItem>
+              <SelectItem value="charging">Charging System</SelectItem>
+              <SelectItem value="detailing">Detailing</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+
+      {/* Records List */}
+      <div className="space-y-3">
+        {filteredRecords.map((record) => {
+          const ServiceIcon = getServiceIcon(record.serviceType);
+          const isExpanded = expandedRow === record.id;
+
+          return (
+            <div key={record.id} className="group">
+              {/* Main Row */}
+              <div
+                className={`flex items-center gap-4 p-4 rounded-xl cursor-pointer transition-all ${
+                  isExpanded 
+                    ? "bg-secondary/70" 
+                    : "hover:bg-secondary/50"
+                }`}
+                onClick={() => toggleExpand(record.id)}
+              >
+                {/* Workshop Logo */}
+                <div
+                  className={`w-12 h-12 rounded-xl ${record.workshopColor} flex items-center justify-center text-white font-bold text-lg flex-shrink-0`}
+                >
+                  {record.workshopLogo}
+                </div>
+
+                {/* Workshop Info */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <p className="text-sm font-semibold text-foreground">
+                      {record.workshopName}
+                    </p>
+                    <Badge variant="secondary" className="text-xs">
+                      {record.serviceType}
+                    </Badge>
+                  </div>
+                  <p className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
+                    <MapPin className="w-3 h-3" />
+                    {record.location}
+                  </p>
+                </div>
+
+                {/* Parts & Work (hidden on mobile) */}
+                <div className="hidden md:block flex-1 min-w-0">
+                  <div className="flex flex-wrap gap-1">
+                    {record.partsChanged.slice(0, 2).map((part, i) => (
+                      <Badge key={i} variant="outline" className="text-xs">
+                        {part.length > 18 ? `${part.slice(0, 18)}...` : part}
+                      </Badge>
+                    ))}
+                    {record.partsChanged.length > 2 && (
+                      <Badge variant="secondary" className="text-xs">
+                        +{record.partsChanged.length - 2}
+                      </Badge>
+                    )}
+                  </div>
+                </div>
+
+                {/* Date & Mileage */}
+                <div className="hidden sm:flex flex-col items-end gap-1 flex-shrink-0">
+                  <span className="text-sm text-foreground flex items-center gap-1.5">
+                    <Calendar className="w-3.5 h-3.5 text-muted-foreground" />
+                    {record.date}
+                  </span>
+                  <span className="text-xs text-muted-foreground flex items-center gap-1.5">
+                    <Gauge className="w-3.5 h-3.5" />
+                    {record.mileage.toLocaleString()} km
+                  </span>
+                </div>
+
+                {/* Expand Button */}
+                <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0">
+                  {isExpanded ? (
+                    <ChevronUp className="w-4 h-4" />
+                  ) : (
+                    <ChevronDown className="w-4 h-4" />
+                  )}
+                </Button>
+              </div>
+
+              {/* Expanded Details */}
+              {isExpanded && (
+                <div className="px-4 pb-4 pt-2 ml-16 animate-fade-in">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 p-4 rounded-xl bg-secondary/30">
+                    {/* Parts Changed */}
+                    <div className="space-y-2">
+                      <h4 className="text-sm font-semibold text-foreground flex items-center gap-2">
+                        <Settings className="w-4 h-4 text-accent" />
+                        Parts Changed
+                      </h4>
+                      <ul className="space-y-1.5">
+                        {record.partsChanged.map((part, i) => (
+                          <li
+                            key={i}
+                            className="text-sm text-muted-foreground flex items-center gap-2"
+                          >
+                            <CheckCircle className="w-3.5 h-3.5 text-success flex-shrink-0" />
+                            {part}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {/* Work Done */}
+                    <div className="space-y-2">
+                      <h4 className="text-sm font-semibold text-foreground flex items-center gap-2">
+                        <Wrench className="w-4 h-4 text-accent" />
+                        Work Performed
+                      </h4>
+                      <ul className="space-y-1.5">
+                        {record.workDone.map((work, i) => (
+                          <li
+                            key={i}
+                            className="text-sm text-muted-foreground flex items-center gap-2"
+                          >
+                            <CheckCircle className="w-3.5 h-3.5 text-success flex-shrink-0" />
+                            {work}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {/* Service Details */}
+                    <div className="space-y-3">
+                      <h4 className="text-sm font-semibold text-foreground flex items-center gap-2">
+                        <FileText className="w-4 h-4 text-accent" />
+                        Service Details
+                      </h4>
+                      <div className="space-y-2">
+                        <div className="flex justify-between text-sm">
+                          <span className="text-muted-foreground">Technician:</span>
+                          <span className="text-foreground font-medium">
+                            {record.technician}
+                          </span>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                          <span className="text-muted-foreground">Duration:</span>
+                          <span className="text-foreground font-medium flex items-center gap-1">
+                            <Clock className="w-3 h-3" />
+                            {record.duration}
+                          </span>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                          <span className="text-muted-foreground">Invoice:</span>
+                          <span className="text-accent font-medium">
+                            {record.invoiceNumber}
+                          </span>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                          <span className="text-muted-foreground">Cost:</span>
+                          <span className="text-foreground font-bold">
+                            RM {record.cost.toLocaleString()}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Notes */}
+                    <div className="space-y-2">
+                      <h4 className="text-sm font-semibold text-foreground flex items-center gap-2">
+                        <FileText className="w-4 h-4 text-accent" />
+                        Technician Notes
+                      </h4>
+                      <p className="text-sm text-muted-foreground bg-background p-3 rounded-lg italic">
+                        "{record.notes}"
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+
+        {filteredRecords.length === 0 && (
+          <div className="text-center py-16">
+            <Search className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+            <p className="text-foreground font-medium">No service records found</p>
+            <p className="text-sm text-muted-foreground">
+              Try adjusting your search or filter
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 

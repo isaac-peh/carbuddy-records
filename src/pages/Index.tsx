@@ -8,28 +8,27 @@ import ServiceRecordTable from "@/components/ServiceRecordTable";
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-10">
         {/* Navigation Bar */}
         <NavigationBar />
 
-        {/* Main Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Left Column - Vehicle Gallery */}
-          <div className="bg-card border border-border rounded-lg p-6 shadow-card">
-            <VehicleGallery />
-          </div>
-
-          {/* Right Column - Vehicle Info */}
-          <div className="bg-card border border-border rounded-lg p-6 shadow-card">
-            <VehicleHeader />
-          </div>
+        {/* Main Content - Vehicle Overview */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+          <VehicleGallery />
+          <VehicleHeader />
         </div>
 
+        {/* Divider */}
+        <div className="border-t border-border" />
+
         {/* Vehicle Details & Service Scoring */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
           <VehicleDetails />
           <ServiceScoring />
         </div>
+
+        {/* Divider */}
+        <div className="border-t border-border" />
 
         {/* Service Record Table */}
         <ServiceRecordTable />
