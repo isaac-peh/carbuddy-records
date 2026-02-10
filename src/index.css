@@ -4,55 +4,47 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Vehicle Service Record Tracking - Professional Automotive Design System */
-
 @layer base {
   :root {
-    /* Core backgrounds - Pure white */
     --background: 0 0% 100%;
     --foreground: 222 47% 11%;
 
-    /* Card surfaces */
     --card: 0 0% 100%;
     --card-foreground: 222 47% 11%;
 
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
 
-    /* Primary - Deep Slate/Navy for automotive professionalism */
     --primary: 222 47% 11%;
     --primary-foreground: 210 40% 98%;
 
-    /* Secondary - Light gray surfaces */
     --secondary: 210 40% 96%;
     --secondary-foreground: 222 47% 11%;
 
-    /* Muted - Subtle backgrounds */
     --muted: 210 20% 94%;
     --muted-foreground: 215 16% 47%;
 
-    /* Accent - Electric Blue for modern tech feel */
     --accent: 217 91% 60%;
     --accent-foreground: 0 0% 100%;
 
-    /* Success/Trust - Green for positive scores */
     --success: 142 76% 36%;
     --success-foreground: 0 0% 100%;
 
-    /* Warning - Amber for caution */
     --warning: 38 92% 50%;
     --warning-foreground: 0 0% 100%;
 
-    /* Destructive */
     --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
 
-    /* Borders and inputs */
     --border: 214 32% 91%;
     --input: 214 32% 91%;
     --ring: 217 91% 60%;
 
     --radius: 0.75rem;
+
+    /* Soft section tints */
+    --section-warm: 210 40% 98%;
+    --section-cool: 217 40% 97%;
 
     /* Sidebar */
     --sidebar-background: 0 0% 98%;
@@ -64,59 +56,44 @@
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217 91% 60%;
 
-    /* Custom automotive tokens */
+    /* Trust */
     --trust-excellent: 142 76% 36%;
     --trust-good: 84 81% 44%;
     --trust-average: 38 92% 50%;
     --trust-poor: 0 84% 60%;
     
-    /* Gradients */
-    --gradient-trust: linear-gradient(135deg, hsl(142 76% 36%), hsl(84 81% 44%));
-    --gradient-accent: linear-gradient(135deg, hsl(217 91% 60%), hsl(232 89% 65%));
-    --gradient-dark: linear-gradient(135deg, hsl(222 47% 11%), hsl(217 33% 17%));
-    
     /* Shadows */
-    --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.05);
-    --shadow-md: 0 4px 6px -1px hsl(0 0% 0% / 0.1), 0 2px 4px -2px hsl(0 0% 0% / 0.1);
-    --shadow-lg: 0 10px 15px -3px hsl(0 0% 0% / 0.1), 0 4px 6px -4px hsl(0 0% 0% / 0.1);
-    --shadow-card: 0 1px 3px 0 hsl(0 0% 0% / 0.06), 0 1px 2px -1px hsl(0 0% 0% / 0.06);
+    --shadow-soft: 0 1px 3px 0 hsl(0 0% 0% / 0.04), 0 1px 2px -1px hsl(0 0% 0% / 0.04);
+    --shadow-elevated: 0 4px 12px -2px hsl(0 0% 0% / 0.08), 0 2px 4px -2px hsl(0 0% 0% / 0.04);
+    --shadow-hover: 0 8px 24px -4px hsl(0 0% 0% / 0.1), 0 4px 8px -4px hsl(0 0% 0% / 0.06);
   }
 
   .dark {
     --background: 222 47% 6%;
     --foreground: 210 40% 98%;
-
     --card: 222 47% 9%;
     --card-foreground: 210 40% 98%;
-
     --popover: 222 47% 9%;
     --popover-foreground: 210 40% 98%;
-
     --primary: 210 40% 98%;
     --primary-foreground: 222 47% 11%;
-
     --secondary: 217 33% 17%;
     --secondary-foreground: 210 40% 98%;
-
     --muted: 217 33% 17%;
     --muted-foreground: 215 20% 65%;
-
     --accent: 217 91% 60%;
     --accent-foreground: 0 0% 100%;
-
     --success: 142 76% 42%;
     --success-foreground: 0 0% 100%;
-
     --warning: 38 92% 50%;
     --warning-foreground: 0 0% 0%;
-
     --destructive: 0 63% 31%;
     --destructive-foreground: 210 40% 98%;
-
     --border: 217 33% 17%;
     --input: 217 33% 17%;
     --ring: 213 27% 84%;
-    
+    --section-warm: 222 47% 8%;
+    --section-cool: 217 33% 9%;
     --sidebar-background: 240 6% 10%;
     --sidebar-foreground: 240 5% 96%;
     --sidebar-primary: 224 76% 48%;
@@ -139,22 +116,30 @@
   }
 }
 
+/* Soft section backgrounds */
+.section-warm {
+  background-color: hsl(var(--section-warm));
+}
+
+.section-cool {
+  background-color: hsl(var(--section-cool));
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: hsl(var(--muted));
-  border-radius: 4px;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: hsl(var(--muted-foreground) / 0.3);
-  border-radius: 4px;
+  background: hsl(var(--muted-foreground) / 0.2);
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--muted-foreground) / 0.5);
+  background: hsl(var(--muted-foreground) / 0.4);
 }
