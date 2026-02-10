@@ -74,6 +74,8 @@ export default {
           average: "hsl(var(--trust-average))",
           poor: "hsl(var(--trust-poor))",
         },
+        "section-warm": "hsl(var(--section-warm))",
+        "section-cool": "hsl(var(--section-cool))",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -81,7 +83,9 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       boxShadow: {
-        card: "var(--shadow-card)",
+        soft: "var(--shadow-soft)",
+        elevated: "var(--shadow-elevated)",
+        hover: "var(--shadow-hover)",
       },
       keyframes: {
         "accordion-down": {

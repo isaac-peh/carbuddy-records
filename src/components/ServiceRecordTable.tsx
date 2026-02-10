@@ -1,30 +1,12 @@
 import { useState } from "react";
 import {
-  Search,
-  Filter,
-  ChevronDown,
-  ChevronUp,
-  Calendar,
-  Gauge,
-  MapPin,
-  FileText,
-  Clock,
-  CheckCircle,
-  Wrench,
-  Settings,
-  Droplets,
-  RotateCcw,
-  Zap,
-  CircleDot,
+  Search, Filter, ChevronDown, ChevronUp, Calendar, Gauge, MapPin,
+  FileText, Clock, CheckCircle, Wrench, Settings, Droplets, RotateCcw, Zap, CircleDot,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 
@@ -48,125 +30,64 @@ interface ServiceRecord {
 
 const serviceRecords: ServiceRecord[] = [
   {
-    id: 1,
-    workshopName: "Tesla Service Center",
-    workshopLogo: "T",
-    workshopColor: "bg-red-600",
-    location: "Kuala Lumpur, Malaysia",
-    date: "03 March 2026",
-    mileage: 106569,
-    serviceType: "Scheduled Maintenance",
-    partsChanged: ["Cabin Air Filter", "Wiper Blades", "Brake Fluid"],
+    id: 1, workshopName: "Tesla Service Center", workshopLogo: "T", workshopColor: "bg-red-600",
+    location: "Kuala Lumpur, Malaysia", date: "03 March 2026", mileage: 106569,
+    serviceType: "Scheduled Maintenance", partsChanged: ["Cabin Air Filter", "Wiper Blades", "Brake Fluid"],
     workDone: ["Brake Fluid Flush", "Filter Replacement", "Software Update v11.2", "Wheel Alignment"],
-    cost: 450,
-    technician: "Ahmad Razak",
-    duration: "3 hours",
-    notes: "All systems functioning normally. Recommended tire rotation at next service.",
-    invoiceNumber: "TSC-2026-0892",
+    cost: 450, technician: "Ahmad Razak", duration: "3 hours",
+    notes: "All systems functioning normally. Recommended tire rotation at next service.", invoiceNumber: "TSC-2026-0892",
   },
   {
-    id: 2,
-    workshopName: "EVolution Auto Care",
-    workshopLogo: "E",
-    workshopColor: "bg-emerald-600",
-    location: "Petaling Jaya, Malaysia",
-    date: "15 December 2025",
-    mileage: 98234,
-    serviceType: "Tire Service",
-    partsChanged: ["Continental EcoContact 6 Tires (4x)"],
+    id: 2, workshopName: "EVolution Auto Care", workshopLogo: "E", workshopColor: "bg-emerald-600",
+    location: "Petaling Jaya, Malaysia", date: "15 December 2025", mileage: 98234,
+    serviceType: "Tire Service", partsChanged: ["Continental EcoContact 6 Tires (4x)"],
     workDone: ["Tire Replacement (All 4)", "Wheel Balancing", "TPMS Sensor Check"],
-    cost: 2800,
-    technician: "Lee Wei Ming",
-    duration: "2 hours",
-    notes: "Upgraded to premium all-season tires for better range and comfort.",
-    invoiceNumber: "EVO-2025-4521",
+    cost: 2800, technician: "Lee Wei Ming", duration: "2 hours",
+    notes: "Upgraded to premium all-season tires for better range and comfort.", invoiceNumber: "EVO-2025-4521",
   },
   {
-    id: 3,
-    workshopName: "Tesla Service Center",
-    workshopLogo: "T",
-    workshopColor: "bg-red-600",
-    location: "Kuala Lumpur, Malaysia",
-    date: "20 August 2025",
-    mileage: 85102,
-    serviceType: "Annual Service",
-    partsChanged: ["HEPA Air Filter", "12V Battery"],
+    id: 3, workshopName: "Tesla Service Center", workshopLogo: "T", workshopColor: "bg-red-600",
+    location: "Kuala Lumpur, Malaysia", date: "20 August 2025", mileage: 85102,
+    serviceType: "Annual Service", partsChanged: ["HEPA Air Filter", "12V Battery"],
     workDone: ["Full Inspection", "Battery Health Check", "Suspension Inspection", "Software Update v10.8"],
-    cost: 680,
-    technician: "Nurul Aisyah",
-    duration: "4 hours",
-    notes: "Battery at 96% health. All components in excellent condition.",
-    invoiceNumber: "TSC-2025-0567",
+    cost: 680, technician: "Nurul Aisyah", duration: "4 hours",
+    notes: "Battery at 96% health. All components in excellent condition.", invoiceNumber: "TSC-2025-0567",
   },
   {
-    id: 4,
-    workshopName: "QuickCharge Solutions",
-    workshopLogo: "Q",
-    workshopColor: "bg-blue-600",
-    location: "Shah Alam, Malaysia",
-    date: "10 May 2025",
-    mileage: 72456,
-    serviceType: "Charging System Service",
-    partsChanged: ["Mobile Connector Cable"],
+    id: 4, workshopName: "QuickCharge Solutions", workshopLogo: "Q", workshopColor: "bg-blue-600",
+    location: "Shah Alam, Malaysia", date: "10 May 2025", mileage: 72456,
+    serviceType: "Charging System Service", partsChanged: ["Mobile Connector Cable"],
     workDone: ["Charge Port Inspection", "Connector Replacement", "Charging System Diagnostic"],
-    cost: 350,
-    technician: "Raj Kumar",
-    duration: "1.5 hours",
-    notes: "Replaced faulty mobile connector. Home charging tested and working perfectly.",
-    invoiceNumber: "QCS-2025-0234",
+    cost: 350, technician: "Raj Kumar", duration: "1.5 hours",
+    notes: "Replaced faulty mobile connector. Home charging tested and working perfectly.", invoiceNumber: "QCS-2025-0234",
   },
   {
-    id: 5,
-    workshopName: "AutoGlaze Detailing",
-    workshopLogo: "A",
-    workshopColor: "bg-purple-600",
-    location: "Bangsar, Malaysia",
-    date: "28 February 2025",
-    mileage: 65890,
-    serviceType: "Detailing & Protection",
-    partsChanged: ["Ceramic Coating Application"],
+    id: 5, workshopName: "AutoGlaze Detailing", workshopLogo: "A", workshopColor: "bg-purple-600",
+    location: "Bangsar, Malaysia", date: "28 February 2025", mileage: 65890,
+    serviceType: "Detailing & Protection", partsChanged: ["Ceramic Coating Application"],
     workDone: ["Full Paint Correction", "Ceramic Coating (5-Year)", "Interior Deep Clean", "Glass Treatment"],
-    cost: 3500,
-    technician: "Jason Lim",
-    duration: "2 days",
-    notes: "Premium ceramic coating applied. Warranty card provided for 5 years.",
-    invoiceNumber: "AGD-2025-0089",
+    cost: 3500, technician: "Jason Lim", duration: "2 days",
+    notes: "Premium ceramic coating applied. Warranty card provided for 5 years.", invoiceNumber: "AGD-2025-0089",
   },
   {
-    id: 6,
-    workshopName: "Tesla Service Center",
-    workshopLogo: "T",
-    workshopColor: "bg-red-600",
-    location: "Kuala Lumpur, Malaysia",
-    date: "05 November 2024",
-    mileage: 52340,
-    serviceType: "Brake Service",
-    partsChanged: ["Front Brake Pads", "Brake Rotors (Front)"],
+    id: 6, workshopName: "Tesla Service Center", workshopLogo: "T", workshopColor: "bg-red-600",
+    location: "Kuala Lumpur, Malaysia", date: "05 November 2024", mileage: 52340,
+    serviceType: "Brake Service", partsChanged: ["Front Brake Pads", "Brake Rotors (Front)"],
     workDone: ["Brake Pad Replacement", "Rotor Resurfacing", "Brake Fluid Top-up", "Caliper Inspection"],
-    cost: 1200,
-    technician: "Ahmad Razak",
-    duration: "3 hours",
-    notes: "Front brakes showing normal wear. Rear brakes still at 70% life.",
-    invoiceNumber: "TSC-2024-0934",
+    cost: 1200, technician: "Ahmad Razak", duration: "3 hours",
+    notes: "Front brakes showing normal wear. Rear brakes still at 70% life.", invoiceNumber: "TSC-2024-0934",
   },
 ];
 
 const getServiceIcon = (serviceType: string) => {
   switch (serviceType.toLowerCase()) {
-    case "scheduled maintenance":
-      return Wrench;
-    case "tire service":
-      return CircleDot;
-    case "annual service":
-      return Settings;
-    case "charging system service":
-      return Zap;
-    case "detailing & protection":
-      return Droplets;
-    case "brake service":
-      return RotateCcw;
-    default:
-      return Wrench;
+    case "scheduled maintenance": return Wrench;
+    case "tire service": return CircleDot;
+    case "annual service": return Settings;
+    case "charging system service": return Zap;
+    case "detailing & protection": return Droplets;
+    case "brake service": return RotateCcw;
+    default: return Wrench;
   }
 };
 
@@ -179,17 +100,9 @@ const ServiceRecordTable = () => {
     const matchesSearch =
       record.workshopName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       record.serviceType.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      record.partsChanged.some((part) =>
-        part.toLowerCase().includes(searchTerm.toLowerCase())
-      ) ||
-      record.workDone.some((work) =>
-        work.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-
-    const matchesFilter =
-      filterType === "all" ||
-      record.serviceType.toLowerCase().includes(filterType.toLowerCase());
-
+      record.partsChanged.some((part) => part.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      record.workDone.some((work) => work.toLowerCase().includes(searchTerm.toLowerCase()));
+    const matchesFilter = filterType === "all" || record.serviceType.toLowerCase().includes(filterType.toLowerCase());
     return matchesSearch && matchesFilter;
   });
 
@@ -201,18 +114,12 @@ const ServiceRecordTable = () => {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-            <FileText className="w-5 h-5 text-primary" />
-          </div>
-          <div>
-            <h2 className="text-xl font-semibold text-foreground">Service Records</h2>
-            <p className="text-sm text-muted-foreground">{filteredRecords.length} records found</p>
-          </div>
+        <div>
+          <h2 className="text-lg font-semibold text-foreground">Service Records</h2>
+          <p className="text-sm text-muted-foreground">{filteredRecords.length} records found</p>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3">
-          {/* Search */}
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
@@ -220,13 +127,11 @@ const ServiceRecordTable = () => {
               placeholder="Search services, parts..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 w-full sm:w-64 bg-secondary/50 border-0"
+              className="pl-10 w-full sm:w-64 bg-background border-border/50 shadow-soft focus:shadow-elevated transition-shadow"
             />
           </div>
-
-          {/* Filter */}
           <Select value={filterType} onValueChange={setFilterType}>
-            <SelectTrigger className="w-full sm:w-48 bg-secondary/50 border-0">
+            <SelectTrigger className="w-full sm:w-48 bg-background border-border/50 shadow-soft">
               <Filter className="w-4 h-4 mr-2 text-muted-foreground" />
               <SelectValue placeholder="Filter by type" />
             </SelectTrigger>
@@ -243,25 +148,27 @@ const ServiceRecordTable = () => {
       </div>
 
       {/* Records List */}
-      <div className="space-y-3">
+      <div className="space-y-2">
         {filteredRecords.map((record) => {
-          const ServiceIcon = getServiceIcon(record.serviceType);
           const isExpanded = expandedRow === record.id;
 
           return (
-            <div key={record.id} className="group">
+            <div
+              key={record.id}
+              className={`rounded-xl transition-all duration-200 ${
+                isExpanded ? "bg-background shadow-elevated" : "bg-background hover:shadow-soft"
+              }`}
+            >
               {/* Main Row */}
               <div
-                className={`flex items-center gap-4 p-4 rounded-xl cursor-pointer transition-all ${
-                  isExpanded 
-                    ? "bg-secondary/70" 
-                    : "hover:bg-secondary/50"
+                className={`flex items-center gap-4 p-4 cursor-pointer rounded-xl transition-colors ${
+                  isExpanded ? "" : "hover:bg-secondary/30"
                 }`}
                 onClick={() => toggleExpand(record.id)}
               >
                 {/* Workshop Logo */}
                 <div
-                  className={`w-12 h-12 rounded-xl ${record.workshopColor} flex items-center justify-center text-white font-bold text-lg flex-shrink-0`}
+                  className={`w-11 h-11 rounded-xl ${record.workshopColor} flex items-center justify-center text-white font-bold text-base flex-shrink-0 shadow-soft`}
                 >
                   {record.workshopLogo}
                 </div>
@@ -269,31 +176,25 @@ const ServiceRecordTable = () => {
                 {/* Workshop Info */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <p className="text-sm font-semibold text-foreground">
-                      {record.workshopName}
-                    </p>
-                    <Badge variant="secondary" className="text-xs">
-                      {record.serviceType}
-                    </Badge>
+                    <p className="text-sm font-semibold text-foreground">{record.workshopName}</p>
+                    <Badge variant="secondary" className="text-[10px] font-medium">{record.serviceType}</Badge>
                   </div>
                   <p className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
-                    <MapPin className="w-3 h-3" />
+                    <MapPin className="w-3 h-3" strokeWidth={1.5} />
                     {record.location}
                   </p>
                 </div>
 
-                {/* Parts & Work (hidden on mobile) */}
+                {/* Parts (hidden on mobile) */}
                 <div className="hidden md:block flex-1 min-w-0">
                   <div className="flex flex-wrap gap-1">
                     {record.partsChanged.slice(0, 2).map((part, i) => (
-                      <Badge key={i} variant="outline" className="text-xs">
+                      <Badge key={i} variant="outline" className="text-[10px] border-border/50">
                         {part.length > 18 ? `${part.slice(0, 18)}...` : part}
                       </Badge>
                     ))}
                     {record.partsChanged.length > 2 && (
-                      <Badge variant="secondary" className="text-xs">
-                        +{record.partsChanged.length - 2}
-                      </Badge>
+                      <Badge variant="secondary" className="text-[10px]">+{record.partsChanged.length - 2}</Badge>
                     )}
                   </div>
                 </div>
@@ -301,109 +202,83 @@ const ServiceRecordTable = () => {
                 {/* Date & Mileage */}
                 <div className="hidden sm:flex flex-col items-end gap-1 flex-shrink-0">
                   <span className="text-sm text-foreground flex items-center gap-1.5">
-                    <Calendar className="w-3.5 h-3.5 text-muted-foreground" />
+                    <Calendar className="w-3.5 h-3.5 text-muted-foreground" strokeWidth={1.5} />
                     {record.date}
                   </span>
                   <span className="text-xs text-muted-foreground flex items-center gap-1.5">
-                    <Gauge className="w-3.5 h-3.5" />
+                    <Gauge className="w-3.5 h-3.5" strokeWidth={1.5} />
                     {record.mileage.toLocaleString()} km
                   </span>
                 </div>
 
-                {/* Expand Button */}
+                {/* Expand */}
                 <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0">
-                  {isExpanded ? (
-                    <ChevronUp className="w-4 h-4" />
-                  ) : (
-                    <ChevronDown className="w-4 h-4" />
-                  )}
+                  {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                 </Button>
               </div>
 
               {/* Expanded Details */}
               {isExpanded && (
-                <div className="px-4 pb-4 pt-2 ml-16 animate-fade-in">
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 p-4 rounded-xl bg-secondary/30">
-                    {/* Parts Changed */}
+                <div className="px-4 pb-4 pt-1 ml-15 animate-fade-in">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 p-5 rounded-xl bg-section-warm border border-border/30">
                     <div className="space-y-2">
-                      <h4 className="text-sm font-semibold text-foreground flex items-center gap-2">
-                        <Settings className="w-4 h-4 text-accent" />
+                      <h4 className="text-xs font-semibold text-foreground uppercase tracking-wider flex items-center gap-2">
+                        <Settings className="w-3.5 h-3.5 text-accent" strokeWidth={1.5} />
                         Parts Changed
                       </h4>
                       <ul className="space-y-1.5">
                         {record.partsChanged.map((part, i) => (
-                          <li
-                            key={i}
-                            className="text-sm text-muted-foreground flex items-center gap-2"
-                          >
-                            <CheckCircle className="w-3.5 h-3.5 text-success flex-shrink-0" />
+                          <li key={i} className="text-sm text-muted-foreground flex items-center gap-2">
+                            <CheckCircle className="w-3.5 h-3.5 text-success flex-shrink-0" strokeWidth={1.5} />
                             {part}
                           </li>
                         ))}
                       </ul>
                     </div>
 
-                    {/* Work Done */}
                     <div className="space-y-2">
-                      <h4 className="text-sm font-semibold text-foreground flex items-center gap-2">
-                        <Wrench className="w-4 h-4 text-accent" />
+                      <h4 className="text-xs font-semibold text-foreground uppercase tracking-wider flex items-center gap-2">
+                        <Wrench className="w-3.5 h-3.5 text-accent" strokeWidth={1.5} />
                         Work Performed
                       </h4>
                       <ul className="space-y-1.5">
                         {record.workDone.map((work, i) => (
-                          <li
-                            key={i}
-                            className="text-sm text-muted-foreground flex items-center gap-2"
-                          >
-                            <CheckCircle className="w-3.5 h-3.5 text-success flex-shrink-0" />
+                          <li key={i} className="text-sm text-muted-foreground flex items-center gap-2">
+                            <CheckCircle className="w-3.5 h-3.5 text-success flex-shrink-0" strokeWidth={1.5} />
                             {work}
                           </li>
                         ))}
                       </ul>
                     </div>
 
-                    {/* Service Details */}
-                    <div className="space-y-3">
-                      <h4 className="text-sm font-semibold text-foreground flex items-center gap-2">
-                        <FileText className="w-4 h-4 text-accent" />
-                        Service Details
+                    <div className="space-y-2">
+                      <h4 className="text-xs font-semibold text-foreground uppercase tracking-wider flex items-center gap-2">
+                        <FileText className="w-3.5 h-3.5 text-accent" strokeWidth={1.5} />
+                        Details
                       </h4>
                       <div className="space-y-2">
-                        <div className="flex justify-between text-sm">
-                          <span className="text-muted-foreground">Technician:</span>
-                          <span className="text-foreground font-medium">
-                            {record.technician}
-                          </span>
-                        </div>
-                        <div className="flex justify-between text-sm">
-                          <span className="text-muted-foreground">Duration:</span>
-                          <span className="text-foreground font-medium flex items-center gap-1">
-                            <Clock className="w-3 h-3" />
-                            {record.duration}
-                          </span>
-                        </div>
-                        <div className="flex justify-between text-sm">
-                          <span className="text-muted-foreground">Invoice:</span>
-                          <span className="text-accent font-medium">
-                            {record.invoiceNumber}
-                          </span>
-                        </div>
-                        <div className="flex justify-between text-sm">
-                          <span className="text-muted-foreground">Cost:</span>
-                          <span className="text-foreground font-bold">
-                            RM {record.cost.toLocaleString()}
-                          </span>
-                        </div>
+                        {[
+                          { label: "Technician", value: record.technician },
+                          { label: "Duration", value: record.duration, icon: Clock },
+                          { label: "Invoice", value: record.invoiceNumber },
+                          { label: "Cost", value: `RM ${record.cost.toLocaleString()}`, bold: true },
+                        ].map((item, i) => (
+                          <div key={i} className="flex justify-between text-sm">
+                            <span className="text-muted-foreground">{item.label}</span>
+                            <span className={`text-foreground ${item.bold ? "font-bold" : "font-medium"}`}>
+                              {item.value}
+                            </span>
+                          </div>
+                        ))}
                       </div>
                     </div>
 
-                    {/* Notes */}
                     <div className="space-y-2">
-                      <h4 className="text-sm font-semibold text-foreground flex items-center gap-2">
-                        <FileText className="w-4 h-4 text-accent" />
-                        Technician Notes
+                      <h4 className="text-xs font-semibold text-foreground uppercase tracking-wider flex items-center gap-2">
+                        <FileText className="w-3.5 h-3.5 text-accent" strokeWidth={1.5} />
+                        Notes
                       </h4>
-                      <p className="text-sm text-muted-foreground bg-background p-3 rounded-lg italic">
+                      <p className="text-sm text-muted-foreground bg-background p-3 rounded-lg italic leading-relaxed">
                         "{record.notes}"
                       </p>
                     </div>
@@ -416,11 +291,9 @@ const ServiceRecordTable = () => {
 
         {filteredRecords.length === 0 && (
           <div className="text-center py-16">
-            <Search className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+            <Search className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" />
             <p className="text-foreground font-medium">No service records found</p>
-            <p className="text-sm text-muted-foreground">
-              Try adjusting your search or filter
-            </p>
+            <p className="text-sm text-muted-foreground">Try adjusting your search or filter</p>
           </div>
         )}
       </div>

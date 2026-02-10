@@ -9,32 +9,37 @@ import ServiceRecordTable from "@/components/ServiceRecordTable";
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-10">
-        <NavigationBar />
+      {/* Navigation */}
+      <NavigationBar />
 
-        {/* Vehicle Overview */}
+      {/* Vehicle Overview */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
           <VehicleGallery />
           <VehicleHeader />
         </div>
+      </div>
 
-        <div className="border-t border-border" />
+      {/* Vehicle Specs - Soft tinted section */}
+      <div className="section-warm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <VehicleDetails />
+        </div>
+      </div>
 
-        {/* Vehicle Details - Full Width */}
-        <VehicleDetails />
-
-        <div className="border-t border-border" />
-
-        {/* Service Scoring & Workshop - Side by Side */}
+      {/* Scoring & Workshop */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
           <ServiceScoring />
           <WorkshopDetails />
         </div>
+      </div>
 
-        <div className="border-t border-border" />
-
-        {/* Service Records */}
-        <ServiceRecordTable />
+      {/* Service Records - Tinted section */}
+      <div className="section-cool">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+          <ServiceRecordTable />
+        </div>
       </div>
     </div>
   );

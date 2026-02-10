@@ -1,14 +1,5 @@
 import { 
-  Battery, 
-  Zap, 
-  Palette, 
-  Cog, 
-  Car, 
-  Gauge, 
-  Fuel, 
-  Thermometer,
-  Shield,
-  Calendar
+  Battery, Zap, Palette, Cog, Car, Gauge, Fuel, Thermometer, Shield, Calendar
 } from "lucide-react";
 
 const VehicleDetails = () => {
@@ -26,14 +17,19 @@ const VehicleDetails = () => {
   ];
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       <h2 className="text-lg font-semibold text-foreground">Vehicle Specifications</h2>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-x-6 gap-y-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
         {specifications.map((spec, index) => (
-          <div key={index} className="flex items-start gap-2.5">
-            <spec.icon className="w-4 h-4 text-muted-foreground mt-0.5 flex-shrink-0" strokeWidth={1.5} />
+          <div
+            key={index}
+            className="flex items-start gap-3 p-3 rounded-xl bg-background hover:shadow-soft transition-all group"
+          >
+            <div className="w-8 h-8 rounded-lg bg-secondary/80 flex items-center justify-center flex-shrink-0 group-hover:bg-accent/10 transition-colors">
+              <spec.icon className="w-4 h-4 text-muted-foreground group-hover:text-accent transition-colors" strokeWidth={1.5} />
+            </div>
             <div className="min-w-0">
-              <p className="text-[11px] text-muted-foreground uppercase tracking-wider leading-none mb-1">{spec.label}</p>
+              <p className="text-[10px] text-muted-foreground uppercase tracking-wider leading-none mb-1">{spec.label}</p>
               <p className="text-sm font-medium text-foreground leading-tight">{spec.value}</p>
             </div>
           </div>

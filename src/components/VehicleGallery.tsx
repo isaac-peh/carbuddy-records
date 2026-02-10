@@ -19,12 +19,16 @@ const VehicleGallery = () => {
   return (
     <div className="space-y-3">
       {/* Main Image */}
-      <div className="relative overflow-hidden rounded-lg bg-secondary aspect-[16/10]">
+      <div className="relative overflow-hidden rounded-2xl bg-secondary aspect-[16/10] shadow-elevated group">
         <img
           src={images[selectedImage].src}
           alt={images[selectedImage].alt}
-          className="w-full h-full object-cover transition-opacity duration-300"
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
         />
+        {/* Image counter pill */}
+        <div className="absolute bottom-3 right-3 bg-foreground/60 backdrop-blur-sm text-primary-foreground text-xs px-2.5 py-1 rounded-full">
+          {selectedImage + 1} / {images.length}
+        </div>
       </div>
 
       {/* Thumbnails */}
@@ -33,10 +37,10 @@ const VehicleGallery = () => {
           <button
             key={index}
             onClick={() => setSelectedImage(index)}
-            className={`relative overflow-hidden rounded-md aspect-square w-16 flex-shrink-0 transition-all duration-200 ${
+            className={`relative overflow-hidden rounded-xl aspect-square w-16 flex-shrink-0 transition-all duration-200 ${
               selectedImage === index
-                ? "ring-2 ring-accent ring-offset-2"
-                : "opacity-70 hover:opacity-100"
+                ? "ring-2 ring-accent ring-offset-2 shadow-elevated scale-105"
+                : "opacity-60 hover:opacity-100 hover:shadow-soft"
             }`}
           >
             <img
