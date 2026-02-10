@@ -13,79 +13,28 @@ import {
 
 const VehicleDetails = () => {
   const specifications = [
-    {
-      icon: Zap,
-      label: "Motor Type",
-      value: "Permanent Magnet Synchronous",
-    },
-    {
-      icon: Battery,
-      label: "Battery Capacity",
-      value: "60 kWh",
-    },
-    {
-      icon: Gauge,
-      label: "Power Output",
-      value: "220 kW (295 hp)",
-    },
-    {
-      icon: Fuel,
-      label: "Range (EPA)",
-      value: "326 miles",
-    },
-    {
-      icon: Cog,
-      label: "Transmission",
-      value: "Single-Speed Fixed Gear",
-    },
-    {
-      icon: Car,
-      label: "Drivetrain",
-      value: "Rear-Wheel Drive",
-    },
-    {
-      icon: Palette,
-      label: "Exterior Color",
-      value: "Pearl White Multi-Coat",
-    },
-    {
-      icon: Thermometer,
-      label: "Interior",
-      value: "Black Premium Leather",
-    },
-    {
-      icon: Shield,
-      label: "VIN",
-      value: "5YJ3E1EA•••••37892",
-    },
-    {
-      icon: Calendar,
-      label: "Year of Manufacture",
-      value: "2020",
-    },
+    { icon: Zap, label: "Motor", value: "Permanent Magnet Synchronous" },
+    { icon: Battery, label: "Battery", value: "60 kWh" },
+    { icon: Gauge, label: "Power", value: "220 kW (295 hp)" },
+    { icon: Fuel, label: "Range", value: "326 mi" },
+    { icon: Cog, label: "Transmission", value: "Single-Speed Fixed" },
+    { icon: Car, label: "Drivetrain", value: "RWD" },
+    { icon: Palette, label: "Color", value: "Pearl White" },
+    { icon: Thermometer, label: "Interior", value: "Black Premium" },
+    { icon: Shield, label: "VIN", value: "5YJ3E1EA•••37892" },
+    { icon: Calendar, label: "Year", value: "2020" },
   ];
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center">
-          <Car className="w-5 h-5 text-accent" />
-        </div>
-        <h2 className="text-xl font-semibold text-foreground">Full Vehicle Details</h2>
-      </div>
-      
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div className="space-y-4">
+      <h2 className="text-lg font-semibold text-foreground">Vehicle Specifications</h2>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-x-6 gap-y-4">
         {specifications.map((spec, index) => (
-          <div 
-            key={index} 
-            className="flex items-center gap-4 py-3 group"
-          >
-            <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center group-hover:bg-accent/10 transition-colors">
-              <spec.icon className="w-5 h-5 text-muted-foreground group-hover:text-accent transition-colors" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-xs text-muted-foreground uppercase tracking-wider">{spec.label}</p>
-              <p className="text-sm font-medium text-foreground truncate">{spec.value}</p>
+          <div key={index} className="flex items-start gap-2.5">
+            <spec.icon className="w-4 h-4 text-muted-foreground mt-0.5 flex-shrink-0" strokeWidth={1.5} />
+            <div className="min-w-0">
+              <p className="text-[11px] text-muted-foreground uppercase tracking-wider leading-none mb-1">{spec.label}</p>
+              <p className="text-sm font-medium text-foreground leading-tight">{spec.value}</p>
             </div>
           </div>
         ))}
