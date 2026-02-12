@@ -12,34 +12,24 @@ const Index = () => {
       {/* Navigation */}
       <NavigationBar />
 
-      {/* Vehicle Overview */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
+        {/* Vehicle Overview */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
           <VehicleGallery />
           <VehicleHeader />
         </div>
-      </div>
 
-      {/* Vehicle Specs - Soft tinted section */}
-      <div className="section-warm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <VehicleDetails />
-        </div>
-      </div>
+        {/* Vehicle Specs */}
+        <VehicleDetails />
 
-      {/* Scoring & Workshop */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        {/* Scoring & Workshop */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
           <ServiceScoring />
           <WorkshopDetails />
         </div>
-      </div>
 
-      {/* Service Records - Tinted section */}
-      <div className="section-cool">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-          <ServiceRecordTable />
-        </div>
+        {/* Service Records */}
+        <ServiceRecordTable />
       </div>
     </div>
   );
