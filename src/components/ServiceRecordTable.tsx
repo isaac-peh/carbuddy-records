@@ -9,6 +9,7 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import SectionTitle from "@/components/SectionTitle";
 
 interface ServiceRecord {
   id: number;
@@ -114,10 +115,7 @@ const ServiceRecordTable = () => {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div>
-          <h2 className="text-lg font-semibold text-foreground">Service Records</h2>
-          <p className="text-sm text-muted-foreground">{filteredRecords.length} records found</p>
-        </div>
+        <SectionTitle title="Service Records" subtitle={`${filteredRecords.length} records found`} />
 
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="relative">
