@@ -1,10 +1,7 @@
-import { useState } from "react";
-import { Calendar, Gauge, Users, Wrench, CheckCircle, Heart } from "lucide-react";
+import { Calendar, Gauge, Users, Wrench, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const VehicleHeader = () => {
-  const [isFavourited, setIsFavourited] = useState(false);
-
   return (
     <div className="space-y-6 flex flex-col justify-center">
       {/* Title Section */}
@@ -13,24 +10,14 @@ const VehicleHeader = () => {
           <h1 className="text-3xl font-bold text-foreground tracking-tight">TESLA MODEL Y</h1>
           <p className="text-muted-foreground mt-0.5">Rear-Wheel Drive 110</p>
         </div>
-        <div className="flex items-center gap-3">
-          <Button
-            variant="ghost"
-            size="icon"
-            className={`rounded-full h-10 w-10 transition-all ${isFavourited ? "text-red-500 hover:text-red-600" : "text-muted-foreground hover:text-foreground"}`}
-            onClick={() => setIsFavourited(!isFavourited)}
-          >
-            <Heart className={`w-5 h-5 ${isFavourited ? "fill-current" : ""}`} strokeWidth={1.5} />
-          </Button>
-          <div className="flex flex-col items-center">
-            <svg viewBox="0 0 100 100" className="w-12 h-12 text-foreground">
-              <path
-                fill="currentColor"
-                d="M50 5 C30 5 15 20 15 35 L15 40 L25 40 L25 35 C25 25 35 15 50 15 C65 15 75 25 75 35 L75 40 L85 40 L85 35 C85 20 70 5 50 5 Z M50 25 L50 95 L55 95 L55 25 L50 25 Z"
-              />
-            </svg>
-            <span className="text-[10px] text-muted-foreground mt-1 tracking-widest">TESLA</span>
-          </div>
+        <div className="flex flex-col items-center">
+          <svg viewBox="0 0 100 100" className="w-12 h-12 text-foreground">
+            <path
+              fill="currentColor"
+              d="M50 5 C30 5 15 20 15 35 L15 40 L25 40 L25 35 C25 25 35 15 50 15 C65 15 75 25 75 35 L75 40 L85 40 L85 35 C85 20 70 5 50 5 Z M50 25 L50 95 L55 95 L55 25 L50 25 Z"
+            />
+          </svg>
+          <span className="text-[10px] text-muted-foreground mt-1 tracking-widest">TESLA</span>
         </div>
       </div>
 
@@ -44,11 +31,11 @@ const VehicleHeader = () => {
         ].map((stat) => (
           <div
             key={stat.label}
-            className="p-3.5 rounded-xl bg-secondary/50 hover:bg-secondary/80 transition-colors group"
+            className="p-3.5 rounded-xl bg-secondary/50"
           >
             <p className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">{stat.label}</p>
             <p className="text-lg font-bold text-foreground flex items-center gap-2">
-              <stat.icon className="w-4 h-4 text-accent opacity-70 group-hover:opacity-100 transition-opacity" strokeWidth={1.5} />
+              <stat.icon className="w-4 h-4 text-accent opacity-70" strokeWidth={1.5} />
               {stat.value}
             </p>
           </div>
