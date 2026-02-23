@@ -38,6 +38,18 @@ const VehicleGallery = () => {
           alt={images[selectedImage].alt}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
         />
+        <button
+          onClick={(e) => { e.stopPropagation(); goPrev(); }}
+          className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-foreground/40 hover:bg-foreground/60 text-primary-foreground rounded-full p-1.5 backdrop-blur-sm transition-colors opacity-0 group-hover:opacity-100"
+        >
+          <ChevronLeft className="w-5 h-5" />
+        </button>
+        <button
+          onClick={(e) => { e.stopPropagation(); goNext(); }}
+          className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-foreground/40 hover:bg-foreground/60 text-primary-foreground rounded-full p-1.5 backdrop-blur-sm transition-colors opacity-0 group-hover:opacity-100"
+        >
+          <ChevronRight className="w-5 h-5" />
+        </button>
         <div className="absolute bottom-3 right-3 bg-foreground/60 backdrop-blur-sm text-primary-foreground text-xs px-2.5 py-1 rounded-full">
           {selectedImage + 1} / {images.length}
         </div>
