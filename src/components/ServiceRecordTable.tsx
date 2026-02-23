@@ -1,7 +1,7 @@
 import { useState } from "react";
 import {
   Search, Filter, ChevronDown, ChevronUp, Calendar, Gauge, MapPin,
-  FileText, Clock, CheckCircle, Wrench, Settings, Droplets, RotateCcw, Zap, CircleDot,
+  FileText, Clock, CheckCircle, Wrench, Settings, Droplets, RotateCcw, Zap, CircleDot, Lock,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -146,8 +146,8 @@ const ServiceRecordTable = () => {
       </div>
 
       {/* Records List */}
-      <div className="space-y-2">
-        {filteredRecords.map((record) => {
+      <div className="space-y-2 relative">
+        {filteredRecords.slice(0, 5).map((record) => {
           const isExpanded = expandedRow === record.id;
 
           return (
@@ -164,14 +164,11 @@ const ServiceRecordTable = () => {
                 }`}
                 onClick={() => toggleExpand(record.id)}
               >
-                {/* Workshop Logo */}
                 <div
                   className={`w-11 h-11 rounded-xl ${record.workshopColor} flex items-center justify-center text-white font-bold text-base flex-shrink-0 shadow-soft`}
                 >
                   {record.workshopLogo}
                 </div>
-
-                {/* Workshop Info */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
                     <p className="text-sm font-semibold text-foreground">{record.workshopName}</p>
@@ -182,8 +179,6 @@ const ServiceRecordTable = () => {
                     {record.location}
                   </p>
                 </div>
-
-                {/* Parts (hidden on mobile) */}
                 <div className="hidden md:block flex-1 min-w-0">
                   <div className="flex flex-wrap gap-1">
                     {record.partsChanged.slice(0, 2).map((part, i) => (
@@ -196,8 +191,6 @@ const ServiceRecordTable = () => {
                     )}
                   </div>
                 </div>
-
-                {/* Date & Mileage */}
                 <div className="hidden sm:flex flex-col items-end gap-1 flex-shrink-0">
                   <span className="text-sm text-foreground flex items-center gap-1.5">
                     <Calendar className="w-3.5 h-3.5 text-muted-foreground" strokeWidth={1.5} />
@@ -208,8 +201,6 @@ const ServiceRecordTable = () => {
                     {record.mileage.toLocaleString()} km
                   </span>
                 </div>
-
-                {/* Expand */}
                 <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0">
                   {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                 </Button>
@@ -233,7 +224,6 @@ const ServiceRecordTable = () => {
                         ))}
                       </ul>
                     </div>
-
                     <div className="space-y-2">
                       <h4 className="text-xs font-semibold text-foreground uppercase tracking-wider flex items-center gap-2">
                         <Wrench className="w-3.5 h-3.5 text-accent" strokeWidth={1.5} />
@@ -248,7 +238,6 @@ const ServiceRecordTable = () => {
                         ))}
                       </ul>
                     </div>
-
                     <div className="space-y-2">
                       <h4 className="text-xs font-semibold text-foreground uppercase tracking-wider flex items-center gap-2">
                         <FileText className="w-3.5 h-3.5 text-accent" strokeWidth={1.5} />
@@ -270,7 +259,6 @@ const ServiceRecordTable = () => {
                         ))}
                       </div>
                     </div>
-
                     <div className="space-y-2">
                       <h4 className="text-xs font-semibold text-foreground uppercase tracking-wider flex items-center gap-2">
                         <FileText className="w-3.5 h-3.5 text-accent" strokeWidth={1.5} />
@@ -286,6 +274,55 @@ const ServiceRecordTable = () => {
             </div>
           );
         })}
+
+        {/* Blurred locked records */}
+        {filteredRecords.length > 5 && (
+          <div className="relative">
+            <div className="space-y-2 blur-sm pointer-events-none select-none">
+              {filteredRecords.slice(5).map((record) => (
+                <div key={record.id} className="rounded-xl bg-background">
+                  <div className="flex items-center gap-4 p-4">
+                    <div className={`w-11 h-11 rounded-xl ${record.workshopColor} flex items-center justify-center text-white font-bold text-base flex-shrink-0`}>
+                      {record.workshopLogo}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <p className="text-sm font-semibold text-foreground">{record.workshopName}</p>
+                        <Badge variant="secondary" className="text-[10px] font-medium">{record.serviceType}</Badge>
+                      </div>
+                      <p className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
+                        <MapPin className="w-3 h-3" strokeWidth={1.5} />
+                        {record.location}
+                      </p>
+                    </div>
+                    <div className="hidden sm:flex flex-col items-end gap-1 flex-shrink-0">
+                      <span className="text-sm text-foreground flex items-center gap-1.5">
+                        <Calendar className="w-3.5 h-3.5 text-muted-foreground" strokeWidth={1.5} />
+                        {record.date}
+                      </span>
+                      <span className="text-xs text-muted-foreground flex items-center gap-1.5">
+                        <Gauge className="w-3.5 h-3.5" strokeWidth={1.5} />
+                        {record.mileage.toLocaleString()} km
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
+              <div className="flex flex-col items-center gap-3 p-6 rounded-2xl bg-background/80 backdrop-blur-sm shadow-elevated border border-border/50">
+                <Lock className="w-8 h-8 text-muted-foreground" strokeWidth={1.5} />
+                <p className="text-sm font-semibold text-foreground">
+                  {filteredRecords.length - 5} more record{filteredRecords.length - 5 > 1 ? "s" : ""} available
+                </p>
+                <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold gap-2">
+                  <Lock className="w-4 h-4" />
+                  Unlock Full History
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {filteredRecords.length === 0 && (
           <div className="text-center py-16">

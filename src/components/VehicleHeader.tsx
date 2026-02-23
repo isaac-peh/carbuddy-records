@@ -1,4 +1,4 @@
-import { Calendar, Gauge, Users, Wrench, CheckCircle } from "lucide-react";
+import { Calendar, Gauge, Users, Wrench, CheckCircle, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const VehicleHeader = () => {
@@ -57,7 +57,8 @@ const VehicleHeader = () => {
       </div>
 
       {/* CTA Button */}
-      <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-6 shadow-elevated hover:shadow-hover transition-all">
+      <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-6 shadow-elevated hover:shadow-hover transition-all gap-2">
+        <Lock className="w-4 h-4" />
         Unlock Full Service History
       </Button>
     </div>
