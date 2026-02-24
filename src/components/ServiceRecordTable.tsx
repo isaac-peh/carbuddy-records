@@ -311,10 +311,18 @@ const ServiceRecordTable = () => {
             </div>
             {/* Gradient overlay with unlock button */}
             <div className="absolute inset-0 bg-gradient-to-b from-background/30 to-background/90 flex items-center justify-center">
-              <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold gap-2 shadow-elevated">
-                <Lock className="w-4 h-4" />
-                Unlock {filteredRecords.length - 5} More Record{filteredRecords.length - 5 > 1 ? "s" : ""}
-              </Button>
+              <div className="flex flex-col items-center gap-2 text-center px-4">
+                <p className="text-sm font-semibold text-foreground">
+                  {filteredRecords.length - 5} older service record{filteredRecords.length - 5 > 1 ? "s" : ""} hidden
+                </p>
+                <p className="text-xs text-muted-foreground max-w-xs">
+                  Unlock to view the complete maintenance history, including past invoices, parts replaced, and technician notes.
+                </p>
+                <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold gap-2 shadow-elevated mt-1">
+                  <Lock className="w-4 h-4" />
+                  Unlock Full History
+                </Button>
+              </div>
             </div>
           </div>
         )}
