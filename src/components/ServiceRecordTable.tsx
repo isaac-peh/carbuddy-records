@@ -315,9 +315,6 @@ const ServiceRecordTable = () => {
                 <p className="text-sm font-semibold text-foreground">
                   {filteredRecords.length - 5} older service record{filteredRecords.length - 5 > 1 ? "s" : ""} hidden
                 </p>
-                <p className="text-xs text-muted-foreground max-w-xs">
-                  Unlock to view the complete maintenance history, including past invoices, parts replaced, and technician notes.
-                </p>
                 <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold gap-2 shadow-elevated mt-1">
                   <Lock className="w-4 h-4" />
                   Unlock Full History
