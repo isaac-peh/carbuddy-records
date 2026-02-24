@@ -208,65 +208,65 @@ const ServiceRecordTable = () => {
 
               {/* Expanded Details */}
               {isExpanded && (
-                <div className="px-4 pb-4 pt-1 ml-15 animate-fade-in">
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 p-5 rounded-xl bg-section-warm border border-border/30">
-                    <div className="space-y-2">
-                      <h4 className="text-xs font-semibold text-foreground uppercase tracking-wider flex items-center gap-2">
-                        <Settings className="w-3.5 h-3.5 text-accent" strokeWidth={1.5} />
-                        Parts Changed
-                      </h4>
-                      <ul className="space-y-1.5">
-                        {record.partsChanged.map((part, i) => (
-                          <li key={i} className="text-sm text-muted-foreground flex items-center gap-2">
-                            <CheckCircle className="w-3.5 h-3.5 text-success flex-shrink-0" strokeWidth={1.5} />
-                            {part}
-                          </li>
-                        ))}
-                      </ul>
+                <div className="px-4 pb-5 pt-1 animate-fade-in">
+                  <div className="rounded-xl border border-border/40 overflow-hidden">
+                    {/* Top summary bar */}
+                    <div className="flex flex-wrap items-center gap-x-6 gap-y-2 px-5 py-3 bg-secondary/40 border-b border-border/30">
+                      {[
+                        { icon: Clock, label: record.duration },
+                        { icon: FileText, label: record.invoiceNumber },
+                        { icon: Wrench, label: record.technician },
+                      ].map((item, i) => (
+                        <span key={i} className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                          <item.icon className="w-3.5 h-3.5" strokeWidth={1.5} />
+                          {item.label}
+                        </span>
+                      ))}
+                      <span className="ml-auto text-sm font-bold text-foreground">
+                        RM {record.cost.toLocaleString()}
+                      </span>
                     </div>
-                    <div className="space-y-2">
-                      <h4 className="text-xs font-semibold text-foreground uppercase tracking-wider flex items-center gap-2">
-                        <Wrench className="w-3.5 h-3.5 text-accent" strokeWidth={1.5} />
-                        Work Performed
-                      </h4>
-                      <ul className="space-y-1.5">
-                        {record.workDone.map((work, i) => (
-                          <li key={i} className="text-sm text-muted-foreground flex items-center gap-2">
-                            <CheckCircle className="w-3.5 h-3.5 text-success flex-shrink-0" strokeWidth={1.5} />
-                            {work}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div className="space-y-2">
-                      <h4 className="text-xs font-semibold text-foreground uppercase tracking-wider flex items-center gap-2">
-                        <FileText className="w-3.5 h-3.5 text-accent" strokeWidth={1.5} />
-                        Details
-                      </h4>
-                      <div className="space-y-2">
-                        {[
-                          { label: "Technician", value: record.technician },
-                          { label: "Duration", value: record.duration, icon: Clock },
-                          { label: "Invoice", value: record.invoiceNumber },
-                          { label: "Cost", value: `RM ${record.cost.toLocaleString()}`, bold: true },
-                        ].map((item, i) => (
-                          <div key={i} className="flex justify-between text-sm">
-                            <span className="text-muted-foreground">{item.label}</span>
-                            <span className={`text-foreground ${item.bold ? "font-bold" : "font-medium"}`}>
-                              {item.value}
-                            </span>
-                          </div>
-                        ))}
+
+                    {/* Content grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-0 divide-y md:divide-y-0 md:divide-x divide-border/30">
+                      {/* Parts Changed */}
+                      <div className="p-5 space-y-3">
+                        <h4 className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest">
+                          Parts Replaced
+                        </h4>
+                        <div className="flex flex-wrap gap-1.5">
+                          {record.partsChanged.map((part, i) => (
+                            <Badge key={i} variant="secondary" className="text-xs font-normal py-1 px-2.5 bg-secondary/60">
+                              {part}
+                            </Badge>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                    <div className="space-y-2">
-                      <h4 className="text-xs font-semibold text-foreground uppercase tracking-wider flex items-center gap-2">
-                        <FileText className="w-3.5 h-3.5 text-accent" strokeWidth={1.5} />
-                        Notes
-                      </h4>
-                      <p className="text-sm text-muted-foreground bg-background p-3 rounded-lg italic leading-relaxed">
-                        "{record.notes}"
-                      </p>
+
+                      {/* Work Performed */}
+                      <div className="p-5 space-y-3">
+                        <h4 className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest">
+                          Work Performed
+                        </h4>
+                        <ul className="space-y-2">
+                          {record.workDone.map((work, i) => (
+                            <li key={i} className="text-sm text-foreground/80 flex items-start gap-2">
+                              <CheckCircle className="w-3.5 h-3.5 text-success flex-shrink-0 mt-0.5" strokeWidth={2} />
+                              {work}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      {/* Notes */}
+                      <div className="p-5 space-y-3">
+                        <h4 className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest">
+                          Notes
+                        </h4>
+                        <p className="text-sm text-muted-foreground leading-relaxed">
+                          {record.notes}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
