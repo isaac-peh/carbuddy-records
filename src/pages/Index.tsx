@@ -5,6 +5,7 @@ import VehicleDetails from "@/components/VehicleDetails";
 import ServiceScoring from "@/components/ServiceScoring";
 import WorkshopDetails from "@/components/WorkshopDetails";
 import ServiceRecordTable from "@/components/ServiceRecordTable";
+import Footer from "@/components/Footer";
 
 const Index = () => {
   return (
@@ -31,6 +32,8 @@ const Index = () => {
         {/* Service Records */}
         <ServiceRecordTable />
       </div>
+
+      <Footer />
     </div>
   );
 };
