@@ -12,7 +12,7 @@ const NavigationBar = () => {
             <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-primary shadow-soft">
               <Car className="w-4.5 h-4.5 text-primary-foreground" strokeWidth={1.5} />
             </div>
-            <span className="text-lg font-bold text-foreground tracking-tight">VehicleTrack</span>
+            <span className="text-lg font-bold text-foreground tracking-tight">Mobilis</span>
           </div>
 
           {/* Search Bar */}
