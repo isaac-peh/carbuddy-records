@@ -380,6 +380,16 @@ const ServiceRecordTable = () => {
                     )}
                     <p className="text-xs text-muted-foreground mt-0.5">{record.workshopName}</p>
                   </div>
+
+                  {/* Parts column */}
+                  <div className="hidden md:block flex-1 min-w-0">
+                    <p className="text-xs text-muted-foreground leading-relaxed truncate">
+                      {record.partsChanged.length <= 2
+                        ? record.partsChanged.join(", ")
+                        : `${record.partsChanged.slice(0, 2).join(", ")} +${record.partsChanged.length - 2} more`}
+                    </p>
+                  </div>
+
                   <div className="hidden sm:flex flex-col items-end gap-1 text-xs text-muted-foreground flex-shrink-0">
                     <span className="flex items-center gap-1.5">
                       <Calendar className="w-3.5 h-3.5" strokeWidth={1.5} />
