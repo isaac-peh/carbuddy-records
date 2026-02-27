@@ -170,7 +170,7 @@ const ServiceRecordTable = () => {
                 <div className={`w-10 h-10 rounded-lg ${record.workshopColor} flex items-center justify-center flex-shrink-0`}>
                   <span className="text-white text-sm font-bold">{record.workshopLogo}</span>
                 </div>
-                <div className="flex-1 min-w-0">
+                <div className="min-w-0 w-[45%] md:w-[35%] flex-shrink-0">
                   {record.serviceTypes && record.serviceTypes.length > 1 ? (
                     <Tooltip>
                       <TooltipTrigger asChild>
@@ -202,7 +202,7 @@ const ServiceRecordTable = () => {
                 </div>
 
                 {/* Parts column */}
-                <div className="hidden md:flex w-56 min-w-0 items-center flex-shrink-0">
+                <div className="hidden md:flex w-[20%] min-w-0 items-center flex-shrink-0">
                   {record.partsChanged.length <= 2 ? (
                     <p className="text-xs text-muted-foreground leading-relaxed truncate">
                       {record.partsChanged.join(", ")}
@@ -231,7 +231,7 @@ const ServiceRecordTable = () => {
                   )}
                 </div>
 
-                <div className="hidden sm:flex flex-col items-end gap-1 text-xs text-muted-foreground flex-shrink-0">
+                <div className="hidden sm:flex flex-col items-end gap-1 text-xs text-muted-foreground flex-shrink-0 ml-auto">
                   <span className="flex items-center gap-1.5">
                     <Calendar className="w-3.5 h-3.5" strokeWidth={1.5} />
                     {record.date}
@@ -241,7 +241,7 @@ const ServiceRecordTable = () => {
                     {record.mileage.toLocaleString()} km
                   </span>
                 </div>
-                <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0">
+                <Button variant="ghost" size="icon" className="h-8 w-8">
                   {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                 </Button>
               </div>
