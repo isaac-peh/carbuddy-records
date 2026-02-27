@@ -348,13 +348,12 @@ const ServiceRecordTable = () => {
                   isExpanded ? "shadow-elevated" : "hover:shadow-soft"
                 }`}
               >
-                <div className={`h-1 ${record.workshopColor}`} />
                 <div
-                  className="flex items-center gap-4 p-4 cursor-pointer hover:bg-secondary/20 transition-colors"
+                  className="flex items-center gap-4 p-4 cursor-pointer hover:bg-secondary/20 transition-colors rounded-xl"
                   onClick={() => toggleExpand(record.id)}
                 >
-                  <div className="w-10 h-10 rounded-full bg-secondary/50 flex items-center justify-center flex-shrink-0">
-                    <ServiceIcon className="w-5 h-5 text-foreground/70" strokeWidth={1.5} />
+                  <div className={`w-10 h-10 rounded-lg ${record.workshopColor} flex items-center justify-center flex-shrink-0`}>
+                    <span className="text-white text-sm font-bold">{record.workshopLogo}</span>
                   </div>
                   <div className="flex-1 min-w-0">
                     {record.serviceTypes && record.serviceTypes.length > 1 ? (
@@ -381,12 +380,15 @@ const ServiceRecordTable = () => {
                     )}
                     <p className="text-xs text-muted-foreground mt-0.5">{record.workshopName}</p>
                   </div>
-                  <div className="hidden sm:flex items-center gap-3 text-xs text-muted-foreground flex-shrink-0">
-                    <span>{record.date}</span>
-                    <span className="w-px h-3 bg-border" />
-                    <span>{record.mileage.toLocaleString()} km</span>
-                    <span className="w-px h-3 bg-border" />
-                    <span className="font-semibold text-foreground text-sm">RM {record.cost.toLocaleString()}</span>
+                  <div className="hidden sm:flex flex-col items-end gap-1 text-xs text-muted-foreground flex-shrink-0">
+                    <span className="flex items-center gap-1.5">
+                      <Calendar className="w-3.5 h-3.5" strokeWidth={1.5} />
+                      {record.date}
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <Gauge className="w-3.5 h-3.5" strokeWidth={1.5} />
+                      {record.mileage.toLocaleString()} km
+                    </span>
                   </div>
                   <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0">
                     {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
