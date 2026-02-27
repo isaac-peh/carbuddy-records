@@ -231,7 +231,7 @@ const ServiceRecordTable = () => {
                   )}
                 </div>
 
-                <div className="hidden sm:flex flex-col items-end gap-1 text-xs text-muted-foreground flex-shrink-0 ml-auto">
+                <div className="flex flex-col items-end gap-1 text-xs text-muted-foreground flex-shrink-0 ml-auto">
                   <span className="flex items-center gap-1.5">
                     <Calendar className="w-3.5 h-3.5" strokeWidth={1.5} />
                     {record.date}
