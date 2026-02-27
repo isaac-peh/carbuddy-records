@@ -199,6 +199,17 @@ const ServiceRecordTable = () => {
                     <MapPin className="w-3 h-3 flex-shrink-0" strokeWidth={1.5} />
                     {record.workshopName}
                   </p>
+                  {/* Date & mileage - inline below workshop on mobile */}
+                  <div className="flex items-center gap-3 mt-1.5 sm:hidden text-[11px] text-muted-foreground">
+                    <span className="flex items-center gap-1">
+                      <Calendar className="w-3 h-3" strokeWidth={1.5} />
+                      {record.date}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Gauge className="w-3 h-3" strokeWidth={1.5} />
+                      {record.mileage.toLocaleString()} km
+                    </span>
+                  </div>
                 </div>
 
                 {/* Parts column */}
@@ -231,7 +242,8 @@ const ServiceRecordTable = () => {
                   )}
                 </div>
 
-                <div className="flex flex-col items-end gap-1 text-xs text-muted-foreground flex-shrink-0 ml-auto">
+                {/* Date & mileage - right-aligned on desktop */}
+                <div className="hidden sm:flex flex-col items-end gap-1 text-xs text-muted-foreground flex-shrink-0 ml-auto">
                   <span className="flex items-center gap-1.5">
                     <Calendar className="w-3.5 h-3.5" strokeWidth={1.5} />
                     {record.date}
