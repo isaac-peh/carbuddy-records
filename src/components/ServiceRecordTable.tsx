@@ -170,7 +170,7 @@ const ServiceRecordTable = () => {
                 <div className={`w-10 h-10 rounded-lg ${record.workshopColor} flex items-center justify-center flex-shrink-0`}>
                   <span className="text-white text-sm font-bold">{record.workshopLogo}</span>
                 </div>
-                <div className="min-w-0 w-[45%] md:w-[35%] flex-shrink-0">
+                <div className="min-w-0 flex-1 md:flex-none md:w-[35%]">
                   {record.serviceTypes && record.serviceTypes.length > 1 ? (
                     <Tooltip>
                       <TooltipTrigger asChild>
