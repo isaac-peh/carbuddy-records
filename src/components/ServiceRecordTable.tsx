@@ -10,6 +10,9 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import SectionTitle from "@/components/SectionTitle";
+import {
+  Tooltip, TooltipTrigger, TooltipContent,
+} from "@/components/ui/tooltip";
 
 interface ServiceRecord {
   id: number;
@@ -27,13 +30,15 @@ interface ServiceRecord {
   duration: string;
   notes: string;
   invoiceNumber: string;
+  serviceTypes?: string[];
 }
 
 const serviceRecords: ServiceRecord[] = [
   {
     id: 1, workshopName: "Tesla Service Center", workshopLogo: "T", workshopColor: "bg-red-600",
     location: "Kuala Lumpur, Malaysia", date: "03 March 2026", mileage: 106569,
-    serviceType: "Scheduled Maintenance", partsChanged: ["Cabin Air Filter", "Wiper Blades", "Brake Fluid"],
+    serviceType: "Scheduled Maintenance", serviceTypes: ["Scheduled Maintenance", "Brake Inspection", "Tire Rotation"],
+    partsChanged: ["Cabin Air Filter", "Wiper Blades", "Brake Fluid"],
     workDone: ["Brake Fluid Flush", "Filter Replacement", "Software Update v11.2", "Wheel Alignment"],
     cost: 450, technician: "Ahmad Razak", duration: "3 hours",
     notes: "All systems functioning normally. Recommended tire rotation at next service.", invoiceNumber: "TSC-2026-0892",
@@ -57,7 +62,8 @@ const serviceRecords: ServiceRecord[] = [
   {
     id: 4, workshopName: "QuickCharge Solutions", workshopLogo: "Q", workshopColor: "bg-blue-600",
     location: "Shah Alam, Malaysia", date: "10 May 2025", mileage: 72456,
-    serviceType: "Charging System Service", partsChanged: ["Mobile Connector Cable"],
+    serviceType: "Charging System Service", serviceTypes: ["Charging System Service", "Battery Health Check", "Software Update"],
+    partsChanged: ["Mobile Connector Cable"],
     workDone: ["Charge Port Inspection", "Connector Replacement", "Charging System Diagnostic"],
     cost: 350, technician: "Raj Kumar", duration: "1.5 hours",
     notes: "Replaced faulty mobile connector. Home charging tested and working perfectly.", invoiceNumber: "QCS-2025-0234",
@@ -351,7 +357,28 @@ const ServiceRecordTable = () => {
                     <ServiceIcon className="w-5 h-5 text-foreground/70" strokeWidth={1.5} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-foreground">{record.serviceType}</p>
+                    {record.serviceTypes && record.serviceTypes.length > 1 ? (
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <p className="text-sm font-semibold text-foreground leading-tight cursor-default">
+                            {record.serviceTypes[0]}{" "}
+                            <span className="text-xs font-normal text-muted-foreground">+{record.serviceTypes.length - 1} more</span>
+                          </p>
+                        </TooltipTrigger>
+                        <TooltipContent side="top" className="max-w-xs">
+                          <ul className="space-y-1 text-xs">
+                            {record.serviceTypes.map((s, i) => (
+                              <li key={i} className="flex items-center gap-1.5">
+                                <CheckCircle className="w-3 h-3 text-primary flex-shrink-0" strokeWidth={2} />
+                                {s}
+                              </li>
+                            ))}
+                          </ul>
+                        </TooltipContent>
+                      </Tooltip>
+                    ) : (
+                      <p className="text-sm font-semibold text-foreground leading-tight">{record.serviceType}</p>
+                    )}
                     <p className="text-xs text-muted-foreground mt-0.5">{record.workshopName}</p>
                   </div>
                   <div className="hidden sm:flex items-center gap-3 text-xs text-muted-foreground flex-shrink-0">
