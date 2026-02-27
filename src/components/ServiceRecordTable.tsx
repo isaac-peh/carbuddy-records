@@ -170,7 +170,7 @@ const ServiceRecordTable = () => {
                 <div className={`w-10 h-10 rounded-lg ${record.workshopColor} flex items-center justify-center flex-shrink-0`}>
                   <span className="text-white text-sm font-bold">{record.workshopLogo}</span>
                 </div>
-                <div className="w-[40%] min-w-0">
+                <div className="flex-1 min-w-0">
                   {record.serviceTypes && record.serviceTypes.length > 1 ? (
                     <Tooltip>
                       <TooltipTrigger asChild>
@@ -202,7 +202,7 @@ const ServiceRecordTable = () => {
                 </div>
 
                 {/* Parts column */}
-                <div className="hidden md:flex w-[25%] min-w-0 items-center">
+                <div className="hidden md:flex w-56 min-w-0 items-center flex-shrink-0">
                   {record.partsChanged.length <= 2 ? (
                     <p className="text-xs text-muted-foreground leading-relaxed truncate">
                       {record.partsChanged.join(", ")}
