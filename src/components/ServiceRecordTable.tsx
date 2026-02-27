@@ -153,378 +153,90 @@ const ServiceRecordTable = () => {
 
       {/* Records List */}
       <div className="space-y-2 relative">
-      {filteredRecords.slice(0, 5).map((record, index) => {
+      {filteredRecords.slice(0, 5).map((record) => {
           const isExpanded = expandedRow === record.id;
-          const ServiceIcon = getServiceIcon(record.serviceType);
-          const isAltDesign = index === 0; // Alt design on first row only
 
-          if (isAltDesign) {
-            return (
-              <div
-                key={record.id}
-                className={`rounded-xl transition-all duration-200 overflow-hidden ${
-                  isExpanded ? "shadow-elevated" : "hover:shadow-soft"
-                }`}
-              >
-                <div
-                  className={`flex items-stretch cursor-pointer transition-colors ${
-                    isExpanded ? "bg-background" : "bg-background hover:bg-secondary/20"
-                  }`}
-                  onClick={() => toggleExpand(record.id)}
-                >
-                  {/* Left accent bar */}
-                  <div className={`w-1 ${record.workshopColor} flex-shrink-0 rounded-l-xl`} />
-                  
-                  <div className="flex items-center gap-4 p-4 flex-1 min-w-0">
-                    {/* Service icon */}
-                    <div className="w-10 h-10 rounded-lg bg-secondary/60 flex items-center justify-center flex-shrink-0">
-                      <ServiceIcon className="w-5 h-5 text-foreground/70" strokeWidth={1.5} />
-                    </div>
-
-                    {/* Primary info */}
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-foreground leading-tight">{record.serviceType}</p>
-                      <p className="text-xs text-muted-foreground mt-0.5">
-                        {record.workshopName} · {record.location}
-                      </p>
-                    </div>
-
-                    {/* Parts as plain text */}
-                    <div className="hidden md:block flex-1 min-w-0">
-                      <p className="text-xs text-muted-foreground leading-relaxed truncate">
-                        {record.partsChanged.join(", ")}
-                      </p>
-                    </div>
-
-                    {/* Date & mileage */}
-                    <div className="hidden sm:flex items-center gap-4 text-xs text-muted-foreground flex-shrink-0">
-                      <span className="flex items-center gap-1.5">
-                        <Calendar className="w-3.5 h-3.5" strokeWidth={1.5} />
-                        {record.date}
-                      </span>
-                      <span className="flex items-center gap-1.5">
-                        <Gauge className="w-3.5 h-3.5" strokeWidth={1.5} />
-                        {record.mileage.toLocaleString()} km
-                      </span>
-                    </div>
-
-                    {/* Cost */}
-                    <span className="text-sm font-semibold text-foreground flex-shrink-0 hidden lg:block">
-                      RM {record.cost.toLocaleString()}
-                    </span>
-
-                    <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0">
-                      {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            );
-          }
-
-          // Variant B: Two-line dense (row index 1)
-          if (index === 1) {
-            return (
-              <div
-                key={record.id}
-                className={`rounded-xl transition-all duration-200 bg-background ${
-                  isExpanded ? "shadow-elevated" : "hover:shadow-soft"
-                }`}
-              >
-                <div
-                  className="flex items-center gap-4 p-4 cursor-pointer rounded-xl hover:bg-secondary/20 transition-colors"
-                  onClick={() => toggleExpand(record.id)}
-                >
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <p className="text-sm font-semibold text-foreground">{record.serviceType}</p>
-                      <span className="text-xs text-muted-foreground">at {record.workshopName}</span>
-                    </div>
-                    <p className="text-xs text-muted-foreground mt-1 truncate">
-                      {record.date} · {record.mileage.toLocaleString()} km · {record.partsChanged.join(", ")}
-                    </p>
-                  </div>
-                  <span className="text-sm font-semibold text-foreground flex-shrink-0">
-                    RM {record.cost.toLocaleString()}
-                  </span>
-                  <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0">
-                    {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                  </Button>
-                </div>
-
-                {/* Expanded Details */}
-                {isExpanded && (
-                  <div className="px-4 pb-5 pt-1 animate-fade-in">
-                    <div className="rounded-xl border border-border/40 overflow-hidden">
-                      <div className="flex flex-wrap items-center gap-x-6 gap-y-2 px-5 py-3 bg-secondary/40 border-b border-border/30">
-                        {[
-                          { icon: Clock, label: record.duration },
-                          { icon: FileText, label: record.invoiceNumber },
-                          { icon: Wrench, label: record.technician },
-                        ].map((item, i) => (
-                          <span key={i} className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                            <item.icon className="w-3.5 h-3.5" strokeWidth={1.5} />
-                            {item.label}
-                          </span>
-                        ))}
-                      </div>
-                      <div className="p-5">
-                        <p className="text-sm text-muted-foreground">{record.notes}</p>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            );
-          }
-
-          // Variant C: Timeline style (row index 2)
-          if (index === 2) {
-            return (
-              <div key={record.id} className="flex gap-4 transition-all duration-200">
-                {/* Date column */}
-                <div className="flex flex-col items-center flex-shrink-0 w-20 pt-5">
-                  <span className="text-xs font-semibold text-foreground">{record.date.split(" ").slice(0, 2).join(" ")}</span>
-                  <span className="text-[10px] text-muted-foreground">{record.date.split(" ")[2]}</span>
-                  <div className="w-2 h-2 rounded-full bg-primary mt-2" />
-                  <div className="w-px flex-1 bg-border/50 mt-1" />
-                </div>
-                {/* Content */}
-                <div
-                  className={`flex-1 rounded-xl bg-background transition-all cursor-pointer ${
-                    isExpanded ? "shadow-elevated" : "hover:shadow-soft"
-                  }`}
-                >
-                  <div
-                    className="flex items-center justify-between gap-3 p-4 hover:bg-secondary/20 rounded-xl transition-colors"
-                    onClick={() => toggleExpand(record.id)}
-                  >
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2">
-                        <ServiceIcon className="w-4 h-4 text-muted-foreground flex-shrink-0" strokeWidth={1.5} />
-                        <p className="text-sm font-semibold text-foreground">{record.serviceType}</p>
-                      </div>
-                      <p className="text-xs text-muted-foreground mt-1">{record.workshopName} · {record.mileage.toLocaleString()} km</p>
-                    </div>
-                    <span className="text-sm font-semibold text-foreground flex-shrink-0">RM {record.cost.toLocaleString()}</span>
-                    <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0">
-                      {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                    </Button>
-                  </div>
-                  {isExpanded && (
-                    <div className="px-4 pb-5 pt-1 animate-fade-in">
-                      <div className="rounded-xl border border-border/40 overflow-hidden">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-0 divide-y md:divide-y-0 md:divide-x divide-border/30">
-                          <div className="p-5 space-y-2">
-                            <h4 className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest">Work Done</h4>
-                            <ul className="space-y-1.5">
-                              {record.workDone.map((work, i) => (
-                                <li key={i} className="text-sm text-foreground/80 flex items-start gap-2">
-                                  <CheckCircle className="w-3.5 h-3.5 text-success flex-shrink-0 mt-0.5" strokeWidth={2} />
-                                  {work}
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                          <div className="p-5 space-y-2">
-                            <h4 className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest">Notes</h4>
-                            <p className="text-sm text-muted-foreground leading-relaxed">{record.notes}</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            );
-          }
-
-          // Variant D: Top color band with circle icon (row index 3)
-          if (index === 3) {
-            return (
-              <div
-                key={record.id}
-                className={`rounded-xl overflow-hidden transition-all duration-200 bg-background ${
-                  isExpanded ? "shadow-elevated" : "hover:shadow-soft"
-                }`}
-              >
-                <div
-                  className="flex items-center gap-4 p-4 cursor-pointer hover:bg-secondary/20 transition-colors rounded-xl"
-                  onClick={() => toggleExpand(record.id)}
-                >
-                  <div className={`w-10 h-10 rounded-lg ${record.workshopColor} flex items-center justify-center flex-shrink-0`}>
-                    <span className="text-white text-sm font-bold">{record.workshopLogo}</span>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    {record.serviceTypes && record.serviceTypes.length > 1 ? (
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <p className="text-sm font-semibold text-foreground leading-tight cursor-default inline-flex items-center gap-1.5">
-                            {record.serviceTypes[0]}
-                            <span className="inline-flex items-center rounded-full bg-secondary px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
-                              +{record.serviceTypes.length - 1} more
-                            </span>
-                          </p>
-                        </TooltipTrigger>
-                        <TooltipContent side="top" className="max-w-xs">
-                          <ul className="space-y-1 text-xs">
-                            {record.serviceTypes.map((s, i) => (
-                              <li key={i} className="flex items-center gap-1.5">
-                                <CheckCircle className="w-3 h-3 text-primary flex-shrink-0" strokeWidth={2} />
-                                {s}
-                              </li>
-                            ))}
-                          </ul>
-                        </TooltipContent>
-                      </Tooltip>
-                    ) : (
-                      <p className="text-sm font-semibold text-foreground leading-tight">{record.serviceType}</p>
-                    )}
-                    <p className="text-xs text-muted-foreground mt-0.5 flex items-center gap-1">
-                      <MapPin className="w-3 h-3 flex-shrink-0" strokeWidth={1.5} />
-                      {record.workshopName}
-                    </p>
-                  </div>
-
-                  {/* Parts column */}
-                  <div className="hidden md:flex flex-1 min-w-0 items-center">
-                    {record.partsChanged.length <= 2 ? (
-                      <p className="text-xs text-muted-foreground leading-relaxed truncate">
-                        {record.partsChanged.join(", ")}
-                      </p>
-                    ) : (
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <p className="text-xs text-muted-foreground leading-relaxed cursor-default inline-flex items-center gap-1.5 truncate">
-                            <span className="truncate">{record.partsChanged[0]}</span>
-                            <span className="inline-flex items-center rounded-full bg-secondary px-2 py-0.5 text-[10px] font-medium text-muted-foreground flex-shrink-0">
-                              +{record.partsChanged.length - 1} more
-                            </span>
-                          </p>
-                        </TooltipTrigger>
-                        <TooltipContent side="top" className="max-w-xs">
-                          <ul className="space-y-1 text-xs">
-                            {record.partsChanged.map((part, i) => (
-                              <li key={i} className="flex items-center gap-1.5">
-                                <CheckCircle className="w-3 h-3 text-primary flex-shrink-0" strokeWidth={2} />
-                                {part}
-                              </li>
-                            ))}
-                          </ul>
-                        </TooltipContent>
-                      </Tooltip>
-                    )}
-                  </div>
-
-                  <div className="hidden sm:flex flex-col items-end gap-1 text-xs text-muted-foreground flex-shrink-0">
-                    <span className="flex items-center gap-1.5">
-                      <Calendar className="w-3.5 h-3.5" strokeWidth={1.5} />
-                      {record.date}
-                    </span>
-                    <span className="flex items-center gap-1.5">
-                      <Gauge className="w-3.5 h-3.5" strokeWidth={1.5} />
-                      {record.mileage.toLocaleString()} km
-                    </span>
-                  </div>
-                  <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0">
-                    {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                  </Button>
-                </div>
-                {isExpanded && (
-                  <div className="px-4 pb-5 pt-1 animate-fade-in">
-                    <div className="rounded-xl border border-border/40 overflow-hidden">
-                      <div className="flex flex-wrap items-center gap-x-6 gap-y-2 px-5 py-3 bg-secondary/40 border-b border-border/30">
-                        {[
-                          { icon: Clock, label: record.duration },
-                          { icon: FileText, label: record.invoiceNumber },
-                          { icon: Wrench, label: record.technician },
-                        ].map((item, i) => (
-                          <span key={i} className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                            <item.icon className="w-3.5 h-3.5" strokeWidth={1.5} />
-                            {item.label}
-                          </span>
-                        ))}
-                        <span className="ml-auto text-sm font-bold text-foreground">RM {record.cost.toLocaleString()}</span>
-                      </div>
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-0 divide-y md:divide-y-0 md:divide-x divide-border/30">
-                        <div className="p-5 space-y-3">
-                          <h4 className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest">Parts Replaced</h4>
-                          <div className="flex flex-wrap gap-1.5">
-                            {record.partsChanged.map((part, i) => (
-                              <Badge key={i} variant="secondary" className="text-xs font-normal py-1 px-2.5 bg-secondary/60">{part}</Badge>
-                            ))}
-                          </div>
-                        </div>
-                        <div className="p-5 space-y-3">
-                          <h4 className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest">Work Performed</h4>
-                          <ul className="space-y-2">
-                            {record.workDone.map((work, i) => (
-                              <li key={i} className="text-sm text-foreground/80 flex items-start gap-2">
-                                <CheckCircle className="w-3.5 h-3.5 text-success flex-shrink-0 mt-0.5" strokeWidth={2} />
-                                {work}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                        <div className="p-5 space-y-3">
-                          <h4 className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest">Notes</h4>
-                          <p className="text-sm text-muted-foreground leading-relaxed">{record.notes}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            );
-          }
-
-          // Original design (row index 4+)
           return (
             <div
               key={record.id}
-              className={`rounded-xl transition-all duration-200 ${
-                isExpanded ? "bg-background shadow-elevated" : "bg-background hover:shadow-soft"
+              className={`rounded-xl overflow-hidden transition-all duration-200 bg-background ${
+                isExpanded ? "shadow-elevated" : "hover:shadow-soft"
               }`}
             >
               <div
-                className={`flex items-center gap-4 p-4 cursor-pointer rounded-xl transition-colors ${
-                  isExpanded ? "" : "hover:bg-secondary/30"
-                }`}
+                className="flex items-center gap-4 p-4 cursor-pointer hover:bg-secondary/20 transition-colors rounded-xl"
                 onClick={() => toggleExpand(record.id)}
               >
-                <div
-                  className={`w-11 h-11 rounded-xl ${record.workshopColor} flex items-center justify-center text-white font-bold text-base flex-shrink-0 shadow-soft`}
-                >
-                  {record.workshopLogo}
+                <div className={`w-10 h-10 rounded-lg ${record.workshopColor} flex items-center justify-center flex-shrink-0`}>
+                  <span className="text-white text-sm font-bold">{record.workshopLogo}</span>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <p className="text-sm font-semibold text-foreground">{record.workshopName}</p>
-                    <Badge variant="secondary" className="text-[10px] font-medium">{record.serviceType}</Badge>
-                  </div>
-                  <p className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
-                    <MapPin className="w-3 h-3" strokeWidth={1.5} />
-                    {record.location}
+                  {record.serviceTypes && record.serviceTypes.length > 1 ? (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <p className="text-sm font-semibold text-foreground leading-tight cursor-default inline-flex items-center gap-1.5">
+                          {record.serviceTypes[0]}
+                          <span className="inline-flex items-center rounded-full bg-secondary px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+                            +{record.serviceTypes.length - 1} more
+                          </span>
+                        </p>
+                      </TooltipTrigger>
+                      <TooltipContent side="top" className="max-w-xs">
+                        <ul className="space-y-1 text-xs">
+                          {record.serviceTypes.map((s, i) => (
+                            <li key={i} className="flex items-center gap-1.5">
+                              <CheckCircle className="w-3 h-3 text-primary flex-shrink-0" strokeWidth={2} />
+                              {s}
+                            </li>
+                          ))}
+                        </ul>
+                      </TooltipContent>
+                    </Tooltip>
+                  ) : (
+                    <p className="text-sm font-semibold text-foreground leading-tight">{record.serviceType}</p>
+                  )}
+                  <p className="text-xs text-muted-foreground mt-0.5 flex items-center gap-1">
+                    <MapPin className="w-3 h-3 flex-shrink-0" strokeWidth={1.5} />
+                    {record.workshopName}
                   </p>
                 </div>
-                <div className="hidden md:block flex-1 min-w-0">
-                  <div className="flex flex-wrap gap-1">
-                    {record.partsChanged.slice(0, 2).map((part, i) => (
-                      <Badge key={i} variant="outline" className="text-[10px] border-border/50">
-                        {part.length > 18 ? `${part.slice(0, 18)}...` : part}
-                      </Badge>
-                    ))}
-                    {record.partsChanged.length > 2 && (
-                      <Badge variant="secondary" className="text-[10px]">+{record.partsChanged.length - 2}</Badge>
-                    )}
-                  </div>
+
+                {/* Parts column */}
+                <div className="hidden md:flex flex-1 min-w-0 items-center">
+                  {record.partsChanged.length <= 2 ? (
+                    <p className="text-xs text-muted-foreground leading-relaxed truncate">
+                      {record.partsChanged.join(", ")}
+                    </p>
+                  ) : (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <p className="text-xs text-muted-foreground leading-relaxed cursor-default inline-flex items-center gap-1.5 truncate">
+                          <span className="truncate">{record.partsChanged[0]}</span>
+                          <span className="inline-flex items-center rounded-full bg-secondary px-2 py-0.5 text-[10px] font-medium text-muted-foreground flex-shrink-0">
+                            +{record.partsChanged.length - 1} more
+                          </span>
+                        </p>
+                      </TooltipTrigger>
+                      <TooltipContent side="top" className="max-w-xs">
+                        <ul className="space-y-1 text-xs">
+                          {record.partsChanged.map((part, i) => (
+                            <li key={i} className="flex items-center gap-1.5">
+                              <CheckCircle className="w-3 h-3 text-primary flex-shrink-0" strokeWidth={2} />
+                              {part}
+                            </li>
+                          ))}
+                        </ul>
+                      </TooltipContent>
+                    </Tooltip>
+                  )}
                 </div>
-                <div className="hidden sm:flex flex-col items-end gap-1 flex-shrink-0">
-                  <span className="text-sm text-foreground flex items-center gap-1.5">
-                    <Calendar className="w-3.5 h-3.5 text-muted-foreground" strokeWidth={1.5} />
+
+                <div className="hidden sm:flex flex-col items-end gap-1 text-xs text-muted-foreground flex-shrink-0">
+                  <span className="flex items-center gap-1.5">
+                    <Calendar className="w-3.5 h-3.5" strokeWidth={1.5} />
                     {record.date}
                   </span>
-                  <span className="text-xs text-muted-foreground flex items-center gap-1.5">
+                  <span className="flex items-center gap-1.5">
                     <Gauge className="w-3.5 h-3.5" strokeWidth={1.5} />
                     {record.mileage.toLocaleString()} km
                   </span>
@@ -533,12 +245,9 @@ const ServiceRecordTable = () => {
                   {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                 </Button>
               </div>
-
-              {/* Expanded Details */}
               {isExpanded && (
                 <div className="px-4 pb-5 pt-1 animate-fade-in">
                   <div className="rounded-xl border border-border/40 overflow-hidden">
-                    {/* Top summary bar */}
                     <div className="flex flex-wrap items-center gap-x-6 gap-y-2 px-5 py-3 bg-secondary/40 border-b border-border/30">
                       {[
                         { icon: Clock, label: record.duration },
@@ -550,32 +259,19 @@ const ServiceRecordTable = () => {
                           {item.label}
                         </span>
                       ))}
-                      <span className="ml-auto text-sm font-bold text-foreground">
-                        RM {record.cost.toLocaleString()}
-                      </span>
+                      <span className="ml-auto text-sm font-bold text-foreground">RM {record.cost.toLocaleString()}</span>
                     </div>
-
-                    {/* Content grid */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-0 divide-y md:divide-y-0 md:divide-x divide-border/30">
-                      {/* Parts Changed */}
                       <div className="p-5 space-y-3">
-                        <h4 className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest">
-                          Parts Replaced
-                        </h4>
+                        <h4 className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest">Parts Replaced</h4>
                         <div className="flex flex-wrap gap-1.5">
                           {record.partsChanged.map((part, i) => (
-                            <Badge key={i} variant="secondary" className="text-xs font-normal py-1 px-2.5 bg-secondary/60">
-                              {part}
-                            </Badge>
+                            <Badge key={i} variant="secondary" className="text-xs font-normal py-1 px-2.5 bg-secondary/60">{part}</Badge>
                           ))}
                         </div>
                       </div>
-
-                      {/* Work Performed */}
                       <div className="p-5 space-y-3">
-                        <h4 className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest">
-                          Work Performed
-                        </h4>
+                        <h4 className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest">Work Performed</h4>
                         <ul className="space-y-2">
                           {record.workDone.map((work, i) => (
                             <li key={i} className="text-sm text-foreground/80 flex items-start gap-2">
@@ -585,15 +281,9 @@ const ServiceRecordTable = () => {
                           ))}
                         </ul>
                       </div>
-
-                      {/* Notes */}
                       <div className="p-5 space-y-3">
-                        <h4 className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest">
-                          Notes
-                        </h4>
-                        <p className="text-sm text-muted-foreground leading-relaxed">
-                          {record.notes}
-                        </p>
+                        <h4 className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest">Notes</h4>
+                        <p className="text-sm text-muted-foreground leading-relaxed">{record.notes}</p>
                       </div>
                     </div>
                   </div>
