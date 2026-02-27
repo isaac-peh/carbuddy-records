@@ -263,14 +263,6 @@ const ServiceRecordTable = () => {
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-0 divide-y md:divide-y-0 md:divide-x divide-border/30">
                       <div className="p-5 space-y-3">
-                        <h4 className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest">Parts Replaced</h4>
-                        <div className="flex flex-wrap gap-1.5">
-                          {record.partsChanged.map((part, i) => (
-                            <Badge key={i} variant="secondary" className="text-xs font-normal py-1 px-2.5 bg-secondary/60">{part}</Badge>
-                          ))}
-                        </div>
-                      </div>
-                      <div className="p-5 space-y-3">
                         <h4 className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest">Work Performed</h4>
                         <ul className="space-y-2">
                           {record.workDone.map((work, i) => (
@@ -280,6 +272,14 @@ const ServiceRecordTable = () => {
                             </li>
                           ))}
                         </ul>
+                      </div>
+                      <div className="p-5 space-y-3">
+                        <h4 className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest">Parts Replaced</h4>
+                        <div className="flex flex-wrap gap-1.5">
+                          {record.partsChanged.map((part, i) => (
+                            <Badge key={i} variant="secondary" className="text-xs font-normal py-1 px-2.5 bg-secondary/60">{part}</Badge>
+                          ))}
+                        </div>
                       </div>
                       <div className="p-5 space-y-3">
                         <h4 className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest">Notes</h4>
