@@ -80,17 +80,17 @@ const WorkshopDetails = () => {
               <span>{workshop.operatingHours}</span>
             </div>
 
-            <div className="flex items-center gap-2 pt-1">
+            <div className="flex flex-wrap items-center gap-2 pt-1">
               <a href={`tel:${workshop.phone}`} className="inline-flex items-center gap-1.5 text-xs font-medium text-accent hover:text-accent/80 bg-accent/5 hover:bg-accent/10 px-2.5 py-1.5 rounded-lg transition-all">
-                <Phone className="w-3.5 h-3.5" strokeWidth={1.5} />
+                <Phone className="w-3.5 h-3.5 flex-shrink-0" strokeWidth={1.5} />
                 Call
               </a>
               <a href={workshop.reservationUrl} className="inline-flex items-center gap-1.5 text-xs font-medium text-accent hover:text-accent/80 bg-accent/5 hover:bg-accent/10 px-2.5 py-1.5 rounded-lg transition-all">
-                <CalendarCheck className="w-3.5 h-3.5" strokeWidth={1.5} />
+                <CalendarCheck className="w-3.5 h-3.5 flex-shrink-0" strokeWidth={1.5} />
                 Reserve
               </a>
               <a href={workshop.googleMapsUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-xs font-medium text-accent hover:text-accent/80 bg-accent/5 hover:bg-accent/10 px-2.5 py-1.5 rounded-lg transition-all">
-                <ExternalLink className="w-3.5 h-3.5" strokeWidth={1.5} />
+                <ExternalLink className="w-3.5 h-3.5 flex-shrink-0" strokeWidth={1.5} />
                 Maps
               </a>
             </div>
