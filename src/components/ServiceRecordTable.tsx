@@ -63,7 +63,7 @@ const serviceRecords: ServiceRecord[] = [
     id: 4, workshopName: "QuickCharge Solutions", workshopLogo: "Q", workshopColor: "bg-blue-600",
     location: "Shah Alam, Malaysia", date: "10 May 2025", mileage: 72456,
     serviceType: "Charging System Service", serviceTypes: ["Charging System Service", "Battery Health Check", "Software Update"],
-    partsChanged: ["Mobile Connector Cable"],
+    partsChanged: ["Mobile Connector Cable", "Charge Port Adapter", "Wall Connector Mount"],
     workDone: ["Charge Port Inspection", "Connector Replacement", "Charging System Diagnostic"],
     cost: 350, technician: "Raj Kumar", duration: "1.5 hours",
     notes: "Replaced faulty mobile connector. Home charging tested and working perfectly.", invoiceNumber: "QCS-2025-0234",
