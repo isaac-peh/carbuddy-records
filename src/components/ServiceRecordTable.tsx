@@ -359,9 +359,11 @@ const ServiceRecordTable = () => {
                     {record.serviceTypes && record.serviceTypes.length > 1 ? (
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <p className="text-sm font-semibold text-foreground leading-tight cursor-default">
-                            {record.serviceTypes[0]}{" "}
-                            <span className="text-xs font-normal text-muted-foreground">+{record.serviceTypes.length - 1} more</span>
+                          <p className="text-sm font-semibold text-foreground leading-tight cursor-default inline-flex items-center gap-1.5">
+                            {record.serviceTypes[0]}
+                            <span className="inline-flex items-center rounded-full bg-secondary px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+                              +{record.serviceTypes.length - 1} more
+                            </span>
                           </p>
                         </TooltipTrigger>
                         <TooltipContent side="top" className="max-w-xs">
@@ -378,16 +380,40 @@ const ServiceRecordTable = () => {
                     ) : (
                       <p className="text-sm font-semibold text-foreground leading-tight">{record.serviceType}</p>
                     )}
-                    <p className="text-xs text-muted-foreground mt-0.5">{record.workshopName}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5 flex items-center gap-1">
+                      <MapPin className="w-3 h-3 flex-shrink-0" strokeWidth={1.5} />
+                      {record.workshopName}
+                    </p>
                   </div>
 
                   {/* Parts column */}
-                  <div className="hidden md:block flex-1 min-w-0">
-                    <p className="text-xs text-muted-foreground leading-relaxed truncate">
-                      {record.partsChanged.length <= 2
-                        ? record.partsChanged.join(", ")
-                        : `${record.partsChanged.slice(0, 2).join(", ")} +${record.partsChanged.length - 2} more`}
-                    </p>
+                  <div className="hidden md:flex flex-1 min-w-0 items-center">
+                    {record.partsChanged.length <= 2 ? (
+                      <p className="text-xs text-muted-foreground leading-relaxed truncate">
+                        {record.partsChanged.join(", ")}
+                      </p>
+                    ) : (
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <p className="text-xs text-muted-foreground leading-relaxed cursor-default inline-flex items-center gap-1.5 truncate">
+                            <span className="truncate">{record.partsChanged[0]}</span>
+                            <span className="inline-flex items-center rounded-full bg-secondary px-2 py-0.5 text-[10px] font-medium text-muted-foreground flex-shrink-0">
+                              +{record.partsChanged.length - 1} more
+                            </span>
+                          </p>
+                        </TooltipTrigger>
+                        <TooltipContent side="top" className="max-w-xs">
+                          <ul className="space-y-1 text-xs">
+                            {record.partsChanged.map((part, i) => (
+                              <li key={i} className="flex items-center gap-1.5">
+                                <CheckCircle className="w-3 h-3 text-primary flex-shrink-0" strokeWidth={2} />
+                                {part}
+                              </li>
+                            ))}
+                          </ul>
+                        </TooltipContent>
+                      </Tooltip>
+                    )}
                   </div>
 
                   <div className="hidden sm:flex flex-col items-end gap-1 text-xs text-muted-foreground flex-shrink-0">
