@@ -147,8 +147,74 @@ const ServiceRecordTable = () => {
 
       {/* Records List */}
       <div className="space-y-2 relative">
-        {filteredRecords.slice(0, 5).map((record) => {
+      {filteredRecords.slice(0, 5).map((record, index) => {
           const isExpanded = expandedRow === record.id;
+          const ServiceIcon = getServiceIcon(record.serviceType);
+          const isAltDesign = index === 0; // Alt design on first row only
+
+          if (isAltDesign) {
+            return (
+              <div
+                key={record.id}
+                className={`rounded-xl transition-all duration-200 overflow-hidden ${
+                  isExpanded ? "shadow-elevated" : "hover:shadow-soft"
+                }`}
+              >
+                <div
+                  className={`flex items-stretch cursor-pointer transition-colors ${
+                    isExpanded ? "bg-background" : "bg-background hover:bg-secondary/20"
+                  }`}
+                  onClick={() => toggleExpand(record.id)}
+                >
+                  {/* Left accent bar */}
+                  <div className={`w-1 ${record.workshopColor} flex-shrink-0 rounded-l-xl`} />
+                  
+                  <div className="flex items-center gap-4 p-4 flex-1 min-w-0">
+                    {/* Service icon */}
+                    <div className="w-10 h-10 rounded-lg bg-secondary/60 flex items-center justify-center flex-shrink-0">
+                      <ServiceIcon className="w-5 h-5 text-foreground/70" strokeWidth={1.5} />
+                    </div>
+
+                    {/* Primary info */}
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold text-foreground leading-tight">{record.serviceType}</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        {record.workshopName} · {record.location}
+                      </p>
+                    </div>
+
+                    {/* Parts as plain text */}
+                    <div className="hidden md:block flex-1 min-w-0">
+                      <p className="text-xs text-muted-foreground leading-relaxed truncate">
+                        {record.partsChanged.join(", ")}
+                      </p>
+                    </div>
+
+                    {/* Date & mileage */}
+                    <div className="hidden sm:flex items-center gap-4 text-xs text-muted-foreground flex-shrink-0">
+                      <span className="flex items-center gap-1.5">
+                        <Calendar className="w-3.5 h-3.5" strokeWidth={1.5} />
+                        {record.date}
+                      </span>
+                      <span className="flex items-center gap-1.5">
+                        <Gauge className="w-3.5 h-3.5" strokeWidth={1.5} />
+                        {record.mileage.toLocaleString()} km
+                      </span>
+                    </div>
+
+                    {/* Cost */}
+                    <span className="text-sm font-semibold text-foreground flex-shrink-0 hidden lg:block">
+                      RM {record.cost.toLocaleString()}
+                    </span>
+
+                    <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0">
+                      {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            );
+          }
 
           return (
             <div
