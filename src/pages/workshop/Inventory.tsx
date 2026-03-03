@@ -10,6 +10,8 @@ import {
   AlertTriangle,
   Pencil,
   Trash2,
+  Filter,
+  X,
 } from "lucide-react";
 import AddPartDialog from "@/components/workshop/AddPartDialog";
 import EditPartDialog from "@/components/workshop/EditPartDialog";
@@ -48,6 +50,19 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface Part {
   id: string;
@@ -145,6 +160,9 @@ export default function Inventory() {
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
+  const [activeSupplier, setActiveSupplier] = useState("All");
+  const [showLowStockOnly, setShowLowStockOnly] = useState(false);
+  const [filterOpen, setFilterOpen] = useState(false);
   const [sortKey, setSortKey] = useState<SortKey | null>(null);
   const [sortDir, setSortDir] = useState<SortDir>("asc");
   const [editPart, setEditPart] = useState<Part | null>(null);
@@ -214,7 +232,9 @@ export default function Inventory() {
         p.name.toLowerCase().includes(search.toLowerCase()) ||
         p.sku.toLowerCase().includes(search.toLowerCase());
       const matchesCategory = activeCategory === "All" || p.category === activeCategory;
-      return matchesSearch && matchesCategory;
+      const matchesSupplier = activeSupplier === "All" || p.supplier === activeSupplier;
+      const matchesLowStock = !showLowStockOnly || p.stock <= p.minStock;
+      return matchesSearch && matchesCategory && matchesSupplier && matchesLowStock;
     });
 
     if (sortKey) {
@@ -231,7 +251,7 @@ export default function Inventory() {
     }
 
     return result;
-  }, [parts, search, activeCategory, sortKey, sortDir]);
+  }, [parts, search, activeCategory, activeSupplier, showLowStockOnly, sortKey, sortDir]);
 
   const totalValue = parts.reduce((sum, p) => sum + p.stock * p.costPrice, 0);
   const lowStockCount = parts.filter((p) => p.stock <= p.minStock).length;
@@ -344,30 +364,114 @@ export default function Inventory() {
         </div>
 
         {/* Filters */}
-        <div className="flex items-center gap-3">
-          <div className="relative shrink-0 w-56">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
-            <Input
-              placeholder="Search parts or SKU..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="pl-9 bg-secondary/60 border-0 shadow-soft"
-            />
-          </div>
-          <div className="flex gap-1.5 overflow-x-auto no-scrollbar">
-            {filterCategories.map((cat) => (
-              <Button
-                key={cat}
-                variant={activeCategory === cat ? "default" : "outline"}
-                size="sm"
-                className="text-xs h-8 shrink-0"
-                onClick={() => setActiveCategory(cat)}
-              >
-                {cat}
-              </Button>
-            ))}
-          </div>
-        </div>
+        {(() => {
+          const activeFilterCount = (activeCategory !== "All" ? 1 : 0) + (activeSupplier !== "All" ? 1 : 0) + (showLowStockOnly ? 1 : 0);
+          return (
+            <div className="flex items-center gap-3">
+              <div className="relative shrink-0 w-56">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
+                <Input
+                  placeholder="Search parts or SKU..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="pl-9 bg-secondary/60 border-0 shadow-soft"
+                />
+              </div>
+              <Popover open={filterOpen} onOpenChange={setFilterOpen}>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" size="sm" className="gap-2 h-9 text-xs">
+                    <Filter className="w-3.5 h-3.5" />
+                    Filters
+                    {activeFilterCount > 0 && (
+                      <Badge className="h-5 w-5 p-0 flex items-center justify-center text-[10px] rounded-full">
+                        {activeFilterCount}
+                      </Badge>
+                    )}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent align="start" className="w-64 p-4 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-medium text-foreground">Filters</p>
+                    {activeFilterCount > 0 && (
+                      <button
+                        className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+                        onClick={() => {
+                          setActiveCategory("All");
+                          setActiveSupplier("All");
+                          setShowLowStockOnly(false);
+                        }}
+                      >
+                        Clear all
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-medium text-muted-foreground">Category</label>
+                    <Select value={activeCategory} onValueChange={setActiveCategory}>
+                      <SelectTrigger className="h-8 text-xs">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {filterCategories.map((cat) => (
+                          <SelectItem key={cat} value={cat} className="text-xs">{cat}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-medium text-muted-foreground">Supplier</label>
+                    <Select value={activeSupplier} onValueChange={setActiveSupplier}>
+                      <SelectTrigger className="h-8 text-xs">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="All" className="text-xs">All</SelectItem>
+                        {allSuppliers.map((s) => (
+                          <SelectItem key={s} value={s} className="text-xs">{s}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <Checkbox
+                      id="low-stock-filter"
+                      checked={showLowStockOnly}
+                      onCheckedChange={(v) => setShowLowStockOnly(v === true)}
+                    />
+                    <label htmlFor="low-stock-filter" className="text-xs font-medium text-foreground cursor-pointer flex items-center gap-1.5">
+                      <AlertTriangle className="w-3 h-3 text-warning" />
+                      Low stock only
+                    </label>
+                  </div>
+                </PopoverContent>
+              </Popover>
+
+              {/* Active filter badges */}
+              {activeFilterCount > 0 && (
+                <div className="flex gap-1.5 flex-wrap">
+                  {activeCategory !== "All" && (
+                    <Badge variant="secondary" className="gap-1 text-xs cursor-pointer" onClick={() => setActiveCategory("All")}>
+                      {activeCategory} <X className="w-3 h-3" />
+                    </Badge>
+                  )}
+                  {activeSupplier !== "All" && (
+                    <Badge variant="secondary" className="gap-1 text-xs cursor-pointer" onClick={() => setActiveSupplier("All")}>
+                      {activeSupplier} <X className="w-3 h-3" />
+                    </Badge>
+                  )}
+                  {showLowStockOnly && (
+                    <Badge variant="secondary" className="gap-1 text-xs cursor-pointer" onClick={() => setShowLowStockOnly(false)}>
+                      Low Stock <X className="w-3 h-3" />
+                    </Badge>
+                  )}
+                </div>
+              )}
+            </div>
+          );
+        })()}
 
         {/* Table */}
         <Card className="shadow-soft border-border/50 overflow-hidden">
