@@ -231,8 +231,8 @@ export default function Inventory() {
       const matchesSearch =
         p.name.toLowerCase().includes(search.toLowerCase()) ||
         p.sku.toLowerCase().includes(search.toLowerCase());
-      const matchesCategory = activeCategory === "All" || p.category === activeCategory;
-      const matchesSupplier = activeSupplier === "All" || p.supplier === activeSupplier;
+      const matchesCategory = activeCategories.length === 0 || activeCategories.includes(p.category);
+      const matchesSupplier = activeSuppliers.length === 0 || activeSuppliers.includes(p.supplier);
       const matchesLowStock = !showLowStockOnly || p.stock <= p.minStock;
       return matchesSearch && matchesCategory && matchesSupplier && matchesLowStock;
     });
