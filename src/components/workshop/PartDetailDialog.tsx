@@ -142,27 +142,28 @@ export default function PartDetailDialog({
 
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) resetForm(); onOpenChange(v); }}>
-      <DialogContent className="max-w-2xl max-h-[85vh] flex flex-col gap-0 p-0">
-        <DialogHeader className="px-6 pt-6 pb-4">
+      <DialogContent className="max-w-3xl max-h-[90vh] flex flex-col gap-0 p-0 overflow-hidden">
+        <DialogHeader className="px-8 pt-8 pb-5">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg bg-secondary flex items-center justify-center">
-                <Package className="w-4 h-4 text-muted-foreground" />
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center">
+                <Package className="w-5 h-5 text-muted-foreground" />
               </div>
               <div>
-                <DialogTitle className="text-lg">{part.name}</DialogTitle>
-                <p className="text-xs font-mono text-muted-foreground mt-0.5">{part.sku}</p>
+                <DialogTitle className="text-xl font-semibold">{part.name}</DialogTitle>
+                <p className="text-xs font-mono text-muted-foreground mt-1">{part.sku}</p>
               </div>
             </div>
-            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onEditClick}>
-              <Pencil className="w-4 h-4" />
+            <Button variant="outline" size="sm" className="gap-1.5 h-8" onClick={onEditClick}>
+              <Pencil className="w-3.5 h-3.5" />
+              Edit
             </Button>
           </div>
         </DialogHeader>
 
-        <div className="px-6 pb-4">
+        <div className="px-8 pb-5">
           {/* Part Info Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-4">
             <InfoItem label="Category" value={part.category} />
             <InfoItem label="Stock" value={String(part.stock)} highlight={part.stock <= part.minStock} />
             <InfoItem label="Min Stock" value={String(part.minStock)} />
@@ -177,7 +178,7 @@ export default function PartDetailDialog({
         <Separator />
 
         {/* Movement Section */}
-        <div className="flex-1 flex flex-col min-h-0 px-6 py-4">
+        <div className="flex-1 flex flex-col min-h-0 px-8 py-5">
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-sm font-semibold text-foreground">Stock Movements</h3>
             {!showForm && (
@@ -267,45 +268,45 @@ export default function PartDetailDialog({
           )}
 
           {/* Movement Table */}
-          <ScrollArea className="flex-1 max-h-[280px]">
+          <ScrollArea className="flex-1 max-h-[320px]">
             <Table>
               <TableHeader>
-                <TableRow className="bg-secondary/30">
-                  <TableHead className="text-xs w-[90px]">Date</TableHead>
-                  <TableHead className="text-xs w-[60px]">Type</TableHead>
-                  <TableHead className="text-xs w-[60px] text-right">Qty</TableHead>
-                  <TableHead className="text-xs w-[100px]">Ref Type</TableHead>
-                  <TableHead className="text-xs w-[80px]">Ref ID</TableHead>
-                  <TableHead className="text-xs w-[70px] text-right">Cost</TableHead>
-                  <TableHead className="text-xs w-[70px] text-right">Balance</TableHead>
+                <TableRow className="bg-secondary/30 hover:bg-secondary/30">
+                  <TableHead className="text-[11px] font-medium h-8">Date</TableHead>
+                  <TableHead className="text-[11px] font-medium h-8">Type</TableHead>
+                  <TableHead className="text-[11px] font-medium h-8 text-right">Qty</TableHead>
+                  <TableHead className="text-[11px] font-medium h-8">Ref Type</TableHead>
+                  <TableHead className="text-[11px] font-medium h-8">Ref ID</TableHead>
+                  <TableHead className="text-[11px] font-medium h-8 text-right">Cost</TableHead>
+                  <TableHead className="text-[11px] font-medium h-8 text-right">Balance</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {partMovements.map((m) => {
                   const config = MOVEMENT_TYPE_CONFIG[m.type];
                   return (
-                    <TableRow key={m.id}>
-                      <TableCell className="text-xs text-muted-foreground">
+                    <TableRow key={m.id} className="hover:bg-secondary/10">
+                      <TableCell className="text-xs text-muted-foreground py-2">
                         {format(new Date(m.date), "dd MMM yy")}
                       </TableCell>
-                      <TableCell>
-                        <Badge variant="outline" className={`text-[10px] px-1.5 ${config.className}`}>
+                      <TableCell className="py-2">
+                        <Badge variant="outline" className={`text-[10px] px-1.5 py-0 h-5 ${config.className}`}>
                           {config.label}
                         </Badge>
                       </TableCell>
-                      <TableCell className={`text-xs text-right font-semibold ${m.quantity > 0 ? "text-emerald-600" : "text-destructive"}`}>
+                      <TableCell className={`text-xs text-right font-semibold py-2 ${m.quantity > 0 ? "text-emerald-600" : "text-destructive"}`}>
                         {m.quantity > 0 ? `+${m.quantity}` : m.quantity}
                       </TableCell>
-                      <TableCell className="text-xs text-muted-foreground">
+                      <TableCell className="text-xs text-muted-foreground py-2">
                         {REFERENCE_TYPE_LABELS[m.referenceType]}
                       </TableCell>
-                      <TableCell className="text-xs font-mono text-muted-foreground">
+                      <TableCell className="text-xs font-mono text-muted-foreground py-2">
                         {m.referenceId || "—"}
                       </TableCell>
-                      <TableCell className="text-xs text-right text-muted-foreground">
+                      <TableCell className="text-xs text-right text-muted-foreground py-2">
                         ${m.costPriceAtTime}
                       </TableCell>
-                      <TableCell className="text-xs text-right font-medium">
+                      <TableCell className="text-xs text-right font-medium py-2">
                         {m.balanceAfter}
                       </TableCell>
                     </TableRow>
@@ -329,9 +330,9 @@ export default function PartDetailDialog({
 
 function InfoItem({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) {
   return (
-    <div className="space-y-0.5">
-      <p className="text-[11px] text-muted-foreground">{label}</p>
-      <p className={`text-sm font-medium ${highlight ? "text-destructive" : "text-foreground"}`}>{value}</p>
+    <div className="space-y-1">
+      <p className="text-[11px] uppercase tracking-wider text-muted-foreground">{label}</p>
+      <p className={`text-sm font-semibold ${highlight ? "text-destructive" : "text-foreground"}`}>{value}</p>
     </div>
   );
 }
