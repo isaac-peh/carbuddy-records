@@ -54,7 +54,7 @@ const mockParts: Part[] = [
   { id: "10", name: "Transmission Fluid (1L)", sku: "TF-ATF-001", category: "Lubricants", stock: 7, minStock: 5, costPrice: 15, sellPrice: 32, supplier: "Shell SG" },
 ];
 
-const categories = ["All", "Brakes", "Lubricants", "Filters", "Ignition", "Accessories", "Electrical"];
+const defaultCategories = ["Brakes", "Lubricants", "Filters", "Ignition", "Accessories", "Electrical"];
 
 type SortKey = "name" | "sku" | "category" | "stock" | "costPrice" | "sellPrice" | "supplier";
 type SortDir = "asc" | "desc";
