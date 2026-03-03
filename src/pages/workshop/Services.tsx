@@ -218,7 +218,7 @@ export default function Services() {
                       <TruncatedCell className="text-sm text-muted-foreground">{service.description}</TruncatedCell>
                     </TableCell>
                     <TableCell className="text-right text-sm font-medium">${service.price}</TableCell>
-                    <TableCell>
+                    <TableCell className="text-center">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button variant="ghost" size="icon" className="h-7 w-7">
