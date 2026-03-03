@@ -74,7 +74,7 @@ const mockParts: Part[] = [
   { id: "10", name: "Transmission Fluid (1L)", sku: "TF-ATF-001", category: "Lubricants", stock: 7, minStock: 5, costPrice: 15, sellPrice: 32, supplier: "Shell SG" },
 ];
 
-const defaultCategories = ["Brakes", "Lubricants", "Filters", "Ignition", "Accessories", "Electrical", "Others"];
+const defaultCategories = ["Brakes", "Lubricants", "Filters", "Ignition", "Accessories", "Electrical", "Suspension", "Cooling", "Others"];
 
 const mockMovements: StockMovement[] = [
   { id: "m1", partId: "1", date: "2026-03-01T10:00:00Z", type: "in", quantity: 20, referenceType: "purchase_order", referenceId: "PO-0012", costPriceAtTime: 35, notes: "Initial stock order", balanceAfter: 20 },
