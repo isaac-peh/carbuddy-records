@@ -54,7 +54,6 @@ const mockParts: Part[] = [
 ];
 
 const categories = ["All", "Brakes", "Lubricants", "Filters", "Ignition", "Accessories", "Electrical"];
-const suppliers = ["All", ...Array.from(new Set(mockParts.map((p) => p.supplier))).sort()];
 
 type SortKey = "name" | "sku" | "category" | "stock" | "costPrice" | "sellPrice" | "supplier";
 type SortDir = "asc" | "desc";
@@ -108,7 +107,6 @@ function SortableHead({
 export default function Inventory() {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
-  const [activeSupplier, setActiveSupplier] = useState("All");
   const [sortKey, setSortKey] = useState<SortKey | null>(null);
   const [sortDir, setSortDir] = useState<SortDir>("asc");
 
@@ -127,8 +125,7 @@ export default function Inventory() {
         p.name.toLowerCase().includes(search.toLowerCase()) ||
         p.sku.toLowerCase().includes(search.toLowerCase());
       const matchesCategory = activeCategory === "All" || p.category === activeCategory;
-      const matchesSupplier = activeSupplier === "All" || p.supplier === activeSupplier;
-      return matchesSearch && matchesCategory && matchesSupplier;
+      return matchesSearch && matchesCategory;
     });
 
     if (sortKey) {
@@ -145,7 +142,7 @@ export default function Inventory() {
     }
 
     return result;
-  }, [search, activeCategory, activeSupplier, sortKey, sortDir]);
+  }, [search, activeCategory, sortKey, sortDir]);
 
   const totalValue = mockParts.reduce((sum, p) => sum + p.stock * p.costPrice, 0);
   const lowStockCount = mockParts.filter((p) => p.stock <= p.minStock).length;
@@ -215,35 +212,18 @@ export default function Inventory() {
               className="pl-9 bg-secondary/60 border-0 shadow-soft"
             />
           </div>
-          <div className="flex flex-col gap-2">
-            <div className="flex gap-1.5 flex-wrap items-center">
-              <span className="text-xs text-muted-foreground font-medium mr-1">Category:</span>
-              {categories.map((cat) => (
-                <Button
-                  key={cat}
-                  variant={activeCategory === cat ? "default" : "outline"}
-                  size="sm"
-                  className="text-xs h-8"
-                  onClick={() => setActiveCategory(cat)}
-                >
-                  {cat}
-                </Button>
-              ))}
-            </div>
-            <div className="flex gap-1.5 flex-wrap items-center">
-              <span className="text-xs text-muted-foreground font-medium mr-1">Supplier:</span>
-              {suppliers.map((sup) => (
-                <Button
-                  key={sup}
-                  variant={activeSupplier === sup ? "default" : "outline"}
-                  size="sm"
-                  className="text-xs h-8"
-                  onClick={() => setActiveSupplier(sup)}
-                >
-                  {sup}
-                </Button>
-              ))}
-            </div>
+          <div className="flex gap-1.5 flex-wrap">
+            {categories.map((cat) => (
+              <Button
+                key={cat}
+                variant={activeCategory === cat ? "default" : "outline"}
+                size="sm"
+                className="text-xs h-8"
+                onClick={() => setActiveCategory(cat)}
+              >
+                {cat}
+              </Button>
+            ))}
           </div>
         </div>
 
