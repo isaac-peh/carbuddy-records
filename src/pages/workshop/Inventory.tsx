@@ -365,7 +365,7 @@ export default function Inventory() {
 
         {/* Filters */}
         {(() => {
-          const activeFilterCount = (activeCategory !== "All" ? 1 : 0) + (activeSupplier !== "All" ? 1 : 0) + (showLowStockOnly ? 1 : 0);
+          const activeFilterCount = activeCategories.length + activeSuppliers.length + (showLowStockOnly ? 1 : 0);
           return (
             <div className="flex items-center gap-3">
               <div className="relative shrink-0 w-56">
@@ -396,8 +396,8 @@ export default function Inventory() {
                       <button
                         className="text-xs text-muted-foreground hover:text-foreground transition-colors"
                         onClick={() => {
-                          setActiveCategory("All");
-                          setActiveSupplier("All");
+                          setActiveCategories([]);
+                          setActiveSuppliers([]);
                           setShowLowStockOnly(false);
                         }}
                       >
@@ -406,33 +406,44 @@ export default function Inventory() {
                     )}
                   </div>
 
-                  <div className="space-y-1.5">
+                  <div className="space-y-2">
                     <label className="text-xs font-medium text-muted-foreground">Category</label>
-                    <Select value={activeCategory} onValueChange={setActiveCategory}>
-                      <SelectTrigger className="h-8 text-xs">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {filterCategories.map((cat) => (
-                          <SelectItem key={cat} value={cat} className="text-xs">{cat}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <div className="space-y-1.5 max-h-32 overflow-y-auto">
+                      {allCategories.map((cat) => (
+                        <div key={cat} className="flex items-center gap-2">
+                          <Checkbox
+                            id={`cat-${cat}`}
+                            checked={activeCategories.includes(cat)}
+                            onCheckedChange={(checked) => {
+                              setActiveCategories((prev) =>
+                                checked ? [...prev, cat] : prev.filter((c) => c !== cat)
+                              );
+                            }}
+                          />
+                          <label htmlFor={`cat-${cat}`} className="text-xs cursor-pointer">{cat}</label>
+                        </div>
+                      ))}
+                    </div>
                   </div>
 
-                  <div className="space-y-1.5">
+                  <div className="space-y-2">
                     <label className="text-xs font-medium text-muted-foreground">Supplier</label>
-                    <Select value={activeSupplier} onValueChange={setActiveSupplier}>
-                      <SelectTrigger className="h-8 text-xs">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="All" className="text-xs">All</SelectItem>
-                        {allSuppliers.map((s) => (
-                          <SelectItem key={s} value={s} className="text-xs">{s}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <div className="space-y-1.5 max-h-32 overflow-y-auto">
+                      {allSuppliers.map((s) => (
+                        <div key={s} className="flex items-center gap-2">
+                          <Checkbox
+                            id={`sup-${s}`}
+                            checked={activeSuppliers.includes(s)}
+                            onCheckedChange={(checked) => {
+                              setActiveSuppliers((prev) =>
+                                checked ? [...prev, s] : prev.filter((x) => x !== s)
+                              );
+                            }}
+                          />
+                          <label htmlFor={`sup-${s}`} className="text-xs cursor-pointer">{s}</label>
+                        </div>
+                      ))}
+                    </div>
                   </div>
 
                   <div className="flex items-center gap-2">
@@ -452,16 +463,16 @@ export default function Inventory() {
               {/* Active filter badges */}
               {activeFilterCount > 0 && (
                 <div className="flex gap-1.5 flex-wrap">
-                  {activeCategory !== "All" && (
-                    <Badge variant="secondary" className="gap-1 text-xs cursor-pointer" onClick={() => setActiveCategory("All")}>
-                      {activeCategory} <X className="w-3 h-3" />
+                  {activeCategories.map((cat) => (
+                    <Badge key={cat} variant="secondary" className="gap-1 text-xs cursor-pointer" onClick={() => setActiveCategories((prev) => prev.filter((c) => c !== cat))}>
+                      {cat} <X className="w-3 h-3" />
                     </Badge>
-                  )}
-                  {activeSupplier !== "All" && (
-                    <Badge variant="secondary" className="gap-1 text-xs cursor-pointer" onClick={() => setActiveSupplier("All")}>
-                      {activeSupplier} <X className="w-3 h-3" />
+                  ))}
+                  {activeSuppliers.map((s) => (
+                    <Badge key={s} variant="secondary" className="gap-1 text-xs cursor-pointer" onClick={() => setActiveSuppliers((prev) => prev.filter((x) => x !== s))}>
+                      {s} <X className="w-3 h-3" />
                     </Badge>
-                  )}
+                  ))}
                   {showLowStockOnly && (
                     <Badge variant="secondary" className="gap-1 text-xs cursor-pointer" onClick={() => setShowLowStockOnly(false)}>
                       Low Stock <X className="w-3 h-3" />
