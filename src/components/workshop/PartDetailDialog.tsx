@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { format } from "date-fns";
 import {
-  Pencil,
   Plus,
   Package,
   ArrowDownCircle,
@@ -67,7 +66,6 @@ interface PartDetailDialogProps {
   onOpenChange: (open: boolean) => void;
   part: Part | null;
   movements: StockMovement[];
-  onEditClick: () => void;
   onRecordMovement: (movement: Omit<StockMovement, "id" | "balanceAfter">) => void;
 }
 
@@ -92,7 +90,6 @@ export default function PartDetailDialog({
   onOpenChange,
   part,
   movements,
-  onEditClick,
   onRecordMovement,
 }: PartDetailDialogProps) {
   const [showForm, setShowForm] = useState(false);
@@ -154,10 +151,6 @@ export default function PartDetailDialog({
                 <p className="text-xs font-mono text-muted-foreground mt-1">{part.sku}</p>
               </div>
             </div>
-            <Button variant="outline" size="sm" className="gap-1.5 h-8" onClick={onEditClick}>
-              <Pencil className="w-3.5 h-3.5" />
-              Edit
-            </Button>
           </div>
         </DialogHeader>
 

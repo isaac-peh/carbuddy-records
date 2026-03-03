@@ -286,13 +286,6 @@ export default function Inventory() {
           onOpenChange={setDetailDialogOpen}
           part={detailPart}
           movements={movements}
-          onEditClick={() => {
-            if (detailPart) {
-              setEditPart(detailPart);
-              setDetailDialogOpen(false);
-              setEditDialogOpen(true);
-            }
-          }}
           onRecordMovement={handleRecordMovement}
         />
 
@@ -427,6 +420,10 @@ export default function Inventory() {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
+                            <DropdownMenuItem onClick={() => { setDetailPart(part); setDetailDialogOpen(true); }}>
+                              <Package className="w-3.5 h-3.5 mr-2" />
+                              View
+                            </DropdownMenuItem>
                             <DropdownMenuItem onClick={() => { setEditPart(part); setEditDialogOpen(true); }}>
                               <Pencil className="w-3.5 h-3.5 mr-2" />
                               Edit
