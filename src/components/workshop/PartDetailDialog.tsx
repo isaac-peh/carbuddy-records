@@ -258,7 +258,7 @@ export default function PartDetailDialog({
               </div>
               <div className="flex justify-end gap-2">
                 <Button variant="ghost" size="sm" onClick={resetForm}>
-                  <X className="w-3 h-3 mr-1" /> Cancel
+                  Cancel
                 </Button>
                 <Button size="sm" disabled={!isValid} onClick={handleSubmit}>
                   Save Movement
