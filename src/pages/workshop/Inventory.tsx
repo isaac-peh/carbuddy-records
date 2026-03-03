@@ -240,7 +240,7 @@ export default function Inventory() {
             />
           </div>
           <div className="flex gap-1.5 flex-wrap">
-            {categories.map((cat) => (
+            {filterCategories.map((cat) => (
               <Button
                 key={cat}
                 variant={activeCategory === cat ? "default" : "outline"}
