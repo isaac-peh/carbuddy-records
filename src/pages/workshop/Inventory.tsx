@@ -236,6 +236,32 @@ export default function Inventory() {
           onAdd={handleAddPart}
         />
 
+        <EditPartDialog
+          open={editDialogOpen}
+          onOpenChange={setEditDialogOpen}
+          part={editPart}
+          categories={allCategories}
+          suppliers={allSuppliers}
+          onSave={handleEditPart}
+        />
+
+        <AlertDialog open={!!deletePart} onOpenChange={(v) => { if (!v) setDeletePart(null); }}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Delete Part</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure you want to delete "{deletePart?.name}"? This action cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={() => deletePart && handleDeletePart(deletePart.id)}>
+                Delete
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+
         {/* Summary Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <Card className="shadow-soft border-border/50">
