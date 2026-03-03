@@ -143,19 +143,20 @@ export default function PartDetailDialog({
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) resetForm(); onOpenChange(v); }}>
       <DialogContent className="max-w-3xl max-h-[90vh] flex flex-col gap-0 p-0 overflow-hidden">
-        <DialogHeader className="px-6 pt-6 pb-4">
+        <DialogHeader className="px-8 pt-8 pb-5">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg bg-secondary flex items-center justify-center">
-                <Package className="w-4 h-4 text-muted-foreground" />
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center">
+                <Package className="w-5 h-5 text-muted-foreground" />
               </div>
               <div>
-                <DialogTitle className="text-lg">{part.name}</DialogTitle>
-                <p className="text-xs font-mono text-muted-foreground mt-0.5">{part.sku}</p>
+                <DialogTitle className="text-xl font-semibold">{part.name}</DialogTitle>
+                <p className="text-xs font-mono text-muted-foreground mt-1">{part.sku}</p>
               </div>
             </div>
-            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onEditClick}>
-              <Pencil className="w-4 h-4" />
+            <Button variant="outline" size="sm" className="gap-1.5 h-8" onClick={onEditClick}>
+              <Pencil className="w-3.5 h-3.5" />
+              Edit
             </Button>
           </div>
         </DialogHeader>
