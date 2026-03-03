@@ -133,6 +133,9 @@ export default function Inventory() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [sortKey, setSortKey] = useState<SortKey | null>(null);
   const [sortDir, setSortDir] = useState<SortDir>("asc");
+  const [editPart, setEditPart] = useState<Part | null>(null);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [deletePart, setDeletePart] = useState<Part | null>(null);
 
   const allCategories = useMemo(() => {
     const merged = new Set([...defaultCategories, ...customCategories]);
