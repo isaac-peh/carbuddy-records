@@ -157,6 +157,19 @@ export default function Inventory() {
       setSortKey(key);
       setSortDir("asc");
     }
+  const handleEditPart = (updatedPart: Part) => {
+    setParts((prev) => prev.map((p) => (p.id === updatedPart.id ? updatedPart : p)));
+    if (!allCategories.includes(updatedPart.category)) {
+      setCustomCategories((prev) => [...prev, updatedPart.category]);
+    }
+    if (updatedPart.supplier && !allSuppliers.includes(updatedPart.supplier)) {
+      setCustomSuppliers((prev) => [...prev, updatedPart.supplier]);
+    }
+  };
+
+  const handleDeletePart = (id: string) => {
+    setParts((prev) => prev.filter((p) => p.id !== id));
+    setDeletePart(null);
   };
 
   const filtered = useMemo(() => {
