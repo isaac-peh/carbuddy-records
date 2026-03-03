@@ -8,8 +8,11 @@ import {
   ArrowDown,
   MoreHorizontal,
   AlertTriangle,
+  Pencil,
+  Trash2,
 } from "lucide-react";
 import AddPartDialog from "@/components/workshop/AddPartDialog";
+import EditPartDialog from "@/components/workshop/EditPartDialog";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -28,6 +31,22 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface Part {
   id: string;
@@ -114,6 +133,9 @@ export default function Inventory() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [sortKey, setSortKey] = useState<SortKey | null>(null);
   const [sortDir, setSortDir] = useState<SortDir>("asc");
+  const [editPart, setEditPart] = useState<Part | null>(null);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [deletePart, setDeletePart] = useState<Part | null>(null);
 
   const allCategories = useMemo(() => {
     const merged = new Set([...defaultCategories, ...customCategories]);
@@ -135,6 +157,21 @@ export default function Inventory() {
       setSortKey(key);
       setSortDir("asc");
     }
+  };
+
+  const handleEditPart = (updatedPart: Part) => {
+    setParts((prev) => prev.map((p) => (p.id === updatedPart.id ? updatedPart : p)));
+    if (!allCategories.includes(updatedPart.category)) {
+      setCustomCategories((prev) => [...prev, updatedPart.category]);
+    }
+    if (updatedPart.supplier && !allSuppliers.includes(updatedPart.supplier)) {
+      setCustomSuppliers((prev) => [...prev, updatedPart.supplier]);
+    }
+  };
+
+  const handleDeletePart = (id: string) => {
+    setParts((prev) => prev.filter((p) => p.id !== id));
+    setDeletePart(null);
   };
 
   const filtered = useMemo(() => {
@@ -200,6 +237,32 @@ export default function Inventory() {
           suppliers={allSuppliers}
           onAdd={handleAddPart}
         />
+
+        <EditPartDialog
+          open={editDialogOpen}
+          onOpenChange={setEditDialogOpen}
+          part={editPart}
+          categories={allCategories}
+          suppliers={allSuppliers}
+          onSave={handleEditPart}
+        />
+
+        <AlertDialog open={!!deletePart} onOpenChange={(v) => { if (!v) setDeletePart(null); }}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Delete Part</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure you want to delete "{deletePart?.name}"? This action cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={() => deletePart && handleDeletePart(deletePart.id)}>
+                Delete
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
 
         {/* Summary Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -308,9 +371,23 @@ export default function Inventory() {
                         <TruncatedCell className="text-xs text-muted-foreground">{part.supplier}</TruncatedCell>
                       </TableCell>
                       <TableCell className="text-center">
-                        <Button variant="ghost" size="icon" className="h-7 w-7">
-                          <MoreHorizontal className="w-3.5 h-3.5" />
-                        </Button>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon" className="h-7 w-7">
+                              <MoreHorizontal className="w-3.5 h-3.5" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem onClick={() => { setEditPart(part); setEditDialogOpen(true); }}>
+                              <Pencil className="w-3.5 h-3.5 mr-2" />
+                              Edit
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className="text-destructive" onClick={() => setDeletePart(part)}>
+                              <Trash2 className="w-3.5 h-3.5 mr-2" />
+                              Delete
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       </TableCell>
                     </TableRow>
                   );
