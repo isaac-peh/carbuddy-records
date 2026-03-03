@@ -147,6 +147,9 @@ export default function Inventory() {
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
+  const [activeSupplier, setActiveSupplier] = useState("All");
+  const [showLowStockOnly, setShowLowStockOnly] = useState(false);
+  const [filterOpen, setFilterOpen] = useState(false);
   const [sortKey, setSortKey] = useState<SortKey | null>(null);
   const [sortDir, setSortDir] = useState<SortDir>("asc");
   const [editPart, setEditPart] = useState<Part | null>(null);
