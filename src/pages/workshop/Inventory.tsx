@@ -286,13 +286,6 @@ export default function Inventory() {
           onOpenChange={setDetailDialogOpen}
           part={detailPart}
           movements={movements}
-          onEditClick={() => {
-            if (detailPart) {
-              setEditPart(detailPart);
-              setDetailDialogOpen(false);
-              setEditDialogOpen(true);
-            }
-          }}
           onRecordMovement={handleRecordMovement}
         />
 
