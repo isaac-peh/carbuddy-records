@@ -54,6 +54,7 @@ const mockParts: Part[] = [
 ];
 
 const categories = ["All", "Brakes", "Lubricants", "Filters", "Ignition", "Accessories", "Electrical"];
+const suppliers = ["All", ...Array.from(new Set(mockParts.map((p) => p.supplier))).sort()];
 
 type SortKey = "name" | "sku" | "category" | "stock" | "costPrice" | "sellPrice" | "supplier";
 type SortDir = "asc" | "desc";
