@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import AddPartDialog from "@/components/workshop/AddPartDialog";
 import EditPartDialog from "@/components/workshop/EditPartDialog";
+import PartDetailDialog, { type StockMovement } from "@/components/workshop/PartDetailDialog";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
