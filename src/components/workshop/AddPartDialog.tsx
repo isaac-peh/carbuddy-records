@@ -179,8 +179,39 @@ export default function AddPartDialog({ open, onOpenChange, categories, supplier
 
           {/* Supplier */}
           <div className="space-y-1.5">
-            <Label htmlFor="part-supplier">Supplier</Label>
-            <Input id="part-supplier" placeholder="e.g. AutoParts SG" value={supplier} onChange={(e) => setSupplier(e.target.value)} />
+            <Label>Supplier</Label>
+            <Select
+              value={supplierMode === "existing" ? selectedSupplier : "__custom__"}
+              onValueChange={(val) => {
+                if (val === "__custom__") {
+                  setSupplierMode("custom");
+                  setSelectedSupplier("");
+                } else {
+                  setSupplierMode("existing");
+                  setSelectedSupplier(val);
+                  setCustomSupplier("");
+                }
+              }}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select supplier" />
+              </SelectTrigger>
+              <SelectContent>
+                {suppliers.map((s) => (
+                  <SelectItem key={s} value={s}>{s}</SelectItem>
+                ))}
+                <SelectItem value="__custom__">+ Add custom supplier</SelectItem>
+              </SelectContent>
+            </Select>
+            {supplierMode === "custom" && (
+              <Input
+                placeholder="Enter supplier name"
+                value={customSupplier}
+                onChange={(e) => setCustomSupplier(e.target.value)}
+                className="mt-1.5"
+                autoFocus
+              />
+            )}
           </div>
         </div>
 
