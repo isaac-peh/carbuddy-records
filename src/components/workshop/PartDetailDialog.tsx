@@ -330,9 +330,9 @@ export default function PartDetailDialog({
 
 function InfoItem({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) {
   return (
-    <div className="space-y-0.5">
-      <p className="text-[11px] text-muted-foreground">{label}</p>
-      <p className={`text-sm font-medium ${highlight ? "text-destructive" : "text-foreground"}`}>{value}</p>
+    <div className="space-y-1">
+      <p className="text-[11px] uppercase tracking-wider text-muted-foreground">{label}</p>
+      <p className={`text-sm font-semibold ${highlight ? "text-destructive" : "text-foreground"}`}>{value}</p>
     </div>
   );
 }
