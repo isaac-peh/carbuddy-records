@@ -419,7 +419,7 @@ export default function Inventory() {
                       <TableCell className="hidden lg:table-cell max-w-[130px]">
                         <TruncatedCell className="text-xs text-muted-foreground">{part.supplier}</TruncatedCell>
                       </TableCell>
-                      <TableCell className="text-center">
+                      <TableCell className="text-center" onClick={(e) => e.stopPropagation()}>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
                             <Button variant="ghost" size="icon" className="h-7 w-7">
