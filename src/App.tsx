@@ -9,6 +9,8 @@ import B2BLayout from "./layouts/B2BLayout";
 import Dashboard from "./pages/workshop/Dashboard";
 import Inventory from "./pages/workshop/Inventory";
 import Invoices from "./pages/workshop/Invoices";
+import Services from "./pages/workshop/Services";
+import { Navigate } from "react-router-dom";
 
 const queryClient = new QueryClient();
 
@@ -24,7 +26,9 @@ const App = () => (
           {/* B2B Workshop Platform */}
           <Route path="/workshop" element={<B2BLayout />}>
             <Route index element={<Dashboard />} />
-            <Route path="inventory" element={<Inventory />} />
+            <Route path="parts" element={<Inventory />} />
+            <Route path="inventory" element={<Navigate to="/workshop/parts" replace />} />
+            <Route path="services" element={<Services />} />
             <Route path="invoices" element={<Invoices />} />
           </Route>
 

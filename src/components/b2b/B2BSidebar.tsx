@@ -26,9 +26,9 @@ import {
 
 const mainItems = [
   { title: "Dashboard", url: "/workshop", icon: LayoutDashboard },
-  { title: "Inventory", url: "/workshop/inventory", icon: Package },
+  { title: "Parts", url: "/workshop/parts", icon: Package },
+  { title: "Services", url: "/workshop/services", icon: Wrench },
   { title: "Invoices", url: "/workshop/invoices", icon: FileText },
-  { title: "Jobs", url: "/workshop/jobs", icon: Wrench },
 ];
 
 const secondaryItems = [
