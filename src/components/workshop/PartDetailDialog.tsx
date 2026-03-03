@@ -268,45 +268,45 @@ export default function PartDetailDialog({
           )}
 
           {/* Movement Table */}
-          <ScrollArea className="flex-1 max-h-[280px]">
+          <ScrollArea className="flex-1 max-h-[320px]">
             <Table>
               <TableHeader>
-                <TableRow className="bg-secondary/30">
-                  <TableHead className="text-xs w-[90px]">Date</TableHead>
-                  <TableHead className="text-xs w-[60px]">Type</TableHead>
-                  <TableHead className="text-xs w-[60px] text-right">Qty</TableHead>
-                  <TableHead className="text-xs w-[100px]">Ref Type</TableHead>
-                  <TableHead className="text-xs w-[80px]">Ref ID</TableHead>
-                  <TableHead className="text-xs w-[70px] text-right">Cost</TableHead>
-                  <TableHead className="text-xs w-[70px] text-right">Balance</TableHead>
+                <TableRow className="bg-secondary/30 hover:bg-secondary/30">
+                  <TableHead className="text-[11px] font-medium h-8">Date</TableHead>
+                  <TableHead className="text-[11px] font-medium h-8">Type</TableHead>
+                  <TableHead className="text-[11px] font-medium h-8 text-right">Qty</TableHead>
+                  <TableHead className="text-[11px] font-medium h-8">Ref Type</TableHead>
+                  <TableHead className="text-[11px] font-medium h-8">Ref ID</TableHead>
+                  <TableHead className="text-[11px] font-medium h-8 text-right">Cost</TableHead>
+                  <TableHead className="text-[11px] font-medium h-8 text-right">Balance</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {partMovements.map((m) => {
                   const config = MOVEMENT_TYPE_CONFIG[m.type];
                   return (
-                    <TableRow key={m.id}>
-                      <TableCell className="text-xs text-muted-foreground">
+                    <TableRow key={m.id} className="hover:bg-secondary/10">
+                      <TableCell className="text-xs text-muted-foreground py-2">
                         {format(new Date(m.date), "dd MMM yy")}
                       </TableCell>
-                      <TableCell>
-                        <Badge variant="outline" className={`text-[10px] px-1.5 ${config.className}`}>
+                      <TableCell className="py-2">
+                        <Badge variant="outline" className={`text-[10px] px-1.5 py-0 h-5 ${config.className}`}>
                           {config.label}
                         </Badge>
                       </TableCell>
-                      <TableCell className={`text-xs text-right font-semibold ${m.quantity > 0 ? "text-emerald-600" : "text-destructive"}`}>
+                      <TableCell className={`text-xs text-right font-semibold py-2 ${m.quantity > 0 ? "text-emerald-600" : "text-destructive"}`}>
                         {m.quantity > 0 ? `+${m.quantity}` : m.quantity}
                       </TableCell>
-                      <TableCell className="text-xs text-muted-foreground">
+                      <TableCell className="text-xs text-muted-foreground py-2">
                         {REFERENCE_TYPE_LABELS[m.referenceType]}
                       </TableCell>
-                      <TableCell className="text-xs font-mono text-muted-foreground">
+                      <TableCell className="text-xs font-mono text-muted-foreground py-2">
                         {m.referenceId || "—"}
                       </TableCell>
-                      <TableCell className="text-xs text-right text-muted-foreground">
+                      <TableCell className="text-xs text-right text-muted-foreground py-2">
                         ${m.costPriceAtTime}
                       </TableCell>
-                      <TableCell className="text-xs text-right font-medium">
+                      <TableCell className="text-xs text-right font-medium py-2">
                         {m.balanceAfter}
                       </TableCell>
                     </TableRow>
