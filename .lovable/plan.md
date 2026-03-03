@@ -1,21 +1,29 @@
 
 
-## Plan: Add Tooltip on Service Type for Multi-Service Records
+## Plan: Add Services Page & Refine Inventory
 
-### Context
-Currently `serviceType` is a single string. To demonstrate the "+N more" and tooltip behavior, we need to either change the data model to support multiple services or simulate it. Since the plan already includes showing "+N more services", the data model should support arrays.
+### What changes
 
-### Changes (single file: `src/components/ServiceRecordTable.tsx`)
+1. **Rename "Inventory" sidebar item to "Parts"** — since we're splitting the concept, "Parts" is more specific. Add a new "Services" item with a `Wrench` or `HandCoins` icon right below it.
 
-1. **Import Tooltip components** from `@/components/ui/tooltip` (`Tooltip`, `TooltipTrigger`, `TooltipContent`, `TooltipProvider`)
+2. **Rename the current Inventory page to Parts** (`/workshop/parts`) — the existing page already tracks spare parts well. Minor rename of heading from "Inventory" to "Parts". Keep the route and file as-is or rename for clarity.
 
-2. **Update data model** -- Add an optional `serviceTypes?: string[]` field to `ServiceRecord` for records with multiple services. Update 1-2 sample records to include multiple service types (e.g., `serviceTypes: ["Scheduled Maintenance", "Brake Inspection", "Tire Rotation"]`)
+3. **Create a new Services page** (`/workshop/services`) with:
+   - Header: "Services" with an "Add Service" button
+   - Summary cards: Total services count, average price
+   - A simple table with columns: **Service Name**, **Description** (short), **Price** (flat rate for now)
+   - No stock tracking, no supplier, no SKU — these don't apply to labor
+   - Search bar to filter services
+   - Mock data: Oil Change Labor, Tyre Change, Brake Pad Replacement (Labor), Diagnostic Scan, A/C Regas, etc.
+   - Each row has a "more" menu (edit/delete) like the parts table
 
-3. **Add tooltip to the service type label in Row 4 (Variant D)** -- When `record.serviceTypes` exists and has more than 1 entry:
-   - Display: `{primaryService} +{N} more` as the label
-   - Wrap it in a `Tooltip` that on hover shows a list of all services
-   - The tooltip content lists each service type (e.g., bullet list or comma-separated)
-   - When only 1 service, render the label normally without tooltip
+4. **Update sidebar** — reorder main items: Dashboard → Parts → Services → Invoices → Jobs
 
-4. **Wrap the component (or relevant section) in `TooltipProvider`** to enable tooltip functionality
+5. **Update routing** in `App.tsx` — add `/workshop/services` route, optionally rename `/workshop/inventory` to `/workshop/parts` (with redirect from old URL)
+
+### Files to create/modify
+- **Create**: `src/pages/workshop/Services.tsx`
+- **Modify**: `src/components/b2b/B2BSidebar.tsx` (add Services nav item, rename Inventory → Parts)
+- **Modify**: `src/App.tsx` (add Services route, rename inventory route)
+- **Modify**: `src/pages/workshop/Inventory.tsx` (rename heading from "Inventory" to "Parts")
 
