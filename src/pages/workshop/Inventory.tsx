@@ -10,6 +10,8 @@ import {
   AlertTriangle,
   Pencil,
   Trash2,
+  Filter,
+  X,
 } from "lucide-react";
 import AddPartDialog from "@/components/workshop/AddPartDialog";
 import EditPartDialog from "@/components/workshop/EditPartDialog";
