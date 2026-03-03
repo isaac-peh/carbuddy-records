@@ -22,6 +22,7 @@ interface AddPartDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   categories: string[];
+  suppliers: string[];
   onAdd: (part: {
     name: string;
     sku: string;
