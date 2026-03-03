@@ -35,7 +35,7 @@ interface AddPartDialogProps {
   }) => void;
 }
 
-export default function AddPartDialog({ open, onOpenChange, categories, onAdd }: AddPartDialogProps) {
+export default function AddPartDialog({ open, onOpenChange, categories, suppliers, onAdd }: AddPartDialogProps) {
   const [name, setName] = useState("");
   const [sku, setSku] = useState("");
   const [categoryMode, setCategoryMode] = useState<"existing" | "custom">("existing");
@@ -45,7 +45,9 @@ export default function AddPartDialog({ open, onOpenChange, categories, onAdd }:
   const [minStock, setMinStock] = useState("");
   const [costPrice, setCostPrice] = useState("");
   const [sellPrice, setSellPrice] = useState("");
-  const [supplier, setSupplier] = useState("");
+  const [supplierMode, setSupplierMode] = useState<"existing" | "custom">("existing");
+  const [selectedSupplier, setSelectedSupplier] = useState("");
+  const [customSupplier, setCustomSupplier] = useState("");
 
   const category = categoryMode === "custom" ? customCategory.trim() : selectedCategory;
 
