@@ -142,7 +142,7 @@ export default function PartDetailDialog({
 
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) resetForm(); onOpenChange(v); }}>
-      <DialogContent className="max-w-3xl max-h-[90vh] flex flex-col gap-0 p-0 overflow-hidden">
+      <DialogContent className="max-w-3xl max-h-[90vh] flex flex-col gap-0 p-0 overflow-y-auto">
         <DialogHeader className="px-8 pt-8 pb-5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
