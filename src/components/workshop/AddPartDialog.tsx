@@ -60,6 +60,8 @@ export default function AddPartDialog({ open, onOpenChange, categories, supplier
     costPrice !== "" &&
     sellPrice !== "";
 
+  const supplier = supplierMode === "custom" ? customSupplier.trim() : selectedSupplier;
+
   const resetForm = () => {
     setName("");
     setSku("");
@@ -70,7 +72,9 @@ export default function AddPartDialog({ open, onOpenChange, categories, supplier
     setMinStock("");
     setCostPrice("");
     setSellPrice("");
-    setSupplier("");
+    setSupplierMode("existing");
+    setSelectedSupplier("");
+    setCustomSupplier("");
   };
 
   const handleSubmit = () => {
