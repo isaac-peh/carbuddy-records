@@ -178,11 +178,18 @@ export default function Inventory() {
               Manage your spare parts and supplies
             </p>
           </div>
-          <Button className="gap-2 shadow-soft">
+          <Button className="gap-2 shadow-soft" onClick={() => setAddDialogOpen(true)}>
             <Plus className="w-4 h-4" />
             Add Part
           </Button>
         </div>
+
+        <AddPartDialog
+          open={addDialogOpen}
+          onOpenChange={setAddDialogOpen}
+          categories={allCategories}
+          onAdd={handleAddPart}
+        />
 
         {/* Summary Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
