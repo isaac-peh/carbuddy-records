@@ -120,6 +120,12 @@ export default function Inventory() {
     return Array.from(merged).sort();
   }, [customCategories]);
 
+  const allSuppliers = useMemo(() => {
+    const fromParts = parts.map((p) => p.supplier).filter(Boolean);
+    const merged = new Set([...fromParts, ...customSuppliers]);
+    return Array.from(merged).sort();
+  }, [parts, customSuppliers]);
+
   const filterCategories = ["All", ...allCategories];
 
   const handleSort = (key: SortKey) => {
