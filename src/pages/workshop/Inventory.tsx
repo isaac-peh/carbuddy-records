@@ -145,7 +145,7 @@ export default function Inventory() {
     }
 
     return result;
-  }, [search, activeCategory, sortKey, sortDir]);
+  }, [search, activeCategory, activeSupplier, sortKey, sortDir]);
 
   const totalValue = mockParts.reduce((sum, p) => sum + p.stock * p.costPrice, 0);
   const lowStockCount = mockParts.filter((p) => p.stock <= p.minStock).length;
