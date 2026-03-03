@@ -219,7 +219,9 @@ export default function Inventory() {
         p.name.toLowerCase().includes(search.toLowerCase()) ||
         p.sku.toLowerCase().includes(search.toLowerCase());
       const matchesCategory = activeCategory === "All" || p.category === activeCategory;
-      return matchesSearch && matchesCategory;
+      const matchesSupplier = activeSupplier === "All" || p.supplier === activeSupplier;
+      const matchesLowStock = !showLowStockOnly || p.stock <= p.minStock;
+      return matchesSearch && matchesCategory && matchesSupplier && matchesLowStock;
     });
 
     if (sortKey) {
