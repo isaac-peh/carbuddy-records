@@ -76,6 +76,19 @@ const mockParts: Part[] = [
 
 const defaultCategories = ["Brakes", "Lubricants", "Filters", "Ignition", "Accessories", "Electrical"];
 
+const mockMovements: StockMovement[] = [
+  { id: "m1", partId: "1", date: "2026-03-01T10:00:00Z", type: "in", quantity: 20, referenceType: "purchase_order", referenceId: "PO-0012", costPriceAtTime: 35, notes: "Initial stock order", balanceAfter: 20 },
+  { id: "m2", partId: "1", date: "2026-03-02T14:30:00Z", type: "out", quantity: -4, referenceType: "service_job", referenceId: "SJ-0045", costPriceAtTime: 35, notes: "Brake job - Toyota Camry", balanceAfter: 16 },
+  { id: "m3", partId: "1", date: "2026-03-02T16:00:00Z", type: "out", quantity: -14, referenceType: "service_job", referenceId: "SJ-0046", costPriceAtTime: 35, notes: "Fleet service", balanceAfter: 2 },
+  { id: "m4", partId: "2", date: "2026-02-28T09:00:00Z", type: "in", quantity: 10, referenceType: "purchase_order", referenceId: "PO-0010", costPriceAtTime: 28, notes: "", balanceAfter: 10 },
+  { id: "m5", partId: "2", date: "2026-03-01T11:00:00Z", type: "out", quantity: -5, referenceType: "service_job", referenceId: "SJ-0040", costPriceAtTime: 28, notes: "Oil change batch", balanceAfter: 5 },
+  { id: "m6", partId: "2", date: "2026-03-02T08:00:00Z", type: "out", quantity: -2, referenceType: "manual", referenceId: "", costPriceAtTime: 28, notes: "Damaged stock write-off", balanceAfter: 3 },
+  { id: "m7", partId: "4", date: "2026-02-25T10:00:00Z", type: "in", quantity: 30, referenceType: "purchase_order", referenceId: "PO-0008", costPriceAtTime: 12, notes: "", balanceAfter: 30 },
+  { id: "m8", partId: "4", date: "2026-03-01T15:00:00Z", type: "out", quantity: -6, referenceType: "service_job", referenceId: "SJ-0042", costPriceAtTime: 12, notes: "Spark plug replacement x6", balanceAfter: 24 },
+  { id: "m9", partId: "3", date: "2026-03-01T09:00:00Z", type: "in", quantity: 10, referenceType: "purchase_order", referenceId: "PO-0011", costPriceAtTime: 5, notes: "", balanceAfter: 10 },
+  { id: "m10", partId: "3", date: "2026-03-02T12:00:00Z", type: "out", quantity: -6, referenceType: "service_job", referenceId: "SJ-0044", costPriceAtTime: 5, notes: "Oil change bundle", balanceAfter: 4 },
+];
+
 type SortKey = "name" | "sku" | "category" | "stock" | "costPrice" | "sellPrice" | "supplier";
 type SortDir = "asc" | "desc";
 
