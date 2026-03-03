@@ -281,6 +281,21 @@ export default function Inventory() {
           onSave={handleEditPart}
         />
 
+        <PartDetailDialog
+          open={detailDialogOpen}
+          onOpenChange={setDetailDialogOpen}
+          part={detailPart}
+          movements={movements}
+          onEditClick={() => {
+            if (detailPart) {
+              setEditPart(detailPart);
+              setDetailDialogOpen(false);
+              setEditDialogOpen(true);
+            }
+          }}
+          onRecordMovement={handleRecordMovement}
+        />
+
         <AlertDialog open={!!deletePart} onOpenChange={(v) => { if (!v) setDeletePart(null); }}>
           <AlertDialogContent>
             <AlertDialogHeader>
