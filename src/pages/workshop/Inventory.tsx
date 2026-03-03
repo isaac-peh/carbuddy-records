@@ -344,8 +344,8 @@ export default function Inventory() {
         </div>
 
         {/* Filters */}
-        <div className="flex flex-col sm:flex-row gap-3">
-          <div className="relative flex-1 max-w-sm">
+        <div className="flex items-center gap-3">
+          <div className="relative shrink-0 w-56">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
             <Input
               placeholder="Search parts or SKU..."
@@ -354,13 +354,13 @@ export default function Inventory() {
               className="pl-9 bg-secondary/60 border-0 shadow-soft"
             />
           </div>
-          <div className="flex gap-1.5 flex-wrap">
+          <div className="flex gap-1.5 overflow-x-auto no-scrollbar">
             {filterCategories.map((cat) => (
               <Button
                 key={cat}
                 variant={activeCategory === cat ? "default" : "outline"}
                 size="sm"
-                className="text-xs h-8"
+                className="text-xs h-8 shrink-0"
                 onClick={() => setActiveCategory(cat)}
               >
                 {cat}
