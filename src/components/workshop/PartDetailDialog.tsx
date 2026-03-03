@@ -152,10 +152,6 @@ export default function PartDetailDialog({
                 <p className="text-xs font-mono text-muted-foreground mt-1">{part.sku}</p>
               </div>
             </div>
-            <Button variant="outline" size="sm" className="gap-1.5 h-8" onClick={onEditClick}>
-              <Pencil className="w-3.5 h-3.5" />
-              Edit
-            </Button>
           </div>
         </DialogHeader>
 
