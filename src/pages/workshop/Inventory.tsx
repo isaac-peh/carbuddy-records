@@ -257,7 +257,7 @@ export default function Inventory() {
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction onClick={() => deletePart && handleDeletePart(deletePart.id)}>
+              <AlertDialogAction className="bg-destructive text-destructive-foreground hover:bg-destructive/90" onClick={() => deletePart && handleDeletePart(deletePart.id)}>
                 Delete
               </AlertDialogAction>
             </AlertDialogFooter>
