@@ -193,7 +193,7 @@ export default function Inventory() {
     return Array.from(merged).sort();
   }, [parts, customSuppliers]);
 
-  const filterCategories = ["All", ...allCategories];
+  
 
   const handleSort = (key: SortKey) => {
     if (sortKey === key) {
