@@ -22,6 +22,7 @@ interface AddPartDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   categories: string[];
+  suppliers: string[];
   onAdd: (part: {
     name: string;
     sku: string;
@@ -34,7 +35,7 @@ interface AddPartDialogProps {
   }) => void;
 }
 
-export default function AddPartDialog({ open, onOpenChange, categories, onAdd }: AddPartDialogProps) {
+export default function AddPartDialog({ open, onOpenChange, categories, suppliers, onAdd }: AddPartDialogProps) {
   const [name, setName] = useState("");
   const [sku, setSku] = useState("");
   const [categoryMode, setCategoryMode] = useState<"existing" | "custom">("existing");
@@ -44,7 +45,9 @@ export default function AddPartDialog({ open, onOpenChange, categories, onAdd }:
   const [minStock, setMinStock] = useState("");
   const [costPrice, setCostPrice] = useState("");
   const [sellPrice, setSellPrice] = useState("");
-  const [supplier, setSupplier] = useState("");
+  const [supplierMode, setSupplierMode] = useState<"existing" | "custom">("existing");
+  const [selectedSupplier, setSelectedSupplier] = useState("");
+  const [customSupplier, setCustomSupplier] = useState("");
 
   const category = categoryMode === "custom" ? customCategory.trim() : selectedCategory;
 
@@ -57,6 +60,8 @@ export default function AddPartDialog({ open, onOpenChange, categories, onAdd }:
     costPrice !== "" &&
     sellPrice !== "";
 
+  const supplier = supplierMode === "custom" ? customSupplier.trim() : selectedSupplier;
+
   const resetForm = () => {
     setName("");
     setSku("");
@@ -67,7 +72,9 @@ export default function AddPartDialog({ open, onOpenChange, categories, onAdd }:
     setMinStock("");
     setCostPrice("");
     setSellPrice("");
-    setSupplier("");
+    setSupplierMode("existing");
+    setSelectedSupplier("");
+    setCustomSupplier("");
   };
 
   const handleSubmit = () => {
@@ -172,8 +179,39 @@ export default function AddPartDialog({ open, onOpenChange, categories, onAdd }:
 
           {/* Supplier */}
           <div className="space-y-1.5">
-            <Label htmlFor="part-supplier">Supplier</Label>
-            <Input id="part-supplier" placeholder="e.g. AutoParts SG" value={supplier} onChange={(e) => setSupplier(e.target.value)} />
+            <Label>Supplier</Label>
+            <Select
+              value={supplierMode === "existing" ? selectedSupplier : "__custom__"}
+              onValueChange={(val) => {
+                if (val === "__custom__") {
+                  setSupplierMode("custom");
+                  setSelectedSupplier("");
+                } else {
+                  setSupplierMode("existing");
+                  setSelectedSupplier(val);
+                  setCustomSupplier("");
+                }
+              }}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select supplier" />
+              </SelectTrigger>
+              <SelectContent>
+                {suppliers.map((s) => (
+                  <SelectItem key={s} value={s}>{s}</SelectItem>
+                ))}
+                <SelectItem value="__custom__">+ Add custom supplier</SelectItem>
+              </SelectContent>
+            </Select>
+            {supplierMode === "custom" && (
+              <Input
+                placeholder="Enter supplier name"
+                value={customSupplier}
+                onChange={(e) => setCustomSupplier(e.target.value)}
+                className="mt-1.5"
+                autoFocus
+              />
+            )}
           </div>
         </div>
 

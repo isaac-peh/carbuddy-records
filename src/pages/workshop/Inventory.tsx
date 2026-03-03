@@ -108,6 +108,7 @@ function SortableHead({
 export default function Inventory() {
   const [parts, setParts] = useState<Part[]>(mockParts);
   const [customCategories, setCustomCategories] = useState<string[]>([]);
+  const [customSuppliers, setCustomSuppliers] = useState<string[]>([]);
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
@@ -118,6 +119,12 @@ export default function Inventory() {
     const merged = new Set([...defaultCategories, ...customCategories]);
     return Array.from(merged).sort();
   }, [customCategories]);
+
+  const allSuppliers = useMemo(() => {
+    const fromParts = parts.map((p) => p.supplier).filter(Boolean);
+    const merged = new Set([...fromParts, ...customSuppliers]);
+    return Array.from(merged).sort();
+  }, [parts, customSuppliers]);
 
   const filterCategories = ["All", ...allCategories];
 
@@ -161,9 +168,11 @@ export default function Inventory() {
   const handleAddPart = (partData: Omit<Part, "id">) => {
     const newPart: Part = { ...partData, id: String(Date.now()) };
     setParts((prev) => [...prev, newPart]);
-    // Save custom category if new
     if (!allCategories.includes(partData.category)) {
       setCustomCategories((prev) => [...prev, partData.category]);
+    }
+    if (partData.supplier && !allSuppliers.includes(partData.supplier)) {
+      setCustomSuppliers((prev) => [...prev, partData.supplier]);
     }
   };
 
@@ -188,6 +197,7 @@ export default function Inventory() {
           open={addDialogOpen}
           onOpenChange={setAddDialogOpen}
           categories={allCategories}
+          suppliers={allSuppliers}
           onAdd={handleAddPart}
         />
 
