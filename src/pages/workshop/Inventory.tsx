@@ -215,18 +215,35 @@ export default function Inventory() {
               className="pl-9 bg-secondary/60 border-0 shadow-soft"
             />
           </div>
-          <div className="flex gap-1.5 flex-wrap">
-            {categories.map((cat) => (
-              <Button
-                key={cat}
-                variant={activeCategory === cat ? "default" : "outline"}
-                size="sm"
-                className="text-xs h-8"
-                onClick={() => setActiveCategory(cat)}
-              >
-                {cat}
-              </Button>
-            ))}
+          <div className="flex flex-col gap-2">
+            <div className="flex gap-1.5 flex-wrap items-center">
+              <span className="text-xs text-muted-foreground font-medium mr-1">Category:</span>
+              {categories.map((cat) => (
+                <Button
+                  key={cat}
+                  variant={activeCategory === cat ? "default" : "outline"}
+                  size="sm"
+                  className="text-xs h-8"
+                  onClick={() => setActiveCategory(cat)}
+                >
+                  {cat}
+                </Button>
+              ))}
+            </div>
+            <div className="flex gap-1.5 flex-wrap items-center">
+              <span className="text-xs text-muted-foreground font-medium mr-1">Supplier:</span>
+              {suppliers.map((sup) => (
+                <Button
+                  key={sup}
+                  variant={activeSupplier === sup ? "default" : "outline"}
+                  size="sm"
+                  className="text-xs h-8"
+                  onClick={() => setActiveSupplier(sup)}
+                >
+                  {sup}
+                </Button>
+              ))}
+            </div>
           </div>
         </div>
 
