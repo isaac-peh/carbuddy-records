@@ -20,20 +20,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -50,11 +38,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Checkbox } from "@/components/ui/checkbox";
 
 interface Part {
@@ -70,31 +54,251 @@ interface Part {
 }
 
 const mockParts: Part[] = [
-  { id: "1", name: "Brake Pads (Front)", sku: "BP-FRT-001", category: "Brakes", stock: 2, minStock: 10, costPrice: 35, sellPrice: 65, supplier: "AutoParts SG" },
-  { id: "2", name: "Engine Oil 5W-30 (5L)", sku: "OIL-5W30-5L", category: "Lubricants", stock: 3, minStock: 8, costPrice: 28, sellPrice: 55, supplier: "Shell SG" },
-  { id: "3", name: "Oil Filter (Universal)", sku: "FLT-OIL-UNI", category: "Filters", stock: 4, minStock: 15, costPrice: 5, sellPrice: 15, supplier: "AutoParts SG" },
-  { id: "4", name: "Spark Plug (Iridium)", sku: "SP-IRD-001", category: "Ignition", stock: 24, minStock: 10, costPrice: 12, sellPrice: 28, supplier: "NGK Dist." },
-  { id: "5", name: "Air Filter", sku: "FLT-AIR-001", category: "Filters", stock: 18, minStock: 10, costPrice: 8, sellPrice: 22, supplier: "AutoParts SG" },
-  { id: "6", name: "Brake Disc (Front)", sku: "BD-FRT-001", category: "Brakes", stock: 6, minStock: 4, costPrice: 65, sellPrice: 120, supplier: "Brembo SG" },
-  { id: "7", name: "Coolant (1L)", sku: "CLT-001", category: "Lubricants", stock: 12, minStock: 6, costPrice: 8, sellPrice: 18, supplier: "Shell SG" },
-  { id: "8", name: "Wiper Blade (Pair)", sku: "WB-UNI-001", category: "Accessories", stock: 30, minStock: 10, costPrice: 10, sellPrice: 25, supplier: "Bosch SG" },
-  { id: "9", name: "Battery (12V 60Ah)", sku: "BAT-12V-60", category: "Electrical", stock: 5, minStock: 3, costPrice: 85, sellPrice: 160, supplier: "Amaron SG" },
-  { id: "10", name: "Transmission Fluid (1L)", sku: "TF-ATF-001", category: "Lubricants", stock: 7, minStock: 5, costPrice: 15, sellPrice: 32, supplier: "Shell SG" },
+  {
+    id: "1",
+    name: "Brake Pads (Front)",
+    sku: "BP-FRT-001",
+    category: "Brakes",
+    stock: 2,
+    minStock: 10,
+    costPrice: 35,
+    sellPrice: 65,
+    supplier: "AutoParts SG",
+  },
+  {
+    id: "2",
+    name: "Engine Oil 5W-30 (5L)",
+    sku: "OIL-5W30-5L",
+    category: "Lubricants",
+    stock: 3,
+    minStock: 8,
+    costPrice: 28,
+    sellPrice: 55,
+    supplier: "Shell SG",
+  },
+  {
+    id: "3",
+    name: "Oil Filter (Universal)",
+    sku: "FLT-OIL-UNI",
+    category: "Filters",
+    stock: 4,
+    minStock: 15,
+    costPrice: 5,
+    sellPrice: 15,
+    supplier: "AutoParts SG",
+  },
+  {
+    id: "4",
+    name: "Spark Plug (Iridium)",
+    sku: "SP-IRD-001",
+    category: "Ignition",
+    stock: 24,
+    minStock: 10,
+    costPrice: 12,
+    sellPrice: 28,
+    supplier: "NGK Dist.",
+  },
+  {
+    id: "5",
+    name: "Air Filter",
+    sku: "FLT-AIR-001",
+    category: "Filters",
+    stock: 18,
+    minStock: 10,
+    costPrice: 8,
+    sellPrice: 22,
+    supplier: "AutoParts SG",
+  },
+  {
+    id: "6",
+    name: "Brake Disc (Front)",
+    sku: "BD-FRT-001",
+    category: "Brakes",
+    stock: 6,
+    minStock: 4,
+    costPrice: 65,
+    sellPrice: 120,
+    supplier: "Brembo SG",
+  },
+  {
+    id: "7",
+    name: "Coolant (1L)",
+    sku: "CLT-001",
+    category: "Lubricants",
+    stock: 12,
+    minStock: 6,
+    costPrice: 8,
+    sellPrice: 18,
+    supplier: "Shell SG",
+  },
+  {
+    id: "8",
+    name: "Wiper Blade (Pair)",
+    sku: "WB-UNI-001",
+    category: "Accessories",
+    stock: 30,
+    minStock: 10,
+    costPrice: 10,
+    sellPrice: 25,
+    supplier: "Bosch SG",
+  },
+  {
+    id: "9",
+    name: "Battery (12V 60Ah)",
+    sku: "BAT-12V-60",
+    category: "Electrical",
+    stock: 5,
+    minStock: 3,
+    costPrice: 85,
+    sellPrice: 160,
+    supplier: "Amaron SG",
+  },
+  {
+    id: "10",
+    name: "Transmission Fluid (1L)",
+    sku: "TF-ATF-001",
+    category: "Lubricants",
+    stock: 7,
+    minStock: 5,
+    costPrice: 15,
+    sellPrice: 32,
+    supplier: "Shell SG",
+  },
 ];
 
-const defaultCategories = ["Brakes", "Lubricants", "Filters", "Ignition", "Accessories", "Electrical", "Suspension", "Cooling", "Others"];
+const defaultCategories = [
+  "Brakes",
+  "Lubricants",
+  "Filters",
+  "Ignition",
+  "Accessories",
+  "Electrical",
+  "Suspension",
+  "Cooling",
+  "Others",
+];
 
 const mockMovements: StockMovement[] = [
-  { id: "m1", partId: "1", date: "2026-03-01T10:00:00Z", type: "in", quantity: 20, referenceType: "purchase_order", referenceId: "PO-0012", costPriceAtTime: 35, notes: "Initial stock order", balanceAfter: 20 },
-  { id: "m2", partId: "1", date: "2026-03-02T14:30:00Z", type: "out", quantity: -4, referenceType: "service_job", referenceId: "SJ-0045", costPriceAtTime: 35, notes: "Brake job - Toyota Camry", balanceAfter: 16 },
-  { id: "m3", partId: "1", date: "2026-03-02T16:00:00Z", type: "out", quantity: -14, referenceType: "service_job", referenceId: "SJ-0046", costPriceAtTime: 35, notes: "Fleet service", balanceAfter: 2 },
-  { id: "m4", partId: "2", date: "2026-02-28T09:00:00Z", type: "in", quantity: 10, referenceType: "purchase_order", referenceId: "PO-0010", costPriceAtTime: 28, notes: "", balanceAfter: 10 },
-  { id: "m5", partId: "2", date: "2026-03-01T11:00:00Z", type: "out", quantity: -5, referenceType: "service_job", referenceId: "SJ-0040", costPriceAtTime: 28, notes: "Oil change batch", balanceAfter: 5 },
-  { id: "m6", partId: "2", date: "2026-03-02T08:00:00Z", type: "out", quantity: -2, referenceType: "manual", referenceId: "", costPriceAtTime: 28, notes: "Damaged stock write-off", balanceAfter: 3 },
-  { id: "m7", partId: "4", date: "2026-02-25T10:00:00Z", type: "in", quantity: 30, referenceType: "purchase_order", referenceId: "PO-0008", costPriceAtTime: 12, notes: "", balanceAfter: 30 },
-  { id: "m8", partId: "4", date: "2026-03-01T15:00:00Z", type: "out", quantity: -6, referenceType: "service_job", referenceId: "SJ-0042", costPriceAtTime: 12, notes: "Spark plug replacement x6", balanceAfter: 24 },
-  { id: "m9", partId: "3", date: "2026-03-01T09:00:00Z", type: "in", quantity: 10, referenceType: "purchase_order", referenceId: "PO-0011", costPriceAtTime: 5, notes: "", balanceAfter: 10 },
-  { id: "m10", partId: "3", date: "2026-03-02T12:00:00Z", type: "out", quantity: -6, referenceType: "service_job", referenceId: "SJ-0044", costPriceAtTime: 5, notes: "Oil change bundle", balanceAfter: 4 },
+  {
+    id: "m1",
+    partId: "1",
+    date: "2026-03-01T10:00:00Z",
+    type: "in",
+    quantity: 20,
+    referenceType: "purchase_order",
+    referenceId: "PO-0012",
+    costPriceAtTime: 35,
+    notes: "Initial stock order",
+    balanceAfter: 20,
+  },
+  {
+    id: "m2",
+    partId: "1",
+    date: "2026-03-02T14:30:00Z",
+    type: "out",
+    quantity: -4,
+    referenceType: "service_job",
+    referenceId: "SJ-0045",
+    costPriceAtTime: 35,
+    notes: "Brake job - Toyota Camry",
+    balanceAfter: 16,
+  },
+  {
+    id: "m3",
+    partId: "1",
+    date: "2026-03-02T16:00:00Z",
+    type: "out",
+    quantity: -14,
+    referenceType: "service_job",
+    referenceId: "SJ-0046",
+    costPriceAtTime: 35,
+    notes: "Fleet service",
+    balanceAfter: 2,
+  },
+  {
+    id: "m4",
+    partId: "2",
+    date: "2026-02-28T09:00:00Z",
+    type: "in",
+    quantity: 10,
+    referenceType: "purchase_order",
+    referenceId: "PO-0010",
+    costPriceAtTime: 28,
+    notes: "",
+    balanceAfter: 10,
+  },
+  {
+    id: "m5",
+    partId: "2",
+    date: "2026-03-01T11:00:00Z",
+    type: "out",
+    quantity: -5,
+    referenceType: "service_job",
+    referenceId: "SJ-0040",
+    costPriceAtTime: 28,
+    notes: "Oil change batch",
+    balanceAfter: 5,
+  },
+  {
+    id: "m6",
+    partId: "2",
+    date: "2026-03-02T08:00:00Z",
+    type: "out",
+    quantity: -2,
+    referenceType: "manual",
+    referenceId: "",
+    costPriceAtTime: 28,
+    notes: "Damaged stock write-off",
+    balanceAfter: 3,
+  },
+  {
+    id: "m7",
+    partId: "4",
+    date: "2026-02-25T10:00:00Z",
+    type: "in",
+    quantity: 30,
+    referenceType: "purchase_order",
+    referenceId: "PO-0008",
+    costPriceAtTime: 12,
+    notes: "",
+    balanceAfter: 30,
+  },
+  {
+    id: "m8",
+    partId: "4",
+    date: "2026-03-01T15:00:00Z",
+    type: "out",
+    quantity: -6,
+    referenceType: "service_job",
+    referenceId: "SJ-0042",
+    costPriceAtTime: 12,
+    notes: "Spark plug replacement x6",
+    balanceAfter: 24,
+  },
+  {
+    id: "m9",
+    partId: "3",
+    date: "2026-03-01T09:00:00Z",
+    type: "in",
+    quantity: 10,
+    referenceType: "purchase_order",
+    referenceId: "PO-0011",
+    costPriceAtTime: 5,
+    notes: "",
+    balanceAfter: 10,
+  },
+  {
+    id: "m10",
+    partId: "3",
+    date: "2026-03-02T12:00:00Z",
+    type: "out",
+    quantity: -6,
+    referenceType: "service_job",
+    referenceId: "SJ-0044",
+    costPriceAtTime: 5,
+    notes: "Oil change bundle",
+    balanceAfter: 4,
+  },
 ];
 
 type SortKey = "name" | "sku" | "category" | "stock" | "costPrice" | "sellPrice" | "supplier";
@@ -137,7 +341,11 @@ function SortableHead({
       >
         {label}
         {active ? (
-          currentDir === "asc" ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />
+          currentDir === "asc" ? (
+            <ArrowUp className="w-3 h-3" />
+          ) : (
+            <ArrowDown className="w-3 h-3" />
+          )
         ) : (
           <ArrowUpDown className="w-3 h-3 opacity-40" />
         )}
@@ -175,9 +383,7 @@ export default function Inventory() {
       balanceAfter: newBalance,
     };
     setMovements((prev) => [...prev, newMovement]);
-    setParts((prev) =>
-      prev.map((p) => (p.id === movData.partId ? { ...p, stock: newBalance } : p))
-    );
+    setParts((prev) => prev.map((p) => (p.id === movData.partId ? { ...p, stock: newBalance } : p)));
     // Update detailPart to reflect new stock
     setDetailPart((prev) => (prev && prev.id === movData.partId ? { ...prev, stock: newBalance } : prev));
   };
@@ -192,8 +398,6 @@ export default function Inventory() {
     const merged = new Set([...fromParts, ...customSuppliers]);
     return Array.from(merged).sort();
   }, [parts, customSuppliers]);
-
-  
 
   const handleSort = (key: SortKey) => {
     if (sortKey === key) {
@@ -222,8 +426,7 @@ export default function Inventory() {
   const filtered = useMemo(() => {
     let result = parts.filter((p) => {
       const matchesSearch =
-        p.name.toLowerCase().includes(search.toLowerCase()) ||
-        p.sku.toLowerCase().includes(search.toLowerCase());
+        p.name.toLowerCase().includes(search.toLowerCase()) || p.sku.toLowerCase().includes(search.toLowerCase());
       const matchesCategory = activeCategories.length === 0 || activeCategories.includes(p.category);
       const matchesSupplier = activeSuppliers.length === 0 || activeSuppliers.includes(p.supplier);
       const matchesLowStock = !showLowStockOnly || p.stock <= p.minStock;
@@ -237,9 +440,7 @@ export default function Inventory() {
         if (typeof aVal === "number" && typeof bVal === "number") {
           return sortDir === "asc" ? aVal - bVal : bVal - aVal;
         }
-        return sortDir === "asc"
-          ? String(aVal).localeCompare(String(bVal))
-          : String(bVal).localeCompare(String(aVal));
+        return sortDir === "asc" ? String(aVal).localeCompare(String(bVal)) : String(bVal).localeCompare(String(aVal));
       });
     }
 
@@ -267,9 +468,7 @@ export default function Inventory() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-2xl font-bold text-foreground tracking-tight">Parts</h1>
-            <p className="text-sm text-muted-foreground mt-1">
-              Manage your spare parts and supplies
-            </p>
+            <p className="text-sm text-muted-foreground mt-1">Manage your spare parts and supplies</p>
           </div>
           <Button className="gap-2 shadow-soft" onClick={() => setAddDialogOpen(true)}>
             <Plus className="w-4 h-4" />
@@ -302,7 +501,12 @@ export default function Inventory() {
           onRecordMovement={handleRecordMovement}
         />
 
-        <AlertDialog open={!!deletePart} onOpenChange={(v) => { if (!v) setDeletePart(null); }}>
+        <AlertDialog
+          open={!!deletePart}
+          onOpenChange={(v) => {
+            if (!v) setDeletePart(null);
+          }}
+        >
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>Delete Part</AlertDialogTitle>
@@ -312,7 +516,10 @@ export default function Inventory() {
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction className="bg-destructive text-destructive-foreground hover:bg-destructive/90" onClick={() => deletePart && handleDeletePart(deletePart.id)}>
+              <AlertDialogAction
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                onClick={() => deletePart && handleDeletePart(deletePart.id)}
+              >
                 Delete
               </AlertDialogAction>
             </AlertDialogFooter>
@@ -362,7 +569,7 @@ export default function Inventory() {
           return (
             <div className="flex items-center gap-3">
               <div className="relative shrink-0 w-56">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4.5 h-3.5 text-muted-foreground" />
                 <Input
                   placeholder="Search parts or SKU..."
                   value={search}
@@ -408,12 +615,12 @@ export default function Inventory() {
                             id={`cat-${cat}`}
                             checked={activeCategories.includes(cat)}
                             onCheckedChange={(checked) => {
-                              setActiveCategories((prev) =>
-                                checked ? [...prev, cat] : prev.filter((c) => c !== cat)
-                              );
+                              setActiveCategories((prev) => (checked ? [...prev, cat] : prev.filter((c) => c !== cat)));
                             }}
                           />
-                          <label htmlFor={`cat-${cat}`} className="text-xs cursor-pointer">{cat}</label>
+                          <label htmlFor={`cat-${cat}`} className="text-xs cursor-pointer">
+                            {cat}
+                          </label>
                         </div>
                       ))}
                     </div>
@@ -428,12 +635,12 @@ export default function Inventory() {
                             id={`sup-${s}`}
                             checked={activeSuppliers.includes(s)}
                             onCheckedChange={(checked) => {
-                              setActiveSuppliers((prev) =>
-                                checked ? [...prev, s] : prev.filter((x) => x !== s)
-                              );
+                              setActiveSuppliers((prev) => (checked ? [...prev, s] : prev.filter((x) => x !== s)));
                             }}
                           />
-                          <label htmlFor={`sup-${s}`} className="text-xs cursor-pointer">{s}</label>
+                          <label htmlFor={`sup-${s}`} className="text-xs cursor-pointer">
+                            {s}
+                          </label>
                         </div>
                       ))}
                     </div>
@@ -445,7 +652,10 @@ export default function Inventory() {
                       checked={showLowStockOnly}
                       onCheckedChange={(v) => setShowLowStockOnly(v === true)}
                     />
-                    <label htmlFor="low-stock-filter" className="text-xs font-medium text-foreground cursor-pointer flex items-center gap-1.5">
+                    <label
+                      htmlFor="low-stock-filter"
+                      className="text-xs font-medium text-foreground cursor-pointer flex items-center gap-1.5"
+                    >
                       <AlertTriangle className="w-3 h-3 text-warning" />
                       Low stock only
                     </label>
@@ -457,17 +667,31 @@ export default function Inventory() {
               {activeFilterCount > 0 && (
                 <div className="flex gap-1.5 flex-wrap">
                   {activeCategories.map((cat) => (
-                    <Badge key={cat} variant="secondary" className="gap-1 text-xs cursor-pointer" onClick={() => setActiveCategories((prev) => prev.filter((c) => c !== cat))}>
+                    <Badge
+                      key={cat}
+                      variant="secondary"
+                      className="gap-1 text-xs cursor-pointer"
+                      onClick={() => setActiveCategories((prev) => prev.filter((c) => c !== cat))}
+                    >
                       {cat} <X className="w-3 h-3" />
                     </Badge>
                   ))}
                   {activeSuppliers.map((s) => (
-                    <Badge key={s} variant="secondary" className="gap-1 text-xs cursor-pointer" onClick={() => setActiveSuppliers((prev) => prev.filter((x) => x !== s))}>
+                    <Badge
+                      key={s}
+                      variant="secondary"
+                      className="gap-1 text-xs cursor-pointer"
+                      onClick={() => setActiveSuppliers((prev) => prev.filter((x) => x !== s))}
+                    >
                       {s} <X className="w-3 h-3" />
                     </Badge>
                   ))}
                   {showLowStockOnly && (
-                    <Badge variant="secondary" className="gap-1 text-xs cursor-pointer" onClick={() => setShowLowStockOnly(false)}>
+                    <Badge
+                      variant="secondary"
+                      className="gap-1 text-xs cursor-pointer"
+                      onClick={() => setShowLowStockOnly(false)}
+                    >
                       Low Stock <X className="w-3 h-3" />
                     </Badge>
                   )}
@@ -483,13 +707,62 @@ export default function Inventory() {
             <Table className="table-fixed">
               <TableHeader>
                 <TableRow className="bg-secondary/30">
-                  <SortableHead label="Part Name" sortKey="name" currentSort={sortKey} currentDir={sortDir} onSort={handleSort} className="w-[200px]" />
-                  <SortableHead label="SKU" sortKey="sku" currentSort={sortKey} currentDir={sortDir} onSort={handleSort} className="w-[130px]" />
-                  <SortableHead label="Category" sortKey="category" currentSort={sortKey} currentDir={sortDir} onSort={handleSort} className="w-[110px] hidden md:table-cell" />
-                  <SortableHead label="Stock" sortKey="stock" currentSort={sortKey} currentDir={sortDir} onSort={handleSort} className="w-[90px] text-center" />
-                  <SortableHead label="Cost" sortKey="costPrice" currentSort={sortKey} currentDir={sortDir} onSort={handleSort} className="w-[90px] hidden sm:table-cell text-right" />
-                  <SortableHead label="Sell Price" sortKey="sellPrice" currentSort={sortKey} currentDir={sortDir} onSort={handleSort} className="w-[100px] text-right" />
-                  <SortableHead label="Supplier" sortKey="supplier" currentSort={sortKey} currentDir={sortDir} onSort={handleSort} className="w-[130px] hidden lg:table-cell" />
+                  <SortableHead
+                    label="Part Name"
+                    sortKey="name"
+                    currentSort={sortKey}
+                    currentDir={sortDir}
+                    onSort={handleSort}
+                    className="w-[200px]"
+                  />
+                  <SortableHead
+                    label="SKU"
+                    sortKey="sku"
+                    currentSort={sortKey}
+                    currentDir={sortDir}
+                    onSort={handleSort}
+                    className="w-[130px]"
+                  />
+                  <SortableHead
+                    label="Category"
+                    sortKey="category"
+                    currentSort={sortKey}
+                    currentDir={sortDir}
+                    onSort={handleSort}
+                    className="w-[110px] hidden md:table-cell"
+                  />
+                  <SortableHead
+                    label="Stock"
+                    sortKey="stock"
+                    currentSort={sortKey}
+                    currentDir={sortDir}
+                    onSort={handleSort}
+                    className="w-[90px] text-center"
+                  />
+                  <SortableHead
+                    label="Cost"
+                    sortKey="costPrice"
+                    currentSort={sortKey}
+                    currentDir={sortDir}
+                    onSort={handleSort}
+                    className="w-[90px] hidden sm:table-cell text-right"
+                  />
+                  <SortableHead
+                    label="Sell Price"
+                    sortKey="sellPrice"
+                    currentSort={sortKey}
+                    currentDir={sortDir}
+                    onSort={handleSort}
+                    className="w-[100px] text-right"
+                  />
+                  <SortableHead
+                    label="Supplier"
+                    sortKey="supplier"
+                    currentSort={sortKey}
+                    currentDir={sortDir}
+                    onSort={handleSort}
+                    className="w-[130px] hidden lg:table-cell"
+                  />
                   <TableHead className="w-[60px]" />
                 </TableRow>
               </TableHeader>
@@ -497,7 +770,14 @@ export default function Inventory() {
                 {filtered.map((part) => {
                   const isLow = part.stock <= part.minStock;
                   return (
-                    <TableRow key={part.id} className="hover:bg-secondary/20 cursor-pointer" onClick={() => { setDetailPart(part); setDetailDialogOpen(true); }}>
+                    <TableRow
+                      key={part.id}
+                      className="hover:bg-secondary/20 cursor-pointer"
+                      onClick={() => {
+                        setDetailPart(part);
+                        setDetailDialogOpen(true);
+                      }}
+                    >
                       <TableCell className="font-medium text-sm max-w-[200px]">
                         <TruncatedCell>{part.name}</TruncatedCell>
                       </TableCell>
@@ -505,7 +785,9 @@ export default function Inventory() {
                         <TruncatedCell className="text-xs font-mono text-muted-foreground">{part.sku}</TruncatedCell>
                       </TableCell>
                       <TableCell className="hidden md:table-cell max-w-[110px]">
-                        <Badge variant="secondary" className="text-[11px]">{part.category}</Badge>
+                        <Badge variant="secondary" className="text-[11px]">
+                          {part.category}
+                        </Badge>
                       </TableCell>
                       <TableCell className="text-center">
                         <span className={`text-sm font-semibold ${isLow ? "text-destructive" : "text-foreground"}`}>
@@ -528,11 +810,21 @@ export default function Inventory() {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => { setDetailPart(part); setDetailDialogOpen(true); }}>
+                            <DropdownMenuItem
+                              onClick={() => {
+                                setDetailPart(part);
+                                setDetailDialogOpen(true);
+                              }}
+                            >
                               <Package className="w-3.5 h-3.5 mr-2" />
                               View
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => { setEditPart(part); setEditDialogOpen(true); }}>
+                            <DropdownMenuItem
+                              onClick={() => {
+                                setEditPart(part);
+                                setEditDialogOpen(true);
+                              }}
+                            >
                               <Pencil className="w-3.5 h-3.5 mr-2" />
                               Edit
                             </DropdownMenuItem>
