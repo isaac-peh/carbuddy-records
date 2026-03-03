@@ -106,10 +106,20 @@ function SortableHead({
 }
 
 export default function Inventory() {
+  const [parts, setParts] = useState<Part[]>(mockParts);
+  const [customCategories, setCustomCategories] = useState<string[]>([]);
+  const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
   const [sortKey, setSortKey] = useState<SortKey | null>(null);
   const [sortDir, setSortDir] = useState<SortDir>("asc");
+
+  const allCategories = useMemo(() => {
+    const merged = new Set([...defaultCategories, ...customCategories]);
+    return Array.from(merged).sort();
+  }, [customCategories]);
+
+  const filterCategories = ["All", ...allCategories];
 
   const handleSort = (key: SortKey) => {
     if (sortKey === key) {
