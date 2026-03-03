@@ -240,7 +240,7 @@ export default function Inventory() {
                   <SortableHead label="Cost" sortKey="costPrice" currentSort={sortKey} currentDir={sortDir} onSort={handleSort} className="w-[90px] hidden sm:table-cell text-right" />
                   <SortableHead label="Sell Price" sortKey="sellPrice" currentSort={sortKey} currentDir={sortDir} onSort={handleSort} className="w-[100px] text-right" />
                   <SortableHead label="Supplier" sortKey="supplier" currentSort={sortKey} currentDir={sortDir} onSort={handleSort} className="w-[130px] hidden lg:table-cell" />
-                  <TableHead className="w-[44px]" />
+                  <TableHead className="w-[60px]" />
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -270,7 +270,7 @@ export default function Inventory() {
                       <TableCell className="hidden lg:table-cell max-w-[130px]">
                         <TruncatedCell className="text-xs text-muted-foreground">{part.supplier}</TruncatedCell>
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="text-center">
                         <Button variant="ghost" size="icon" className="h-7 w-7">
                           <MoreHorizontal className="w-3.5 h-3.5" />
                         </Button>

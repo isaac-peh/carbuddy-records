@@ -205,7 +205,7 @@ export default function Services() {
                   <SortableHead label="Service Name" sortKey="name" currentSort={sortKey} currentDir={sortDir} onSort={handleSort} className="w-[240px]" />
                   <SortableHead label="Description" sortKey="description" currentSort={sortKey} currentDir={sortDir} onSort={handleSort} className="hidden sm:table-cell" />
                   <SortableHead label="Price" sortKey="price" currentSort={sortKey} currentDir={sortDir} onSort={handleSort} className="w-[100px] text-right" />
-                  <TableHead className="w-[44px]" />
+                  <TableHead className="w-[60px]" />
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -218,7 +218,7 @@ export default function Services() {
                       <TruncatedCell className="text-sm text-muted-foreground">{service.description}</TruncatedCell>
                     </TableCell>
                     <TableCell className="text-right text-sm font-medium">${service.price}</TableCell>
-                    <TableCell>
+                    <TableCell className="text-center">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button variant="ghost" size="icon" className="h-7 w-7">
