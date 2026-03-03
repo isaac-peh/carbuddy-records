@@ -108,6 +108,7 @@ function SortableHead({
 export default function Inventory() {
   const [parts, setParts] = useState<Part[]>(mockParts);
   const [customCategories, setCustomCategories] = useState<string[]>([]);
+  const [customSuppliers, setCustomSuppliers] = useState<string[]>([]);
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
