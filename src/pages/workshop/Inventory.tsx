@@ -1,14 +1,15 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   Package,
   Search,
   Plus,
-  Filter,
   ArrowUpDown,
+  ArrowUp,
+  ArrowDown,
   MoreHorizontal,
   AlertTriangle,
 } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -20,6 +21,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface Part {
   id: string;
@@ -48,149 +55,241 @@ const mockParts: Part[] = [
 
 const categories = ["All", "Brakes", "Lubricants", "Filters", "Ignition", "Accessories", "Electrical"];
 
+type SortKey = "name" | "sku" | "category" | "stock" | "costPrice" | "sellPrice" | "supplier";
+type SortDir = "asc" | "desc";
+
+function TruncatedCell({ children, className }: { children: string; className?: string }) {
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <span className={`block truncate ${className ?? ""}`}>{children}</span>
+      </TooltipTrigger>
+      <TooltipContent side="top" className="max-w-xs">
+        <p className="text-xs">{children}</p>
+      </TooltipContent>
+    </Tooltip>
+  );
+}
+
+function SortableHead({
+  label,
+  sortKey,
+  currentSort,
+  currentDir,
+  onSort,
+  className,
+}: {
+  label: string;
+  sortKey: SortKey;
+  currentSort: SortKey | null;
+  currentDir: SortDir;
+  onSort: (key: SortKey) => void;
+  className?: string;
+}) {
+  const active = currentSort === sortKey;
+  return (
+    <TableHead className={`text-xs font-medium ${className ?? ""}`}>
+      <button
+        className="inline-flex items-center gap-1 hover:text-foreground transition-colors"
+        onClick={() => onSort(sortKey)}
+      >
+        {label}
+        {active ? (
+          currentDir === "asc" ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />
+        ) : (
+          <ArrowUpDown className="w-3 h-3 opacity-40" />
+        )}
+      </button>
+    </TableHead>
+  );
+}
+
 export default function Inventory() {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
+  const [sortKey, setSortKey] = useState<SortKey | null>(null);
+  const [sortDir, setSortDir] = useState<SortDir>("asc");
 
-  const filtered = mockParts.filter((p) => {
-    const matchesSearch =
-      p.name.toLowerCase().includes(search.toLowerCase()) ||
-      p.sku.toLowerCase().includes(search.toLowerCase());
-    const matchesCategory = activeCategory === "All" || p.category === activeCategory;
-    return matchesSearch && matchesCategory;
-  });
+  const handleSort = (key: SortKey) => {
+    if (sortKey === key) {
+      setSortDir((d) => (d === "asc" ? "desc" : "asc"));
+    } else {
+      setSortKey(key);
+      setSortDir("asc");
+    }
+  };
+
+  const filtered = useMemo(() => {
+    let result = mockParts.filter((p) => {
+      const matchesSearch =
+        p.name.toLowerCase().includes(search.toLowerCase()) ||
+        p.sku.toLowerCase().includes(search.toLowerCase());
+      const matchesCategory = activeCategory === "All" || p.category === activeCategory;
+      return matchesSearch && matchesCategory;
+    });
+
+    if (sortKey) {
+      result = [...result].sort((a, b) => {
+        const aVal = a[sortKey];
+        const bVal = b[sortKey];
+        if (typeof aVal === "number" && typeof bVal === "number") {
+          return sortDir === "asc" ? aVal - bVal : bVal - aVal;
+        }
+        return sortDir === "asc"
+          ? String(aVal).localeCompare(String(bVal))
+          : String(bVal).localeCompare(String(aVal));
+      });
+    }
+
+    return result;
+  }, [search, activeCategory, sortKey, sortDir]);
 
   const totalValue = mockParts.reduce((sum, p) => sum + p.stock * p.costPrice, 0);
   const lowStockCount = mockParts.filter((p) => p.stock <= p.minStock).length;
 
   return (
-    <div className="space-y-6 max-w-6xl">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-foreground tracking-tight">Parts</h1>
-          <p className="text-sm text-muted-foreground mt-1">
-            Manage your spare parts and supplies
-          </p>
+    <TooltipProvider delayDuration={200}>
+      <div className="space-y-6 max-w-6xl">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-bold text-foreground tracking-tight">Parts</h1>
+            <p className="text-sm text-muted-foreground mt-1">
+              Manage your spare parts and supplies
+            </p>
+          </div>
+          <Button className="gap-2 shadow-soft">
+            <Plus className="w-4 h-4" />
+            Add Part
+          </Button>
         </div>
-        <Button className="gap-2 shadow-soft">
-          <Plus className="w-4 h-4" />
-          Add Part
-        </Button>
-      </div>
 
-      {/* Summary Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <Card className="shadow-soft border-border/50">
-          <CardContent className="p-4 flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-secondary flex items-center justify-center">
-              <Package className="w-4 h-4 text-muted-foreground" />
-            </div>
-            <div>
-              <p className="text-xl font-bold text-foreground">{mockParts.length}</p>
-              <p className="text-xs text-muted-foreground">Total SKUs</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="shadow-soft border-border/50">
-          <CardContent className="p-4 flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-secondary flex items-center justify-center">
-              <ArrowUpDown className="w-4 h-4 text-muted-foreground" />
-            </div>
-            <div>
-              <p className="text-xl font-bold text-foreground">${totalValue.toLocaleString()}</p>
-              <p className="text-xs text-muted-foreground">Inventory Value</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="shadow-soft border-border/50">
-          <CardContent className="p-4 flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-warning/10 flex items-center justify-center">
-              <AlertTriangle className="w-4 h-4 text-warning" />
-            </div>
-            <div>
-              <p className="text-xl font-bold text-foreground">{lowStockCount}</p>
-              <p className="text-xs text-muted-foreground">Low Stock Items</p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-3">
-        <div className="relative flex-1 max-w-sm">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
-          <Input
-            placeholder="Search parts or SKU..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="pl-9 bg-secondary/60 border-0 shadow-soft"
-          />
+        {/* Summary Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <Card className="shadow-soft border-border/50">
+            <CardContent className="p-4 flex items-center gap-3">
+              <div className="w-9 h-9 rounded-lg bg-secondary flex items-center justify-center">
+                <Package className="w-4 h-4 text-muted-foreground" />
+              </div>
+              <div>
+                <p className="text-xl font-bold text-foreground">{mockParts.length}</p>
+                <p className="text-xs text-muted-foreground">Total SKUs</p>
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="shadow-soft border-border/50">
+            <CardContent className="p-4 flex items-center gap-3">
+              <div className="w-9 h-9 rounded-lg bg-secondary flex items-center justify-center">
+                <ArrowUpDown className="w-4 h-4 text-muted-foreground" />
+              </div>
+              <div>
+                <p className="text-xl font-bold text-foreground">${totalValue.toLocaleString()}</p>
+                <p className="text-xs text-muted-foreground">Inventory Value</p>
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="shadow-soft border-border/50">
+            <CardContent className="p-4 flex items-center gap-3">
+              <div className="w-9 h-9 rounded-lg bg-warning/10 flex items-center justify-center">
+                <AlertTriangle className="w-4 h-4 text-warning" />
+              </div>
+              <div>
+                <p className="text-xl font-bold text-foreground">{lowStockCount}</p>
+                <p className="text-xs text-muted-foreground">Low Stock Items</p>
+              </div>
+            </CardContent>
+          </Card>
         </div>
-        <div className="flex gap-1.5 flex-wrap">
-          {categories.map((cat) => (
-            <Button
-              key={cat}
-              variant={activeCategory === cat ? "default" : "outline"}
-              size="sm"
-              className="text-xs h-8"
-              onClick={() => setActiveCategory(cat)}
-            >
-              {cat}
-            </Button>
-          ))}
-        </div>
-      </div>
 
-      {/* Table */}
-      <Card className="shadow-soft border-border/50 overflow-hidden">
-        <div className="overflow-x-auto">
-          <Table>
-            <TableHeader>
-              <TableRow className="bg-secondary/30">
-                <TableHead className="text-xs font-medium">Part Name</TableHead>
-                <TableHead className="text-xs font-medium">SKU</TableHead>
-                <TableHead className="text-xs font-medium hidden md:table-cell">Category</TableHead>
-                <TableHead className="text-xs font-medium text-center">Stock</TableHead>
-                <TableHead className="text-xs font-medium hidden sm:table-cell text-right">Cost</TableHead>
-                <TableHead className="text-xs font-medium text-right">Sell Price</TableHead>
-                <TableHead className="text-xs font-medium hidden lg:table-cell">Supplier</TableHead>
-                <TableHead className="w-10" />
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filtered.map((part) => {
-                const isLow = part.stock <= part.minStock;
-                return (
-                  <TableRow key={part.id} className="hover:bg-secondary/20">
-                    <TableCell className="font-medium text-sm">{part.name}</TableCell>
-                    <TableCell className="text-xs font-mono text-muted-foreground">{part.sku}</TableCell>
-                    <TableCell className="hidden md:table-cell">
-                      <Badge variant="secondary" className="text-[11px]">{part.category}</Badge>
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <span className={`text-sm font-semibold ${isLow ? "text-destructive" : "text-foreground"}`}>
-                        {part.stock}
-                      </span>
-                      {isLow && <AlertTriangle className="inline-block w-3 h-3 text-warning ml-1" />}
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell text-right text-sm text-muted-foreground">
-                      ${part.costPrice}
-                    </TableCell>
-                    <TableCell className="text-right text-sm font-medium">${part.sellPrice}</TableCell>
-                    <TableCell className="hidden lg:table-cell text-xs text-muted-foreground">{part.supplier}</TableCell>
-                    <TableCell>
-                      <Button variant="ghost" size="icon" className="h-7 w-7">
-                        <MoreHorizontal className="w-3.5 h-3.5" />
-                      </Button>
+        {/* Filters */}
+        <div className="flex flex-col sm:flex-row gap-3">
+          <div className="relative flex-1 max-w-sm">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
+            <Input
+              placeholder="Search parts or SKU..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pl-9 bg-secondary/60 border-0 shadow-soft"
+            />
+          </div>
+          <div className="flex gap-1.5 flex-wrap">
+            {categories.map((cat) => (
+              <Button
+                key={cat}
+                variant={activeCategory === cat ? "default" : "outline"}
+                size="sm"
+                className="text-xs h-8"
+                onClick={() => setActiveCategory(cat)}
+              >
+                {cat}
+              </Button>
+            ))}
+          </div>
+        </div>
+
+        {/* Table */}
+        <Card className="shadow-soft border-border/50 overflow-hidden">
+          <div className="overflow-x-auto">
+            <Table className="table-fixed">
+              <TableHeader>
+                <TableRow className="bg-secondary/30">
+                  <SortableHead label="Part Name" sortKey="name" currentSort={sortKey} currentDir={sortDir} onSort={handleSort} className="w-[200px]" />
+                  <SortableHead label="SKU" sortKey="sku" currentSort={sortKey} currentDir={sortDir} onSort={handleSort} className="w-[130px]" />
+                  <SortableHead label="Category" sortKey="category" currentSort={sortKey} currentDir={sortDir} onSort={handleSort} className="w-[110px] hidden md:table-cell" />
+                  <SortableHead label="Stock" sortKey="stock" currentSort={sortKey} currentDir={sortDir} onSort={handleSort} className="w-[90px] text-center" />
+                  <SortableHead label="Cost" sortKey="costPrice" currentSort={sortKey} currentDir={sortDir} onSort={handleSort} className="w-[90px] hidden sm:table-cell text-right" />
+                  <SortableHead label="Sell Price" sortKey="sellPrice" currentSort={sortKey} currentDir={sortDir} onSort={handleSort} className="w-[100px] text-right" />
+                  <SortableHead label="Supplier" sortKey="supplier" currentSort={sortKey} currentDir={sortDir} onSort={handleSort} className="w-[130px] hidden lg:table-cell" />
+                  <TableHead className="w-[44px]" />
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filtered.map((part) => {
+                  const isLow = part.stock <= part.minStock;
+                  return (
+                    <TableRow key={part.id} className="hover:bg-secondary/20">
+                      <TableCell className="font-medium text-sm max-w-[200px]">
+                        <TruncatedCell>{part.name}</TruncatedCell>
+                      </TableCell>
+                      <TableCell className="max-w-[130px]">
+                        <TruncatedCell className="text-xs font-mono text-muted-foreground">{part.sku}</TruncatedCell>
+                      </TableCell>
+                      <TableCell className="hidden md:table-cell max-w-[110px]">
+                        <Badge variant="secondary" className="text-[11px]">{part.category}</Badge>
+                      </TableCell>
+                      <TableCell className="text-center">
+                        <span className={`text-sm font-semibold ${isLow ? "text-destructive" : "text-foreground"}`}>
+                          {part.stock}
+                        </span>
+                        {isLow && <AlertTriangle className="inline-block w-3 h-3 text-warning ml-1" />}
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell text-right text-sm text-muted-foreground">
+                        ${part.costPrice}
+                      </TableCell>
+                      <TableCell className="text-right text-sm font-medium">${part.sellPrice}</TableCell>
+                      <TableCell className="hidden lg:table-cell max-w-[130px]">
+                        <TruncatedCell className="text-xs text-muted-foreground">{part.supplier}</TruncatedCell>
+                      </TableCell>
+                      <TableCell>
+                        <Button variant="ghost" size="icon" className="h-7 w-7">
+                          <MoreHorizontal className="w-3.5 h-3.5" />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+                {filtered.length === 0 && (
+                  <TableRow>
+                    <TableCell colSpan={8} className="text-center text-sm text-muted-foreground py-8">
+                      No parts found
                     </TableCell>
                   </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </div>
-      </Card>
-    </div>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        </Card>
+      </div>
+    </TooltipProvider>
   );
 }
