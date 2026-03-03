@@ -178,7 +178,7 @@ export default function PartDetailDialog({
         <Separator />
 
         {/* Movement Section */}
-        <div className="flex-1 flex flex-col min-h-0 px-8 py-5">
+        <div className="flex-1 flex flex-col min-h-0 px-8 py-5 shrink-0">
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-sm font-semibold text-foreground">Stock Movements</h3>
             {!showForm && (
@@ -258,7 +258,7 @@ export default function PartDetailDialog({
               </div>
               <div className="flex justify-end gap-2">
                 <Button variant="ghost" size="sm" onClick={resetForm}>
-                  <X className="w-3 h-3 mr-1" /> Cancel
+                  Cancel
                 </Button>
                 <Button size="sm" disabled={!isValid} onClick={handleSubmit}>
                   Save Movement
