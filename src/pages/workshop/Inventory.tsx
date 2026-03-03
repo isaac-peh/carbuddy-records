@@ -168,9 +168,11 @@ export default function Inventory() {
   const handleAddPart = (partData: Omit<Part, "id">) => {
     const newPart: Part = { ...partData, id: String(Date.now()) };
     setParts((prev) => [...prev, newPart]);
-    // Save custom category if new
     if (!allCategories.includes(partData.category)) {
       setCustomCategories((prev) => [...prev, partData.category]);
+    }
+    if (partData.supplier && !allSuppliers.includes(partData.supplier)) {
+      setCustomSuppliers((prev) => [...prev, partData.supplier]);
     }
   };
 
@@ -195,6 +197,7 @@ export default function Inventory() {
           open={addDialogOpen}
           onOpenChange={setAddDialogOpen}
           categories={allCategories}
+          suppliers={allSuppliers}
           onAdd={handleAddPart}
         />
 
