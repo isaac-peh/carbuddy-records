@@ -396,7 +396,7 @@ export default function Inventory() {
                 {filtered.map((part) => {
                   const isLow = part.stock <= part.minStock;
                   return (
-                    <TableRow key={part.id} className="hover:bg-secondary/20">
+                    <TableRow key={part.id} className="hover:bg-secondary/20 cursor-pointer" onClick={() => { setDetailPart(part); setDetailDialogOpen(true); }}>
                       <TableCell className="font-medium text-sm max-w-[200px]">
                         <TruncatedCell>{part.name}</TruncatedCell>
                       </TableCell>
