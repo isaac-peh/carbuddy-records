@@ -91,7 +91,6 @@ export default function PartDetailDialog({
   onOpenChange,
   part,
   movements,
-  onEditClick,
   onRecordMovement,
 }: PartDetailDialogProps) {
   const [showForm, setShowForm] = useState(false);
