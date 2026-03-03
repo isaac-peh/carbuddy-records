@@ -8,8 +8,11 @@ import {
   ArrowDown,
   MoreHorizontal,
   AlertTriangle,
+  Pencil,
+  Trash2,
 } from "lucide-react";
 import AddPartDialog from "@/components/workshop/AddPartDialog";
+import EditPartDialog from "@/components/workshop/EditPartDialog";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
