@@ -153,10 +153,19 @@ export default function Inventory() {
     }
 
     return result;
-  }, [search, activeCategory, sortKey, sortDir]);
+  }, [parts, search, activeCategory, sortKey, sortDir]);
 
-  const totalValue = mockParts.reduce((sum, p) => sum + p.stock * p.costPrice, 0);
-  const lowStockCount = mockParts.filter((p) => p.stock <= p.minStock).length;
+  const totalValue = parts.reduce((sum, p) => sum + p.stock * p.costPrice, 0);
+  const lowStockCount = parts.filter((p) => p.stock <= p.minStock).length;
+
+  const handleAddPart = (partData: Omit<Part, "id">) => {
+    const newPart: Part = { ...partData, id: String(Date.now()) };
+    setParts((prev) => [...prev, newPart]);
+    // Save custom category if new
+    if (!allCategories.includes(partData.category)) {
+      setCustomCategories((prev) => [...prev, partData.category]);
+    }
+  };
 
   return (
     <TooltipProvider delayDuration={200}>
