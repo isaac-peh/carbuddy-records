@@ -251,7 +251,7 @@ export default function Inventory() {
     }
 
     return result;
-  }, [parts, search, activeCategory, activeSupplier, showLowStockOnly, sortKey, sortDir]);
+  }, [parts, search, activeCategories, activeSuppliers, showLowStockOnly, sortKey, sortDir]);
 
   const totalValue = parts.reduce((sum, p) => sum + p.stock * p.costPrice, 0);
   const lowStockCount = parts.filter((p) => p.stock <= p.minStock).length;
