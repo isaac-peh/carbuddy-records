@@ -9,6 +9,7 @@ import {
   MoreHorizontal,
   AlertTriangle,
 } from "lucide-react";
+import AddPartDialog from "@/components/workshop/AddPartDialog";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -53,7 +54,7 @@ const mockParts: Part[] = [
   { id: "10", name: "Transmission Fluid (1L)", sku: "TF-ATF-001", category: "Lubricants", stock: 7, minStock: 5, costPrice: 15, sellPrice: 32, supplier: "Shell SG" },
 ];
 
-const categories = ["All", "Brakes", "Lubricants", "Filters", "Ignition", "Accessories", "Electrical"];
+const defaultCategories = ["Brakes", "Lubricants", "Filters", "Ignition", "Accessories", "Electrical"];
 
 type SortKey = "name" | "sku" | "category" | "stock" | "costPrice" | "sellPrice" | "supplier";
 type SortDir = "asc" | "desc";
@@ -105,10 +106,20 @@ function SortableHead({
 }
 
 export default function Inventory() {
+  const [parts, setParts] = useState<Part[]>(mockParts);
+  const [customCategories, setCustomCategories] = useState<string[]>([]);
+  const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
   const [sortKey, setSortKey] = useState<SortKey | null>(null);
   const [sortDir, setSortDir] = useState<SortDir>("asc");
+
+  const allCategories = useMemo(() => {
+    const merged = new Set([...defaultCategories, ...customCategories]);
+    return Array.from(merged).sort();
+  }, [customCategories]);
+
+  const filterCategories = ["All", ...allCategories];
 
   const handleSort = (key: SortKey) => {
     if (sortKey === key) {
@@ -120,7 +131,7 @@ export default function Inventory() {
   };
 
   const filtered = useMemo(() => {
-    let result = mockParts.filter((p) => {
+    let result = parts.filter((p) => {
       const matchesSearch =
         p.name.toLowerCase().includes(search.toLowerCase()) ||
         p.sku.toLowerCase().includes(search.toLowerCase());
@@ -142,10 +153,19 @@ export default function Inventory() {
     }
 
     return result;
-  }, [search, activeCategory, sortKey, sortDir]);
+  }, [parts, search, activeCategory, sortKey, sortDir]);
 
-  const totalValue = mockParts.reduce((sum, p) => sum + p.stock * p.costPrice, 0);
-  const lowStockCount = mockParts.filter((p) => p.stock <= p.minStock).length;
+  const totalValue = parts.reduce((sum, p) => sum + p.stock * p.costPrice, 0);
+  const lowStockCount = parts.filter((p) => p.stock <= p.minStock).length;
+
+  const handleAddPart = (partData: Omit<Part, "id">) => {
+    const newPart: Part = { ...partData, id: String(Date.now()) };
+    setParts((prev) => [...prev, newPart]);
+    // Save custom category if new
+    if (!allCategories.includes(partData.category)) {
+      setCustomCategories((prev) => [...prev, partData.category]);
+    }
+  };
 
   return (
     <TooltipProvider delayDuration={200}>
@@ -158,11 +178,18 @@ export default function Inventory() {
               Manage your spare parts and supplies
             </p>
           </div>
-          <Button className="gap-2 shadow-soft">
+          <Button className="gap-2 shadow-soft" onClick={() => setAddDialogOpen(true)}>
             <Plus className="w-4 h-4" />
             Add Part
           </Button>
         </div>
+
+        <AddPartDialog
+          open={addDialogOpen}
+          onOpenChange={setAddDialogOpen}
+          categories={allCategories}
+          onAdd={handleAddPart}
+        />
 
         {/* Summary Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -213,7 +240,7 @@ export default function Inventory() {
             />
           </div>
           <div className="flex gap-1.5 flex-wrap">
-            {categories.map((cat) => (
+            {filterCategories.map((cat) => (
               <Button
                 key={cat}
                 variant={activeCategory === cat ? "default" : "outline"}
