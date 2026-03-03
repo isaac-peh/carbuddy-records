@@ -180,29 +180,44 @@ export default function AddPartDialog({ open, onOpenChange, categories, supplier
           {/* Supplier */}
           <div className="space-y-1.5">
             <Label>Supplier</Label>
-            <Select
-              value={supplierMode === "existing" ? selectedSupplier : "__custom__"}
-              onValueChange={(val) => {
-                if (val === "__custom__") {
-                  setSupplierMode("custom");
-                  setSelectedSupplier("");
-                } else {
-                  setSupplierMode("existing");
-                  setSelectedSupplier(val);
-                  setCustomSupplier("");
-                }
-              }}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select supplier" />
-              </SelectTrigger>
-              <SelectContent>
-                {suppliers.map((s) => (
-                  <SelectItem key={s} value={s}>{s}</SelectItem>
-                ))}
-                <SelectItem value="__custom__">+ Add custom supplier</SelectItem>
-              </SelectContent>
-            </Select>
+            <div className="relative">
+              <Select
+                value={supplierMode === "existing" ? selectedSupplier : "__custom__"}
+                onValueChange={(val) => {
+                  if (val === "__custom__") {
+                    setSupplierMode("custom");
+                    setSelectedSupplier("");
+                  } else {
+                    setSupplierMode("existing");
+                    setSelectedSupplier(val);
+                    setCustomSupplier("");
+                  }
+                }}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select supplier" />
+                </SelectTrigger>
+                <SelectContent>
+                  {suppliers.map((s) => (
+                    <SelectItem key={s} value={s}>{s}</SelectItem>
+                  ))}
+                  <SelectItem value="__custom__">+ Add custom supplier</SelectItem>
+                </SelectContent>
+              </Select>
+              {(selectedSupplier || supplierMode === "custom") && (
+                <button
+                  type="button"
+                  className="absolute right-8 top-1/2 -translate-y-1/2 rounded-sm p-0.5 text-muted-foreground hover:text-foreground transition-colors"
+                  onClick={() => {
+                    setSupplierMode("existing");
+                    setSelectedSupplier("");
+                    setCustomSupplier("");
+                  }}
+                >
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              )}
+            </div>
             {supplierMode === "custom" && (
               <Input
                 placeholder="Enter supplier name"
