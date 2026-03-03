@@ -150,6 +150,26 @@ export default function Inventory() {
   const [editPart, setEditPart] = useState<Part | null>(null);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [deletePart, setDeletePart] = useState<Part | null>(null);
+  const [detailPart, setDetailPart] = useState<Part | null>(null);
+  const [detailDialogOpen, setDetailDialogOpen] = useState(false);
+  const [movements, setMovements] = useState<StockMovement[]>(mockMovements);
+
+  const handleRecordMovement = (movData: Omit<StockMovement, "id" | "balanceAfter">) => {
+    const currentPart = parts.find((p) => p.id === movData.partId);
+    if (!currentPart) return;
+    const newBalance = currentPart.stock + movData.quantity;
+    const newMovement: StockMovement = {
+      ...movData,
+      id: String(Date.now()),
+      balanceAfter: newBalance,
+    };
+    setMovements((prev) => [...prev, newMovement]);
+    setParts((prev) =>
+      prev.map((p) => (p.id === movData.partId ? { ...p, stock: newBalance } : p))
+    );
+    // Update detailPart to reflect new stock
+    setDetailPart((prev) => (prev && prev.id === movData.partId ? { ...prev, stock: newBalance } : prev));
+  };
 
   const allCategories = useMemo(() => {
     const merged = new Set([...defaultCategories, ...customCategories]);
