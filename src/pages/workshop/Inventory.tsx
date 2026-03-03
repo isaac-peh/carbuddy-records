@@ -157,6 +157,8 @@ export default function Inventory() {
       setSortKey(key);
       setSortDir("asc");
     }
+  };
+
   const handleEditPart = (updatedPart: Part) => {
     setParts((prev) => prev.map((p) => (p.id === updatedPart.id ? updatedPart : p)));
     if (!allCategories.includes(updatedPart.category)) {
