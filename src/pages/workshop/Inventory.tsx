@@ -131,7 +131,7 @@ export default function Inventory() {
   };
 
   const filtered = useMemo(() => {
-    let result = mockParts.filter((p) => {
+    let result = parts.filter((p) => {
       const matchesSearch =
         p.name.toLowerCase().includes(search.toLowerCase()) ||
         p.sku.toLowerCase().includes(search.toLowerCase());
