@@ -67,7 +67,6 @@ interface PartDetailDialogProps {
   onOpenChange: (open: boolean) => void;
   part: Part | null;
   movements: StockMovement[];
-  onEditClick: () => void;
   onRecordMovement: (movement: Omit<StockMovement, "id" | "balanceAfter">) => void;
 }
 
