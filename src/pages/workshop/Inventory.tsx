@@ -710,14 +710,14 @@ export default function Inventory() {
                 </PopoverContent>
               </Popover>
 
-              {/* Active filter badges */}
+              {/* Active filter badges - hidden on mobile */}
               {activeFilterCount > 0 && (
-                <div className="flex gap-1.5 flex-wrap">
+                <div className="hidden md:flex gap-1.5 flex-wrap">
                   {activeCategories.map((cat) => (
                     <Badge
                       key={cat}
                       variant="secondary"
-                      className="gap-1 text-xs cursor-pointer"
+                      className="gap-1 text-xs cursor-pointer h-9 px-3 rounded-md"
                       onClick={() => setActiveCategories((prev) => prev.filter((c) => c !== cat))}
                     >
                       {cat} <X className="w-3 h-3" />
@@ -727,7 +727,7 @@ export default function Inventory() {
                     <Badge
                       key={s}
                       variant="secondary"
-                      className="gap-1 text-xs cursor-pointer"
+                      className="gap-1 text-xs cursor-pointer h-9 px-3 rounded-md"
                       onClick={() => setActiveSuppliers((prev) => prev.filter((x) => x !== s))}
                     >
                       {s} <X className="w-3 h-3" />
@@ -736,7 +736,7 @@ export default function Inventory() {
                   {showLowStockOnly && (
                     <Badge
                       variant="secondary"
-                      className="gap-1 text-xs cursor-pointer"
+                      className="gap-1 text-xs cursor-pointer h-9 px-3 rounded-md"
                       onClick={() => setShowLowStockOnly(false)}
                     >
                       Low Stock <X className="w-3 h-3" />
