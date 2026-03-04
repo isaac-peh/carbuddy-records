@@ -262,6 +262,7 @@ export default function PartDetailDialog({
           )}
 
           {/* Movement Table */}
+          <div className="overflow-x-auto">
           <ScrollArea className="flex-1 max-h-[320px]">
             <Table>
               <TableHeader>
