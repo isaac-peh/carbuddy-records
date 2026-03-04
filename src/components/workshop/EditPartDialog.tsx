@@ -117,7 +117,7 @@ export default function EditPartDialog({ open, onOpenChange, part, categories, s
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md mx-2 sm:mx-auto max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Edit Part</DialogTitle>
           <DialogDescription>Update the details for this spare part.</DialogDescription>
