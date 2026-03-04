@@ -669,7 +669,7 @@ export default function Inventory() {
                             placeholder="Search categories..."
                             value={categorySearch}
                             onChange={(e) => setCategorySearch(e.target.value)}
-                            className="h-7 text-xs mb-2"
+                            className="h-7 text-xs mb-2 focus-visible:ring-0 focus-visible:ring-offset-0"
                           />
                         )}
                         <div className="space-y-1.5 max-h-40 overflow-y-auto">
@@ -710,7 +710,7 @@ export default function Inventory() {
                             placeholder="Search suppliers..."
                             value={supplierSearch}
                             onChange={(e) => setSupplierSearch(e.target.value)}
-                            className="h-7 text-xs mb-2"
+                            className="h-7 text-xs mb-2 focus-visible:ring-0 focus-visible:ring-offset-0"
                           />
                         )}
                         <div className="space-y-1.5 max-h-40 overflow-y-auto">
