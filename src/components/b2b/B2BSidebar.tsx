@@ -21,7 +21,6 @@ import {
   SidebarMenuItem,
   SidebarHeader,
   SidebarFooter,
-  useSidebar,
 } from "@/components/ui/sidebar";
 
 const mainItems = [
@@ -38,8 +37,6 @@ const secondaryItems = [
 ];
 
 export function B2BSidebar() {
-  const { state } = useSidebar();
-  const collapsed = state === "collapsed";
   const location = useLocation();
   const currentPath = location.pathname;
 
@@ -50,21 +47,19 @@ export function B2BSidebar() {
 
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader className={collapsed ? "p-2 flex items-center justify-center" : "p-4"}>
-        <div className={`flex items-center ${collapsed ? "justify-center" : "gap-3"}`}>
+      <SidebarHeader className="p-4">
+        <div className="flex items-center gap-3 overflow-hidden">
           <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-accent shadow-soft shrink-0">
             <Car className="w-4 h-4 text-accent-foreground" strokeWidth={1.5} />
           </div>
-          {!collapsed && (
-            <div className="flex flex-col">
-              <span className="text-sm font-bold text-sidebar-foreground tracking-tight">
-                Mobilis
-              </span>
-              <span className="text-[11px] text-muted-foreground leading-tight">
-                Workshop Manager
-              </span>
-            </div>
-          )}
+          <div className="flex flex-col min-w-0 overflow-hidden whitespace-nowrap">
+            <span className="text-sm font-bold text-sidebar-foreground tracking-tight">
+              Mobilis
+            </span>
+            <span className="text-[11px] text-muted-foreground leading-tight">
+              Workshop Manager
+            </span>
+          </div>
         </div>
       </SidebarHeader>
 
@@ -86,8 +81,8 @@ export function B2BSidebar() {
                       className="hover:bg-sidebar-accent/50"
                       activeClassName="bg-sidebar-accent text-sidebar-accent-foreground font-medium"
                     >
-                      <item.icon className="h-4 w-4" />
-                      {!collapsed && <span>{item.title}</span>}
+                      <item.icon className="h-4 w-4 shrink-0" />
+                      <span className="overflow-hidden whitespace-nowrap">{item.title}</span>
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -112,8 +107,8 @@ export function B2BSidebar() {
                       className="hover:bg-sidebar-accent/50"
                       activeClassName="bg-sidebar-accent text-sidebar-accent-foreground font-medium"
                     >
-                      <item.icon className="h-4 w-4" />
-                      {!collapsed && <span>{item.title}</span>}
+                      <item.icon className="h-4 w-4 shrink-0" />
+                      <span className="overflow-hidden whitespace-nowrap">{item.title}</span>
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -123,15 +118,13 @@ export function B2BSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="p-4">
-        {!collapsed && (
-          <div className="rounded-lg border border-border/50 bg-secondary/30 p-3">
-            <p className="text-xs font-medium text-foreground">Free Plan</p>
-            <p className="text-[11px] text-muted-foreground mt-0.5">
-              Upgrade for full features
-            </p>
-          </div>
-        )}
+      <SidebarFooter className="p-4 overflow-hidden">
+        <div className="rounded-lg border border-border/50 bg-secondary/30 p-3 overflow-hidden whitespace-nowrap">
+          <p className="text-xs font-medium text-foreground">Free Plan</p>
+          <p className="text-[11px] text-muted-foreground mt-0.5">
+            Upgrade for full features
+          </p>
+        </div>
       </SidebarFooter>
     </Sidebar>
   );
