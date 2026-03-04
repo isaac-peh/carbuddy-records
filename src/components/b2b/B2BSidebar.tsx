@@ -121,15 +121,13 @@ export function B2BSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="p-4">
-        {!collapsed && (
-          <div className="rounded-lg border border-border/50 bg-secondary/30 p-3">
-            <p className="text-xs font-medium text-foreground">Free Plan</p>
-            <p className="text-[11px] text-muted-foreground mt-0.5">
-              Upgrade for full features
-            </p>
-          </div>
-        )}
+      <SidebarFooter className="p-4 overflow-hidden">
+        <div className="rounded-lg border border-border/50 bg-secondary/30 p-3 overflow-hidden whitespace-nowrap">
+          <p className="text-xs font-medium text-foreground">Free Plan</p>
+          <p className="text-[11px] text-muted-foreground mt-0.5">
+            Upgrade for full features
+          </p>
+        </div>
       </SidebarFooter>
     </Sidebar>
   );
