@@ -622,7 +622,7 @@ export default function Inventory() {
                   className="pl-9 bg-secondary/60 border-0 shadow-soft"
                 />
               </div>
-              <Popover open={filterOpen} onOpenChange={setFilterOpen}>
+              <Popover open={filterOpen} onOpenChange={(open) => { setFilterOpen(open); if (!open) { setCategorySearch(""); setSupplierSearch(""); } }}>
                 <PopoverTrigger asChild>
                   <Button variant="outline" size="sm" className="gap-2 h-9 text-xs">
                     <Filter className="w-3.5 h-3.5" />
