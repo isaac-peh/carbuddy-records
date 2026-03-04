@@ -317,6 +317,8 @@ export default function PartDetailDialog({
               </TableBody>
             </Table>
           </ScrollArea>
+          </div>
+        </div>
         </div>
       </DialogContent>
     </Dialog>

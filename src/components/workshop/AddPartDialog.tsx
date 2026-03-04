@@ -96,7 +96,7 @@ export default function AddPartDialog({ open, onOpenChange, categories, supplier
 
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) resetForm(); onOpenChange(v); }}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md mx-2 sm:mx-auto max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Add New Part</DialogTitle>
           <DialogDescription>Fill in the details for the new spare part.</DialogDescription>
