@@ -70,7 +70,7 @@ export default function AddPartDialog({ open, onOpenChange, categories, supplier
     setCategoryMode("existing");
     setSelectedCategory("");
     setCustomCategory("");
-    setStock("");
+    // stock defaults to 0
     setMinStock("");
     setCostPrice("");
     setSellPrice("");
