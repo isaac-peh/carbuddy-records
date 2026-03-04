@@ -139,7 +139,7 @@ export default function PartDetailDialog({
 
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) resetForm(); onOpenChange(v); }}>
-      <DialogContent className="max-w-3xl max-h-[90vh] flex flex-col gap-0 p-0 overflow-hidden mx-2 sm:mx-auto">
+      <DialogContent className="w-[calc(100%-2rem)] max-w-3xl max-h-[90vh] flex flex-col gap-0 p-0 overflow-hidden">
         <div className="flex-1 overflow-y-auto">
         <DialogHeader className="px-4 sm:px-8 pt-6 sm:pt-8 pb-4 sm:pb-5">
           <div className="flex items-center justify-between">
@@ -262,8 +262,7 @@ export default function PartDetailDialog({
           )}
 
           {/* Movement Table */}
-          <div className="overflow-x-auto">
-          <ScrollArea className="flex-1 max-h-[320px]">
+          <div className="overflow-x-auto overflow-y-auto max-h-[320px] -mx-4 sm:-mx-8 px-4 sm:px-8">
             <Table className="min-w-[600px]">
               <TableHeader>
                 <TableRow className="bg-secondary/30 hover:bg-secondary/30">
@@ -316,7 +315,6 @@ export default function PartDetailDialog({
                 )}
               </TableBody>
             </Table>
-          </ScrollArea>
           </div>
         </div>
         </div>
