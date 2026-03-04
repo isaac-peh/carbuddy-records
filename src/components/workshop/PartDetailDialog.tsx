@@ -155,7 +155,7 @@ export default function PartDetailDialog({
           </div>
         </DialogHeader>
 
-        <div className="px-8 pb-5">
+        <div className="px-4 sm:px-8 pb-5">
           {/* Part Info Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-4">
             <InfoItem label="Category" value={part.category} />
