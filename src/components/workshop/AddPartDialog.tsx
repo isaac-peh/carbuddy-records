@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { X, Info } from "lucide-react";
-import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
+import { TapTooltip } from "@/components/ui/tap-tooltip";
 import {
   Dialog,
   DialogContent,
