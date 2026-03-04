@@ -93,6 +93,7 @@ export default function AddPartDialog({ open, onOpenChange, categories, supplier
       costPrice: Number(costPrice),
       sellPrice: Number(sellPrice),
       supplier: supplier.trim(),
+      uom: uom.trim(),
     });
     resetForm();
     onOpenChange(false);
