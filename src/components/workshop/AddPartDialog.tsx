@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { X, Info } from "lucide-react";
-import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
+import { TapTooltip } from "@/components/ui/tap-tooltip";
 import {
   Dialog,
   DialogContent,
@@ -160,16 +160,9 @@ export default function AddPartDialog({ open, onOpenChange, categories, supplier
             <div className="space-y-1.5">
               <Label htmlFor="part-stock" className="flex items-center gap-1">
                 Current Stock *
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Info className="h-3.5 w-3.5 text-muted-foreground cursor-help" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p className="max-w-[200px] text-xs">Stock is managed via movement records. Use the part detail view to record stock changes.</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                <TapTooltip content={<p className="max-w-[200px] text-xs">Stock is managed via movement records. Use the part detail view to record stock changes.</p>}>
+                  <Info className="h-3.5 w-3.5 text-muted-foreground cursor-help" />
+                </TapTooltip>
               </Label>
               <Input id="part-stock" type="number" min={0} placeholder="0" value={stock} disabled className="disabled:opacity-70 disabled:cursor-not-allowed" />
             </div>
