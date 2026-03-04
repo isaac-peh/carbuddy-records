@@ -22,12 +22,11 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          
+
           {/* B2B Workshop Platform */}
           <Route path="/workshop" element={<B2BLayout />}>
             <Route index element={<Dashboard />} />
-            <Route path="parts" element={<Inventory />} />
-            <Route path="inventory" element={<Navigate to="/workshop/parts" replace />} />
+            <Route path="inventory" element={<Inventory />} />
             <Route path="services" element={<Services />} />
             <Route path="invoices" element={<Invoices />} />
           </Route>
