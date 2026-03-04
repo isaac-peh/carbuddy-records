@@ -446,8 +446,10 @@ export default function Inventory() {
     }
   };
 
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
+
   const handleDeletePart = (id: string) => {
-    setParts((prev) => prev.filter((p) => p.id !== id));
+    setPendingDeleteId(id);
     setDeletePart(null);
   };
 
@@ -543,7 +545,14 @@ export default function Inventory() {
             if (!v) setDeletePart(null);
           }}
         >
-          <AlertDialogContent>
+          <AlertDialogContent
+            onAnimationEnd={() => {
+              if (!deletePart && pendingDeleteId) {
+                setParts((prev) => prev.filter((p) => p.id !== pendingDeleteId));
+                setPendingDeleteId(null);
+              }
+            }}
+          >
             <AlertDialogHeader>
               <AlertDialogTitle>Delete Part</AlertDialogTitle>
               <AlertDialogDescription>
