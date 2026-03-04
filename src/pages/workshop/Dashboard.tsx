@@ -68,7 +68,7 @@ const statusColor: Record<string, string> = {
 
 export default function Dashboard() {
   return (
-    <div className="space-y-6 max-w-6xl">
+    <div className="space-y-6">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-foreground tracking-tight">Dashboard</h1>
