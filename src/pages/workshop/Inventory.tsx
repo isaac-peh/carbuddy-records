@@ -42,14 +42,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface Part {
   id: string;
@@ -398,8 +391,6 @@ export default function Inventory() {
   const [activeSuppliers, setActiveSuppliers] = useState<string[]>([]);
   const [showLowStockOnly, setShowLowStockOnly] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
-  const [categorySearch, setCategorySearch] = useState("");
-  const [supplierSearch, setSupplierSearch] = useState("");
   const [sortKey, setSortKey] = useState<SortKey | null>(null);
   const [sortDir, setSortDir] = useState<SortDir>("asc");
   const [editPart, setEditPart] = useState<Part | null>(null);
@@ -556,7 +547,8 @@ export default function Inventory() {
             <AlertDialogHeader>
               <AlertDialogTitle>Delete Part</AlertDialogTitle>
               <AlertDialogDescription>
-                Are you sure you want to delete "{deletePart?.name}"? This action cannot be undone.
+                Are you sure you want to delete "{deletePart?.name}"? This part will be archived and no longer appear in
+                your inventory.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
@@ -622,7 +614,7 @@ export default function Inventory() {
                   className="pl-9 bg-secondary/60 border-0 shadow-soft"
                 />
               </div>
-              <Popover open={filterOpen} onOpenChange={(open) => { setFilterOpen(open); if (!open) { setCategorySearch(""); setSupplierSearch(""); } }}>
+              <Popover open={filterOpen} onOpenChange={setFilterOpen}>
                 <PopoverTrigger asChild>
                   <Button variant="outline" size="sm" className="gap-2 h-9 text-xs">
                     <Filter className="w-3.5 h-3.5" />
@@ -651,120 +643,71 @@ export default function Inventory() {
                     )}
                   </div>
 
-                  <Accordion type="multiple" className="w-full">
-                    <AccordionItem value="category" className="border-b-0">
-                      <AccordionTrigger className="py-2 text-xs font-medium text-muted-foreground hover:no-underline">
-                        <span className="flex items-center gap-2">
-                          Category
-                          {activeCategories.length > 0 && (
-                            <Badge className="h-4 min-w-4 p-0 flex items-center justify-center text-[10px] rounded-full">
-                              {activeCategories.length}
-                            </Badge>
-                          )}
-                        </span>
-                      </AccordionTrigger>
-                      <AccordionContent className="pb-2">
-                        {allCategories.length > 5 && (
-                          <Input
-                            placeholder="Search categories..."
-                            value={categorySearch}
-                            onChange={(e) => setCategorySearch(e.target.value)}
-                            className="h-7 text-xs mb-2 focus-visible:ring-0 focus-visible:ring-offset-0"
+                  <div className="space-y-2">
+                    <label className="text-xs font-medium text-muted-foreground">Category</label>
+                    <div className="space-y-1.5 max-h-32 overflow-y-auto">
+                      {allCategories.map((cat) => (
+                        <div key={cat} className="flex items-center gap-2">
+                          <Checkbox
+                            id={`cat-${cat}`}
+                            checked={activeCategories.includes(cat)}
+                            onCheckedChange={(checked) => {
+                              setActiveCategories((prev) => (checked ? [...prev, cat] : prev.filter((c) => c !== cat)));
+                            }}
                           />
-                        )}
-                        <div className="space-y-1.5 max-h-40 overflow-y-auto">
-                          {allCategories
-                            .filter((cat) => cat.toLowerCase().includes(categorySearch.toLowerCase()))
-                            .map((cat) => (
-                              <div key={cat} className="flex items-center gap-2">
-                                <Checkbox
-                                  id={`cat-${cat}`}
-                                  checked={activeCategories.includes(cat)}
-                                  onCheckedChange={(checked) => {
-                                    setActiveCategories((prev) => (checked ? [...prev, cat] : prev.filter((c) => c !== cat)));
-                                  }}
-                                />
-                                <label htmlFor={`cat-${cat}`} className="text-xs cursor-pointer">
-                                  {cat}
-                                </label>
-                              </div>
-                            ))}
+                          <label htmlFor={`cat-${cat}`} className="text-xs cursor-pointer">
+                            {cat}
+                          </label>
                         </div>
-                      </AccordionContent>
-                    </AccordionItem>
-
-                    <AccordionItem value="supplier" className="border-b-0">
-                      <AccordionTrigger className="py-2 text-xs font-medium text-muted-foreground hover:no-underline">
-                        <span className="flex items-center gap-2">
-                          Supplier
-                          {activeSuppliers.length > 0 && (
-                            <Badge className="h-4 min-w-4 p-0 flex items-center justify-center text-[10px] rounded-full">
-                              {activeSuppliers.length}
-                            </Badge>
-                          )}
-                        </span>
-                      </AccordionTrigger>
-                      <AccordionContent className="pb-2">
-                        {allSuppliers.length > 5 && (
-                          <Input
-                            placeholder="Search suppliers..."
-                            value={supplierSearch}
-                            onChange={(e) => setSupplierSearch(e.target.value)}
-                            className="h-7 text-xs mb-2 focus-visible:ring-0 focus-visible:ring-offset-0"
-                          />
-                        )}
-                        <div className="space-y-1.5 max-h-40 overflow-y-auto">
-                          {allSuppliers
-                            .filter((s) => s.toLowerCase().includes(supplierSearch.toLowerCase()))
-                            .map((s) => (
-                              <div key={s} className="flex items-center gap-2">
-                                <Checkbox
-                                  id={`sup-${s}`}
-                                  checked={activeSuppliers.includes(s)}
-                                  onCheckedChange={(checked) => {
-                                    setActiveSuppliers((prev) => (checked ? [...prev, s] : prev.filter((x) => x !== s)));
-                                  }}
-                                />
-                                <label htmlFor={`sup-${s}`} className="text-xs cursor-pointer">
-                                  {s}
-                                </label>
-                              </div>
-                            ))}
-                        </div>
-                      </AccordionContent>
-                    </AccordionItem>
-                  </Accordion>
+                      ))}
+                    </div>
+                  </div>
 
                   <div className="space-y-2">
-                    <label className="text-xs font-medium text-muted-foreground">Others</label>
-                    <div className="space-y-1.5">
-                      <div className="flex items-center gap-2">
-                        <Checkbox
-                          id="low-stock-filter"
-                          checked={showLowStockOnly}
-                          onCheckedChange={(v) => setShowLowStockOnly(v === true)}
-                        />
-                        <label
-                          htmlFor="low-stock-filter"
-                          className="text-xs font-medium text-foreground cursor-pointer flex items-center gap-1.5"
-                        >
-                          <AlertTriangle className="w-3 h-3 text-warning" />
-                          Low stock only
-                        </label>
-                      </div>
+                    <label className="text-xs font-medium text-muted-foreground">Supplier</label>
+                    <div className="space-y-1.5 max-h-32 overflow-y-auto">
+                      {allSuppliers.map((s) => (
+                        <div key={s} className="flex items-center gap-2">
+                          <Checkbox
+                            id={`sup-${s}`}
+                            checked={activeSuppliers.includes(s)}
+                            onCheckedChange={(checked) => {
+                              setActiveSuppliers((prev) => (checked ? [...prev, s] : prev.filter((x) => x !== s)));
+                            }}
+                          />
+                          <label htmlFor={`sup-${s}`} className="text-xs cursor-pointer">
+                            {s}
+                          </label>
+                        </div>
+                      ))}
                     </div>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <Checkbox
+                      id="low-stock-filter"
+                      checked={showLowStockOnly}
+                      onCheckedChange={(v) => setShowLowStockOnly(v === true)}
+                    />
+                    <label
+                      htmlFor="low-stock-filter"
+                      className="text-xs font-medium text-foreground cursor-pointer flex items-center gap-1.5"
+                    >
+                      <AlertTriangle className="w-3 h-3 text-warning" />
+                      Low stock only
+                    </label>
                   </div>
                 </PopoverContent>
               </Popover>
 
-              {/* Active filter badges - hidden on mobile */}
+              {/* Active filter badges */}
               {activeFilterCount > 0 && (
-                <div className="hidden md:flex gap-1.5 flex-wrap">
+                <div className="flex gap-1.5 flex-wrap">
                   {activeCategories.map((cat) => (
                     <Badge
                       key={cat}
                       variant="secondary"
-                      className="gap-1 text-xs cursor-pointer h-9 px-3 rounded-md"
+                      className="gap-1 text-xs cursor-pointer"
                       onClick={() => setActiveCategories((prev) => prev.filter((c) => c !== cat))}
                     >
                       {cat} <X className="w-3 h-3" />
@@ -774,7 +717,7 @@ export default function Inventory() {
                     <Badge
                       key={s}
                       variant="secondary"
-                      className="gap-1 text-xs cursor-pointer h-9 px-3 rounded-md"
+                      className="gap-1 text-xs cursor-pointer"
                       onClick={() => setActiveSuppliers((prev) => prev.filter((x) => x !== s))}
                     >
                       {s} <X className="w-3 h-3" />
@@ -783,7 +726,7 @@ export default function Inventory() {
                   {showLowStockOnly && (
                     <Badge
                       variant="secondary"
-                      className="gap-1 text-xs cursor-pointer h-9 px-3 rounded-md"
+                      className="gap-1 text-xs cursor-pointer"
                       onClick={() => setShowLowStockOnly(false)}
                     >
                       Low Stock <X className="w-3 h-3" />
@@ -958,18 +901,29 @@ export default function Inventory() {
           <div className="flex items-center justify-between px-4 py-3 border-t border-border/50">
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <span>Rows per page</span>
-              <Select value={String(pageSize)} onValueChange={(v) => { setPageSize(Number(v)); setCurrentPage(1); }}>
+              <Select
+                value={String(pageSize)}
+                onValueChange={(v) => {
+                  setPageSize(Number(v));
+                  setCurrentPage(1);
+                }}
+              >
                 <SelectTrigger className="h-7 w-[60px] text-xs">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   {PAGE_SIZE_OPTIONS.map((size) => (
-                    <SelectItem key={size} value={String(size)}>{size}</SelectItem>
+                    <SelectItem key={size} value={String(size)}>
+                      {size}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
               <span className="ml-2">
-                {filtered.length === 0 ? "0" : `${(currentPage - 1) * pageSize + 1}–${Math.min(currentPage * pageSize, filtered.length)}`} of {filtered.length}
+                {filtered.length === 0
+                  ? "0"
+                  : `${(currentPage - 1) * pageSize + 1}–${Math.min(currentPage * pageSize, filtered.length)}`}{" "}
+                of {filtered.length}
               </span>
             </div>
             <div className="flex items-center gap-1">
