@@ -75,6 +75,7 @@ export default function EditPartDialog({
       setMinStock(String(part.minStock));
       setCostPrice(String(part.costPrice));
       setSellPrice(String(part.sellPrice));
+      setUom(part.uom || "");
       if (part.supplier && suppliers.includes(part.supplier)) {
         setSupplierMode("existing");
         setSelectedSupplier(part.supplier);
