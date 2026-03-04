@@ -110,6 +110,7 @@ export default function EditPartDialog({
       costPrice: Number(costPrice),
       sellPrice: Number(sellPrice),
       supplier: supplier.trim(),
+      uom: uom.trim(),
     });
     onOpenChange(false);
   };
