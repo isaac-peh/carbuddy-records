@@ -29,7 +29,7 @@ const secondaryItems = [
 ];
 
 export function B2BSidebar() {
-  const { state } = useSidebar();
+  const { state, setOpenMobile } = useSidebar();
   const collapsed = state === "collapsed";
   const location = useLocation();
   const currentPath = location.pathname;
