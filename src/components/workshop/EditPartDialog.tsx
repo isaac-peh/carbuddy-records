@@ -24,6 +24,7 @@ interface Part {
   costPrice: number;
   sellPrice: number;
   supplier: string;
+  uom: string;
 }
 
 interface EditPartDialogProps {
