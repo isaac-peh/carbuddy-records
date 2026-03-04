@@ -42,6 +42,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import {
   Select,
   SelectContent,
@@ -397,6 +398,8 @@ export default function Inventory() {
   const [activeSuppliers, setActiveSuppliers] = useState<string[]>([]);
   const [showLowStockOnly, setShowLowStockOnly] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
+  const [categorySearch, setCategorySearch] = useState("");
+  const [supplierSearch, setSupplierSearch] = useState("");
   const [sortKey, setSortKey] = useState<SortKey | null>(null);
   const [sortDir, setSortDir] = useState<SortDir>("asc");
   const [editPart, setEditPart] = useState<Part | null>(null);
@@ -619,7 +622,7 @@ export default function Inventory() {
                   className="pl-9 bg-secondary/60 border-0 shadow-soft"
                 />
               </div>
-              <Popover open={filterOpen} onOpenChange={setFilterOpen}>
+              <Popover open={filterOpen} onOpenChange={(open) => { setFilterOpen(open); if (!open) { setCategorySearch(""); setSupplierSearch(""); } }}>
                 <PopoverTrigger asChild>
                   <Button variant="outline" size="sm" className="gap-2 h-9 text-xs">
                     <Filter className="w-3.5 h-3.5" />
@@ -648,45 +651,89 @@ export default function Inventory() {
                     )}
                   </div>
 
-                  <div className="space-y-2">
-                    <label className="text-xs font-medium text-muted-foreground">Category</label>
-                    <div className="space-y-1.5 max-h-32 overflow-y-auto">
-                      {allCategories.map((cat) => (
-                        <div key={cat} className="flex items-center gap-2">
-                          <Checkbox
-                            id={`cat-${cat}`}
-                            checked={activeCategories.includes(cat)}
-                            onCheckedChange={(checked) => {
-                              setActiveCategories((prev) => (checked ? [...prev, cat] : prev.filter((c) => c !== cat)));
-                            }}
+                  <Accordion type="multiple" className="w-full">
+                    <AccordionItem value="category" className="border-b-0">
+                      <AccordionTrigger className="py-2 text-xs font-medium text-muted-foreground hover:no-underline">
+                        <span className="flex items-center gap-2">
+                          Category
+                          {activeCategories.length > 0 && (
+                            <Badge className="h-4 min-w-4 p-0 flex items-center justify-center text-[10px] rounded-full">
+                              {activeCategories.length}
+                            </Badge>
+                          )}
+                        </span>
+                      </AccordionTrigger>
+                      <AccordionContent className="pb-2">
+                        {allCategories.length > 5 && (
+                          <Input
+                            placeholder="Search categories..."
+                            value={categorySearch}
+                            onChange={(e) => setCategorySearch(e.target.value)}
+                            className="h-7 text-xs mb-2"
                           />
-                          <label htmlFor={`cat-${cat}`} className="text-xs cursor-pointer">
-                            {cat}
-                          </label>
+                        )}
+                        <div className="space-y-1.5 max-h-40 overflow-y-auto">
+                          {allCategories
+                            .filter((cat) => cat.toLowerCase().includes(categorySearch.toLowerCase()))
+                            .map((cat) => (
+                              <div key={cat} className="flex items-center gap-2">
+                                <Checkbox
+                                  id={`cat-${cat}`}
+                                  checked={activeCategories.includes(cat)}
+                                  onCheckedChange={(checked) => {
+                                    setActiveCategories((prev) => (checked ? [...prev, cat] : prev.filter((c) => c !== cat)));
+                                  }}
+                                />
+                                <label htmlFor={`cat-${cat}`} className="text-xs cursor-pointer">
+                                  {cat}
+                                </label>
+                              </div>
+                            ))}
                         </div>
-                      ))}
-                    </div>
-                  </div>
+                      </AccordionContent>
+                    </AccordionItem>
 
-                  <div className="space-y-2">
-                    <label className="text-xs font-medium text-muted-foreground">Supplier</label>
-                    <div className="space-y-1.5 max-h-32 overflow-y-auto">
-                      {allSuppliers.map((s) => (
-                        <div key={s} className="flex items-center gap-2">
-                          <Checkbox
-                            id={`sup-${s}`}
-                            checked={activeSuppliers.includes(s)}
-                            onCheckedChange={(checked) => {
-                              setActiveSuppliers((prev) => (checked ? [...prev, s] : prev.filter((x) => x !== s)));
-                            }}
+                    <AccordionItem value="supplier" className="border-b-0">
+                      <AccordionTrigger className="py-2 text-xs font-medium text-muted-foreground hover:no-underline">
+                        <span className="flex items-center gap-2">
+                          Supplier
+                          {activeSuppliers.length > 0 && (
+                            <Badge className="h-4 min-w-4 p-0 flex items-center justify-center text-[10px] rounded-full">
+                              {activeSuppliers.length}
+                            </Badge>
+                          )}
+                        </span>
+                      </AccordionTrigger>
+                      <AccordionContent className="pb-2">
+                        {allSuppliers.length > 5 && (
+                          <Input
+                            placeholder="Search suppliers..."
+                            value={supplierSearch}
+                            onChange={(e) => setSupplierSearch(e.target.value)}
+                            className="h-7 text-xs mb-2"
                           />
-                          <label htmlFor={`sup-${s}`} className="text-xs cursor-pointer">
-                            {s}
-                          </label>
+                        )}
+                        <div className="space-y-1.5 max-h-40 overflow-y-auto">
+                          {allSuppliers
+                            .filter((s) => s.toLowerCase().includes(supplierSearch.toLowerCase()))
+                            .map((s) => (
+                              <div key={s} className="flex items-center gap-2">
+                                <Checkbox
+                                  id={`sup-${s}`}
+                                  checked={activeSuppliers.includes(s)}
+                                  onCheckedChange={(checked) => {
+                                    setActiveSuppliers((prev) => (checked ? [...prev, s] : prev.filter((x) => x !== s)));
+                                  }}
+                                />
+                                <label htmlFor={`sup-${s}`} className="text-xs cursor-pointer">
+                                  {s}
+                                </label>
+                              </div>
+                            ))}
                         </div>
-                      ))}
-                    </div>
-                  </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
 
                   <div className="space-y-2">
                     <label className="text-xs font-medium text-muted-foreground">Others</label>
