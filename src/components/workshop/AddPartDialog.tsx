@@ -42,7 +42,7 @@ export default function AddPartDialog({ open, onOpenChange, categories, supplier
   const [categoryMode, setCategoryMode] = useState<"existing" | "custom">("existing");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [customCategory, setCustomCategory] = useState("");
-  const [stock, setStock] = useState("");
+  const [stock] = useState("0");
   const [minStock, setMinStock] = useState("");
   const [costPrice, setCostPrice] = useState("");
   const [sellPrice, setSellPrice] = useState("");
@@ -56,7 +56,6 @@ export default function AddPartDialog({ open, onOpenChange, categories, supplier
     name.trim() &&
     sku.trim() &&
     category &&
-    stock !== "" &&
     minStock !== "" &&
     costPrice !== "" &&
     sellPrice !== "";
@@ -69,7 +68,7 @@ export default function AddPartDialog({ open, onOpenChange, categories, supplier
     setCategoryMode("existing");
     setSelectedCategory("");
     setCustomCategory("");
-    setStock("");
+    // stock resets handled by default
     setMinStock("");
     setCostPrice("");
     setSellPrice("");
@@ -155,10 +154,11 @@ export default function AddPartDialog({ open, onOpenChange, categories, supplier
           </div>
 
           {/* Stock */}
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-3 items-end">
             <div className="space-y-1.5">
-              <Label htmlFor="part-stock">Current Stock *</Label>
-              <Input id="part-stock" type="number" min={0} placeholder="0" value={stock} onChange={(e) => setStock(e.target.value)} />
+              <Label htmlFor="part-stock">Starting Stock</Label>
+              <Input id="part-stock" type="number" value="0" disabled className="disabled:opacity-70 disabled:cursor-not-allowed" />
+              <p className="text-[11px] text-muted-foreground">Use movement records to adjust stock.</p>
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="part-min-stock">Min Stock Level *</Label>

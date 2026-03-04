@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { X, Info } from "lucide-react";
-import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
+import { X } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -181,31 +180,18 @@ export default function EditPartDialog({
 
           <div className="grid grid-cols-2 gap-3 items-end">
             <div className="space-y-1.5">
-              <Label htmlFor="edit-part-stock" className="flex items-center gap-1">
-                Current Stock *
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Info className="h-3.5 w-3.5 text-muted-foreground cursor-help" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p className="max-w-[200px] text-xs">Stock is managed via movement records. Use the part detail view to record stock changes.</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </Label>
+              <Label htmlFor="edit-part-stock">Current Stock</Label>
               <Input
                 id="edit-part-stock"
                 type="number"
-                min={0}
-                placeholder="0"
                 value={stock}
                 disabled
                 className="disabled:opacity-70 disabled:cursor-not-allowed"
               />
+              <p className="text-[11px] text-muted-foreground">Use movement records to adjust stock.</p>
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="edit-part-min-stock" className="flex items-center gap-1 min-h-[1.25rem]">Min Stock Level *</Label>
+              <Label htmlFor="edit-part-min-stock">Min Stock Level *</Label>
               <Input
                 id="edit-part-min-stock"
                 type="number"
