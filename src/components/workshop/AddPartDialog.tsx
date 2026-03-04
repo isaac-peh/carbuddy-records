@@ -56,7 +56,6 @@ export default function AddPartDialog({ open, onOpenChange, categories, supplier
     name.trim() &&
     sku.trim() &&
     category &&
-    stock !== "" &&
     minStock !== "" &&
     costPrice !== "" &&
     sellPrice !== "";
