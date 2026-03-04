@@ -205,7 +205,7 @@ export default function EditPartDialog({
               />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="edit-part-min-stock">Min Stock Level *</Label>
+              <Label htmlFor="edit-part-min-stock" className="flex items-center gap-1 min-h-[1.25rem]">Min Stock Level *</Label>
               <Input
                 id="edit-part-min-stock"
                 type="number"
