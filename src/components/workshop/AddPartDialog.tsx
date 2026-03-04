@@ -174,7 +174,7 @@ export default function AddPartDialog({ open, onOpenChange, categories, supplier
               <Input id="part-stock" type="number" min={0} placeholder="0" value={stock} disabled className="disabled:opacity-70 disabled:cursor-not-allowed" />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="part-min-stock">Min Stock Level *</Label>
+              <Label htmlFor="part-min-stock" className="flex items-center gap-1 min-h-[1.25rem]">Min Stock Level *</Label>
               <Input id="part-min-stock" type="number" min={0} placeholder="0" value={minStock} onChange={(e) => setMinStock(e.target.value)} />
             </div>
           </div>
