@@ -1,29 +1,37 @@
 
 
-## Plan: Add Services Page & Refine Inventory
+## Filter Popover Revamp
 
-### What changes
+### Problem
+The filter popover renders all categories and suppliers as flat checkbox lists. As these lists grow, the popover becomes unmanageably tall.
 
-1. **Rename "Inventory" sidebar item to "Parts"** — since we're splitting the concept, "Parts" is more specific. Add a new "Services" item with a `Wrench` or `HandCoins` icon right below it.
+### Solution
+Use collapsible accordion sections with inline search for long lists, capped with scroll containers.
 
-2. **Rename the current Inventory page to Parts** (`/workshop/parts`) — the existing page already tracks spare parts well. Minor rename of heading from "Inventory" to "Parts". Keep the route and file as-is or rename for clarity.
+```text
+┌─────────────────────────┐
+│ Filters        Clear all│
+├─────────────────────────┤
+│ ▸ Category          (3) │  ← collapsed, shows active count
+│ ▾ Supplier          (1) │  ← expanded on click
+│   🔍 Search...          │  ← only if >5 items
+│   ☑ Supplier A          │
+│   ☐ Supplier B          │
+│   (max-h-40 scrollable) │
+├─────────────────────────┤
+│ ☐ Low stock only        │  ← Others stays flat
+└─────────────────────────┘
+```
 
-3. **Create a new Services page** (`/workshop/services`) with:
-   - Header: "Services" with an "Add Service" button
-   - Summary cards: Total services count, average price
-   - A simple table with columns: **Service Name**, **Description** (short), **Price** (flat rate for now)
-   - No stock tracking, no supplier, no SKU — these don't apply to labor
-   - Search bar to filter services
-   - Mock data: Oil Change Labor, Tyre Change, Brake Pad Replacement (Labor), Diagnostic Scan, A/C Regas, etc.
-   - Each row has a "more" menu (edit/delete) like the parts table
+### Technical Changes (single file: `src/pages/workshop/Inventory.tsx`)
 
-4. **Update sidebar** — reorder main items: Dashboard → Parts → Services → Invoices → Jobs
+1. **Import** `Accordion`, `AccordionItem`, `AccordionTrigger`, `AccordionContent` from existing UI components
+2. **Replace** the flat Category and Supplier sections (lines 651-689) with an `Accordion type="multiple"` containing two `AccordionItem` blocks
+3. **Each AccordionTrigger** shows the label plus a count badge when filters are active (e.g., "Category (3)")
+4. **Inside each AccordionContent**: render a small `Input` search field (only when list has >5 items) that filters checkboxes locally using two new state variables (`categorySearch`, `supplierSearch`)
+5. **Checkbox lists** wrapped in `max-h-40 overflow-y-auto` containers
+6. **Reset** search terms when popover closes (via `onOpenChange`)
+7. **Others section** (low stock toggle) remains outside the accordion, unchanged
 
-5. **Update routing** in `App.tsx` — add `/workshop/services` route, optionally rename `/workshop/inventory` to `/workshop/parts` (with redirect from old URL)
-
-### Files to create/modify
-- **Create**: `src/pages/workshop/Services.tsx`
-- **Modify**: `src/components/b2b/B2BSidebar.tsx` (add Services nav item, rename Inventory → Parts)
-- **Modify**: `src/App.tsx` (add Services route, rename inventory route)
-- **Modify**: `src/pages/workshop/Inventory.tsx` (rename heading from "Inventory" to "Parts")
+No new dependencies or components needed -- all building blocks already exist in the project.
 
