@@ -179,7 +179,7 @@ export default function EditPartDialog({
             )}
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-3 items-end">
             <div className="space-y-1.5">
               <Label htmlFor="edit-part-stock" className="flex items-center gap-1">
                 Current Stock *
