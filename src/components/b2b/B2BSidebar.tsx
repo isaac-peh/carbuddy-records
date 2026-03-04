@@ -66,6 +66,7 @@ export function B2BSidebar() {
                       end={item.url === "/workshop"}
                       className="hover:bg-sidebar-accent/50"
                       activeClassName="bg-sidebar-accent text-sidebar-accent-foreground font-medium"
+                      onClick={() => setOpenMobile(false)}
                     >
                       <item.icon className="h-4 w-4 shrink-0" />
                       <span className="overflow-hidden whitespace-nowrap">{item.title}</span>
