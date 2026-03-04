@@ -1,17 +1,29 @@
 
 
-## Plan: Disable Stock Editing in Edit Part Dialog
+## Plan: Add Services Page & Refine Inventory
 
-**Goal**: Prevent direct stock edits in the Edit Part dialog. Show the field as read-only with a tooltip explaining users should use the movement record instead.
+### What changes
 
-### Changes
+1. **Rename "Inventory" sidebar item to "Parts"** — since we're splitting the concept, "Parts" is more specific. Add a new "Services" item with a `Wrench` or `HandCoins` icon right below it.
 
-**File: `src/components/workshop/EditPartDialog.tsx`**
+2. **Rename the current Inventory page to Parts** (`/workshop/parts`) — the existing page already tracks spare parts well. Minor rename of heading from "Inventory" to "Parts". Keep the route and file as-is or rename for clarity.
 
-1. Disable the "Current Stock" input field (`disabled` prop).
-2. Add a small `Info` icon (from lucide-react) next to the "Current Stock" label.
-3. Wrap the icon in a `Tooltip` that displays: *"Stock is managed via movement records. Use the part detail view to record stock changes."*
-4. Import `Tooltip`, `TooltipTrigger`, `TooltipContent`, `TooltipProvider` from UI components and `Info` from lucide-react.
+3. **Create a new Services page** (`/workshop/services`) with:
+   - Header: "Services" with an "Add Service" button
+   - Summary cards: Total services count, average price
+   - A simple table with columns: **Service Name**, **Description** (short), **Price** (flat rate for now)
+   - No stock tracking, no supplier, no SKU — these don't apply to labor
+   - Search bar to filter services
+   - Mock data: Oil Change Labor, Tyre Change, Brake Pad Replacement (Labor), Diagnostic Scan, A/C Regas, etc.
+   - Each row has a "more" menu (edit/delete) like the parts table
 
-The min stock field remains editable since it's a configuration value, not an inventory count.
+4. **Update sidebar** — reorder main items: Dashboard → Parts → Services → Invoices → Jobs
+
+5. **Update routing** in `App.tsx` — add `/workshop/services` route, optionally rename `/workshop/inventory` to `/workshop/parts` (with redirect from old URL)
+
+### Files to create/modify
+- **Create**: `src/pages/workshop/Services.tsx`
+- **Modify**: `src/components/b2b/B2BSidebar.tsx` (add Services nav item, rename Inventory → Parts)
+- **Modify**: `src/App.tsx` (add Services route, rename inventory route)
+- **Modify**: `src/pages/workshop/Inventory.tsx` (rename heading from "Inventory" to "Parts")
 
