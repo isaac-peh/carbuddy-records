@@ -24,6 +24,7 @@ interface Part {
   costPrice: number;
   sellPrice: number;
   supplier: string;
+  uom: string;
 }
 
 interface EditPartDialogProps {
@@ -55,6 +56,7 @@ export default function EditPartDialog({
   const [supplierMode, setSupplierMode] = useState<"existing" | "custom">("existing");
   const [selectedSupplier, setSelectedSupplier] = useState("");
   const [customSupplier, setCustomSupplier] = useState("");
+  const [uom, setUom] = useState("");
 
   useEffect(() => {
     if (part && open) {
@@ -73,6 +75,7 @@ export default function EditPartDialog({
       setMinStock(String(part.minStock));
       setCostPrice(String(part.costPrice));
       setSellPrice(String(part.sellPrice));
+      setUom(part.uom || "");
       if (part.supplier && suppliers.includes(part.supplier)) {
         setSupplierMode("existing");
         setSelectedSupplier(part.supplier);
@@ -107,6 +110,7 @@ export default function EditPartDialog({
       costPrice: Number(costPrice),
       sellPrice: Number(sellPrice),
       supplier: supplier.trim(),
+      uom: uom.trim(),
     });
     onOpenChange(false);
   };
@@ -237,6 +241,22 @@ export default function EditPartDialog({
             </div>
           </div>
 
+          {/* UOM */}
+          <div className="space-y-1.5">
+            <Label htmlFor="edit-part-uom">Unit of Measure</Label>
+            <Select value={uom} onValueChange={setUom}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select UOM" />
+              </SelectTrigger>
+              <SelectContent>
+                {["pc", "set", "pair", "bottle", "litre", "metre", "kg", "box"].map((u) => (
+                  <SelectItem key={u} value={u}>{u}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Supplier */}
           <div className="space-y-1.5">
             <Label>Supplier</Label>
             <div className="relative">

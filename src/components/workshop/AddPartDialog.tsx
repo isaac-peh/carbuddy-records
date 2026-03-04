@@ -34,6 +34,7 @@ interface AddPartDialogProps {
     costPrice: number;
     sellPrice: number;
     supplier: string;
+    uom: string;
   }) => void;
 }
 
@@ -50,6 +51,7 @@ export default function AddPartDialog({ open, onOpenChange, categories, supplier
   const [supplierMode, setSupplierMode] = useState<"existing" | "custom">("existing");
   const [selectedSupplier, setSelectedSupplier] = useState("");
   const [customSupplier, setCustomSupplier] = useState("");
+  const [uom, setUom] = useState("");
 
   const category = categoryMode === "custom" ? customCategory.trim() : selectedCategory;
 
@@ -77,6 +79,7 @@ export default function AddPartDialog({ open, onOpenChange, categories, supplier
     setSupplierMode("existing");
     setSelectedSupplier("");
     setCustomSupplier("");
+    setUom("");
   };
 
   const handleSubmit = () => {
@@ -90,6 +93,7 @@ export default function AddPartDialog({ open, onOpenChange, categories, supplier
       costPrice: Number(costPrice),
       sellPrice: Number(sellPrice),
       supplier: supplier.trim(),
+      uom: uom.trim(),
     });
     resetForm();
     onOpenChange(false);
@@ -182,6 +186,21 @@ export default function AddPartDialog({ open, onOpenChange, categories, supplier
               <Label htmlFor="part-sell">Sell Price ($) *</Label>
               <Input id="part-sell" type="number" min={0} step="0.01" placeholder="0.00" value={sellPrice} onChange={(e) => setSellPrice(e.target.value)} />
             </div>
+          </div>
+
+          {/* UOM & Supplier */}
+          <div className="space-y-1.5">
+            <Label htmlFor="part-uom">Unit of Measure</Label>
+            <Select value={uom} onValueChange={setUom}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select UOM" />
+              </SelectTrigger>
+              <SelectContent>
+                {["pc", "set", "pair", "bottle", "litre", "metre", "kg", "box"].map((u) => (
+                  <SelectItem key={u} value={u}>{u}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Supplier */}
