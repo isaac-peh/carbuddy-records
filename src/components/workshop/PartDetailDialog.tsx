@@ -172,7 +172,7 @@ export default function PartDetailDialog({
         <Separator />
 
         {/* Movement Section */}
-        <div className="flex-1 flex flex-col min-h-0 px-8 py-5 shrink-0">
+        <div className="flex-1 flex flex-col min-h-0 px-4 sm:px-8 py-5 shrink-0">
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-sm font-semibold text-foreground">Stock Movements</h3>
             {!showForm && (
