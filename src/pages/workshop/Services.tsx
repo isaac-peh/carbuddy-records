@@ -8,6 +8,8 @@ import {
   ArrowUpDown,
   ArrowUp,
   ArrowDown,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -32,6 +34,13 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface Service {
   id: string;
@@ -53,6 +62,8 @@ const mockServices: Service[] = [
 
 type SortKey = "name" | "description" | "price";
 type SortDir = "asc" | "desc";
+
+const PAGE_SIZE_OPTIONS = [10, 25, 50];
 
 function TruncatedCell({ children, className }: { children: string; className?: string }) {
   return (
@@ -104,6 +115,8 @@ export default function Services() {
   const [search, setSearch] = useState("");
   const [sortKey, setSortKey] = useState<SortKey | null>(null);
   const [sortDir, setSortDir] = useState<SortDir>("asc");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
 
   const handleSort = (key: SortKey) => {
     if (sortKey === key) {
@@ -136,6 +149,14 @@ export default function Services() {
 
     return result;
   }, [search, sortKey, sortDir]);
+
+  // Reset page on search change
+  useMemo(() => {
+    setCurrentPage(1);
+  }, [search]);
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const paginatedServices = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   const avgPrice =
     mockServices.length > 0
@@ -209,7 +230,7 @@ export default function Services() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filtered.map((service) => (
+                {paginatedServices.map((service) => (
                   <TableRow key={service.id} className="hover:bg-secondary/20">
                     <TableCell className="font-medium text-sm max-w-[240px]">
                       <TruncatedCell>{service.name}</TruncatedCell>
@@ -233,7 +254,7 @@ export default function Services() {
                     </TableCell>
                   </TableRow>
                 ))}
-                {filtered.length === 0 && (
+                {paginatedServices.length === 0 && (
                   <TableRow>
                     <TableCell colSpan={4} className="text-center text-sm text-muted-foreground py-8">
                       No services found
@@ -242,6 +263,46 @@ export default function Services() {
                 )}
               </TableBody>
             </Table>
+          </div>
+
+          {/* Pagination */}
+          <div className="flex items-center justify-between px-4 py-3 border-t border-border/50">
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <span>Rows per page</span>
+              <Select value={String(pageSize)} onValueChange={(v) => { setPageSize(Number(v)); setCurrentPage(1); }}>
+                <SelectTrigger className="h-7 w-[60px] text-xs">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {PAGE_SIZE_OPTIONS.map((size) => (
+                    <SelectItem key={size} value={String(size)}>{size}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <span className="ml-2">
+                {filtered.length === 0 ? "0" : `${(currentPage - 1) * pageSize + 1}–${Math.min(currentPage * pageSize, filtered.length)}`} of {filtered.length}
+              </span>
+            </div>
+            <div className="flex items-center gap-1">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-7 w-7"
+                disabled={currentPage <= 1}
+                onClick={() => setCurrentPage((p) => p - 1)}
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-7 w-7"
+                disabled={currentPage >= totalPages}
+                onClick={() => setCurrentPage((p) => p + 1)}
+              >
+                <ChevronRight className="w-4 h-4" />
+              </Button>
+            </div>
           </div>
         </Card>
       </div>
