@@ -545,7 +545,14 @@ export default function Inventory() {
             if (!v) setDeletePart(null);
           }}
         >
-          <AlertDialogContent>
+          <AlertDialogContent
+            onAnimationEnd={() => {
+              if (!deletePart && pendingDeleteId) {
+                setParts((prev) => prev.filter((p) => p.id !== pendingDeleteId));
+                setPendingDeleteId(null);
+              }
+            }}
+          >
             <AlertDialogHeader>
               <AlertDialogTitle>Delete Part</AlertDialogTitle>
               <AlertDialogDescription>
