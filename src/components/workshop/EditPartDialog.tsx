@@ -178,29 +178,31 @@ export default function EditPartDialog({
             )}
           </div>
 
-          <div className="grid grid-cols-2 gap-3 items-end">
-            <div className="space-y-1.5">
-              <Label htmlFor="edit-part-stock">Current Stock</Label>
-              <Input
-                id="edit-part-stock"
-                type="number"
-                value={stock}
-                disabled
-                className="disabled:opacity-70 disabled:cursor-not-allowed"
-              />
-              <p className="text-[11px] text-muted-foreground">Use movement records to adjust stock.</p>
+          <div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label htmlFor="edit-part-stock">Current Stock</Label>
+                <Input
+                  id="edit-part-stock"
+                  type="number"
+                  value={stock}
+                  disabled
+                  className="disabled:opacity-70 disabled:cursor-not-allowed"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="edit-part-min-stock">Min Stock Level *</Label>
+                <Input
+                  id="edit-part-min-stock"
+                  type="number"
+                  min={0}
+                  placeholder="0"
+                  value={minStock}
+                  onChange={(e) => setMinStock(e.target.value)}
+                />
+              </div>
             </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="edit-part-min-stock">Min Stock Level *</Label>
-              <Input
-                id="edit-part-min-stock"
-                type="number"
-                min={0}
-                placeholder="0"
-                value={minStock}
-                onChange={(e) => setMinStock(e.target.value)}
-              />
-            </div>
+            <p className="text-[11px] text-muted-foreground mt-1">Use movement records to adjust stock.</p>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
