@@ -43,7 +43,7 @@ export default function AddPartDialog({ open, onOpenChange, categories, supplier
   const [categoryMode, setCategoryMode] = useState<"existing" | "custom">("existing");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [customCategory, setCustomCategory] = useState("");
-  const [stock, setStock] = useState("");
+  const [stock] = useState("0");
   const [minStock, setMinStock] = useState("");
   const [costPrice, setCostPrice] = useState("");
   const [sellPrice, setSellPrice] = useState("");
