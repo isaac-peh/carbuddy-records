@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { X } from "lucide-react";
+import { X, Info } from "lucide-react";
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 import {
   Dialog,
   DialogContent,
@@ -42,7 +43,7 @@ export default function AddPartDialog({ open, onOpenChange, categories, supplier
   const [categoryMode, setCategoryMode] = useState<"existing" | "custom">("existing");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [customCategory, setCustomCategory] = useState("");
-  const [stock, setStock] = useState("");
+  const [stock] = useState("0");
   const [minStock, setMinStock] = useState("");
   const [costPrice, setCostPrice] = useState("");
   const [sellPrice, setSellPrice] = useState("");
@@ -69,7 +70,7 @@ export default function AddPartDialog({ open, onOpenChange, categories, supplier
     setCategoryMode("existing");
     setSelectedCategory("");
     setCustomCategory("");
-    setStock("");
+    // stock defaults to 0
     setMinStock("");
     setCostPrice("");
     setSellPrice("");
@@ -157,11 +158,23 @@ export default function AddPartDialog({ open, onOpenChange, categories, supplier
           {/* Stock */}
           <div className="grid grid-cols-2 gap-3 items-end">
             <div className="space-y-1.5">
-              <Label htmlFor="part-stock">Current Stock *</Label>
-              <Input id="part-stock" type="number" min={0} placeholder="0" value={stock} onChange={(e) => setStock(e.target.value)} />
+              <Label htmlFor="part-stock" className="flex items-center gap-1">
+                Current Stock *
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Info className="h-3.5 w-3.5 text-muted-foreground cursor-help" />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p className="max-w-[200px] text-xs">Stock is managed via movement records. Use the part detail view to record stock changes.</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </Label>
+              <Input id="part-stock" type="number" min={0} placeholder="0" value={stock} disabled className="disabled:opacity-70 disabled:cursor-not-allowed" />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="part-min-stock">Min Stock Level *</Label>
+              <Label htmlFor="part-min-stock" className="flex items-center gap-1 min-h-[1.25rem]">Min Stock Level *</Label>
               <Input id="part-min-stock" type="number" min={0} placeholder="0" value={minStock} onChange={(e) => setMinStock(e.target.value)} />
             </div>
           </div>
