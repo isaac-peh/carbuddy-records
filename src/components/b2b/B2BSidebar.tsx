@@ -50,8 +50,8 @@ export function B2BSidebar() {
 
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader className={collapsed ? "p-2" : "p-4"}>
-        <div className={`flex items-center overflow-hidden ${collapsed ? "justify-center" : "gap-3"}`}>
+      <SidebarHeader className="p-2">
+        <div className="flex items-center gap-3 overflow-hidden">
           <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-accent shadow-soft shrink-0">
             <Car className="w-4 h-4 text-accent-foreground" strokeWidth={1.5} />
           </div>
