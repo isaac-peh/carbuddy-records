@@ -79,6 +79,7 @@ export default function AddPartDialog({ open, onOpenChange, categories, supplier
     setSupplierMode("existing");
     setSelectedSupplier("");
     setCustomSupplier("");
+    setUom("");
   };
 
   const handleSubmit = () => {
