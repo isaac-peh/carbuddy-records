@@ -688,19 +688,24 @@ export default function Inventory() {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2">
-                    <Checkbox
-                      id="low-stock-filter"
-                      checked={showLowStockOnly}
-                      onCheckedChange={(v) => setShowLowStockOnly(v === true)}
-                    />
-                    <label
-                      htmlFor="low-stock-filter"
-                      className="text-xs font-medium text-foreground cursor-pointer flex items-center gap-1.5"
-                    >
-                      <AlertTriangle className="w-3 h-3 text-warning" />
-                      Low stock only
-                    </label>
+                  <div className="space-y-2">
+                    <label className="text-xs font-medium text-muted-foreground">Others</label>
+                    <div className="space-y-1.5">
+                      <div className="flex items-center gap-2">
+                        <Checkbox
+                          id="low-stock-filter"
+                          checked={showLowStockOnly}
+                          onCheckedChange={(v) => setShowLowStockOnly(v === true)}
+                        />
+                        <label
+                          htmlFor="low-stock-filter"
+                          className="text-xs font-medium text-foreground cursor-pointer flex items-center gap-1.5"
+                        >
+                          <AlertTriangle className="w-3 h-3 text-warning" />
+                          Low stock only
+                        </label>
+                      </div>
+                    </div>
                   </div>
                 </PopoverContent>
               </Popover>
