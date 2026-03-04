@@ -188,6 +188,21 @@ export default function AddPartDialog({ open, onOpenChange, categories, supplier
             </div>
           </div>
 
+          {/* UOM & Supplier */}
+          <div className="space-y-1.5">
+            <Label htmlFor="part-uom">Unit of Measure</Label>
+            <Select value={uom} onValueChange={setUom}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select UOM" />
+              </SelectTrigger>
+              <SelectContent>
+                {["pc", "set", "pair", "bottle", "litre", "metre", "kg", "box"].map((u) => (
+                  <SelectItem key={u} value={u}>{u}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
           {/* Supplier */}
           <div className="space-y-1.5">
             <Label>Supplier</Label>

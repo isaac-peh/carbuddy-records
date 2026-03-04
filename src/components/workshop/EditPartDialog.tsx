@@ -241,6 +241,22 @@ export default function EditPartDialog({
             </div>
           </div>
 
+          {/* UOM */}
+          <div className="space-y-1.5">
+            <Label htmlFor="edit-part-uom">Unit of Measure</Label>
+            <Select value={uom} onValueChange={setUom}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select UOM" />
+              </SelectTrigger>
+              <SelectContent>
+                {["pc", "set", "pair", "bottle", "litre", "metre", "kg", "box"].map((u) => (
+                  <SelectItem key={u} value={u}>{u}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Supplier */}
           <div className="space-y-1.5">
             <Label>Supplier</Label>
             <div className="relative">
