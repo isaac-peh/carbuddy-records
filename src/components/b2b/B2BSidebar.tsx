@@ -1,13 +1,4 @@
-import {
-  LayoutDashboard,
-  Package,
-  FileText,
-  Settings,
-  Car,
-  Users,
-  BarChart3,
-  Wrench,
-} from "lucide-react";
+import { LayoutDashboard, Package, FileText, Settings, Car, Users, BarChart3, Wrench } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
 import {
@@ -44,24 +35,20 @@ export function B2BSidebar() {
   const currentPath = location.pathname;
 
   const isActive = (path: string) =>
-    path === "/workshop"
-      ? currentPath === "/workshop"
-      : currentPath.startsWith(path);
+    path === "/workshop" ? currentPath === "/workshop" : currentPath.startsWith(path);
 
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className={collapsed ? "p-2" : "p-4"}>
-        <div className={`flex items-center overflow-hidden ${collapsed ? "justify-center" : "gap-3"}`}>
+        <div className={`flex items-center overflow-hidden ${collapsed ? "gap-3" : "gap-3"}`}>
           <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-accent shadow-soft shrink-0">
             <Car className="w-4 h-4 text-accent-foreground" strokeWidth={1.5} />
           </div>
-          <div className={`flex flex-col min-w-0 overflow-hidden whitespace-nowrap transition-opacity duration-200 ${collapsed ? "opacity-0 w-0" : "opacity-100"}`}>
-            <span className="text-sm font-bold text-sidebar-foreground tracking-tight">
-              Mobilis
-            </span>
-            <span className="text-[11px] text-muted-foreground leading-tight">
-              Workshop Manager
-            </span>
+          <div
+            className={`flex flex-col min-w-0 overflow-hidden whitespace-nowrap transition-opacity duration-200 ${collapsed ? "opacity-0 w-0" : "opacity-100"}`}
+          >
+            <span className="text-sm font-bold text-sidebar-foreground tracking-tight">Mobilis</span>
+            <span className="text-[11px] text-muted-foreground leading-tight">Workshop Manager</span>
           </div>
         </div>
       </SidebarHeader>
@@ -73,11 +60,7 @@ export function B2BSidebar() {
             <SidebarMenu>
               {mainItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={isActive(item.url)}
-                    tooltip={item.title}
-                  >
+                  <SidebarMenuButton asChild isActive={isActive(item.url)} tooltip={item.title}>
                     <NavLink
                       to={item.url}
                       end={item.url === "/workshop"}
@@ -100,11 +83,7 @@ export function B2BSidebar() {
             <SidebarMenu>
               {secondaryItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={isActive(item.url)}
-                    tooltip={item.title}
-                  >
+                  <SidebarMenuButton asChild isActive={isActive(item.url)} tooltip={item.title}>
                     <NavLink
                       to={item.url}
                       className="hover:bg-sidebar-accent/50"
@@ -122,11 +101,11 @@ export function B2BSidebar() {
       </SidebarContent>
 
       <SidebarFooter className={collapsed ? "p-2" : "p-4"}>
-        <div className={`rounded-lg border border-border/50 bg-secondary/30 p-3 overflow-hidden whitespace-nowrap transition-opacity duration-200 ${collapsed ? "opacity-0 scale-95 h-0 p-0 border-0" : "opacity-100 scale-100"}`}>
+        <div
+          className={`rounded-lg border border-border/50 bg-secondary/30 p-3 overflow-hidden whitespace-nowrap transition-opacity duration-200 ${collapsed ? "opacity-0 scale-95 h-0 p-0 border-0" : "opacity-100 scale-100"}`}
+        >
           <p className="text-xs font-medium text-foreground">Free Plan</p>
-          <p className="text-[11px] text-muted-foreground mt-0.5">
-            Upgrade for full features
-          </p>
+          <p className="text-[11px] text-muted-foreground mt-0.5">Upgrade for full features</p>
         </div>
       </SidebarFooter>
     </Sidebar>
