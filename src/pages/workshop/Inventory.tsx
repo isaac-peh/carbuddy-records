@@ -446,8 +446,10 @@ export default function Inventory() {
     }
   };
 
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
+
   const handleDeletePart = (id: string) => {
-    setParts((prev) => prev.filter((p) => p.id !== id));
+    setPendingDeleteId(id);
     setDeletePart(null);
   };
 
