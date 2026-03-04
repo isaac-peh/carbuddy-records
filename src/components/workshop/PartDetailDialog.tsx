@@ -139,8 +139,9 @@ export default function PartDetailDialog({
 
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) resetForm(); onOpenChange(v); }}>
-      <DialogContent className="max-w-3xl max-h-[90vh] flex flex-col gap-0 p-0 overflow-y-auto">
-        <DialogHeader className="px-8 pt-8 pb-5">
+      <DialogContent className="max-w-3xl max-h-[90vh] flex flex-col gap-0 p-0 overflow-hidden mx-2 sm:mx-auto">
+        <div className="flex-1 overflow-y-auto">
+        <DialogHeader className="px-4 sm:px-8 pt-6 sm:pt-8 pb-4 sm:pb-5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center">
@@ -154,7 +155,7 @@ export default function PartDetailDialog({
           </div>
         </DialogHeader>
 
-        <div className="px-8 pb-5">
+        <div className="px-4 sm:px-8 pb-5">
           {/* Part Info Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-4">
             <InfoItem label="Category" value={part.category} />
@@ -171,7 +172,7 @@ export default function PartDetailDialog({
         <Separator />
 
         {/* Movement Section */}
-        <div className="flex-1 flex flex-col min-h-0 px-8 py-5 shrink-0">
+        <div className="flex-1 flex flex-col min-h-0 px-4 sm:px-8 py-5 shrink-0">
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-sm font-semibold text-foreground">Stock Movements</h3>
             {!showForm && (
@@ -261,8 +262,9 @@ export default function PartDetailDialog({
           )}
 
           {/* Movement Table */}
+          <div className="overflow-x-auto">
           <ScrollArea className="flex-1 max-h-[320px]">
-            <Table>
+            <Table className="min-w-[600px]">
               <TableHeader>
                 <TableRow className="bg-secondary/30 hover:bg-secondary/30">
                   <TableHead className="text-[11px] font-medium h-8">Date</TableHead>
@@ -315,6 +317,8 @@ export default function PartDetailDialog({
               </TableBody>
             </Table>
           </ScrollArea>
+          </div>
+        </div>
         </div>
       </DialogContent>
     </Dialog>
