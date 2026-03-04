@@ -568,7 +568,7 @@ export default function Inventory() {
           const activeFilterCount = activeCategories.length + activeSuppliers.length + (showLowStockOnly ? 1 : 0);
           return (
             <div className="flex items-center gap-3">
-              <div className="relative shrink-0 w-78">
+              <div className="relative shrink-0 max-w-sm">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
                 <Input
                   placeholder="Search parts or SKU..."
