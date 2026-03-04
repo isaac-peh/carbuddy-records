@@ -6,7 +6,6 @@ import {
   ArrowDownCircle,
   ArrowUpCircle,
   RefreshCw,
-  X,
 } from "lucide-react";
 import {
   Dialog,
@@ -18,7 +17,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import {
   Select,
@@ -59,6 +57,8 @@ interface Part {
   costPrice: number;
   sellPrice: number;
   supplier: string;
+  uom?: string;
+  description?: string;
 }
 
 interface PartDetailDialogProps {
@@ -156,9 +156,15 @@ export default function PartDetailDialog({
         </DialogHeader>
 
         <div className="px-4 sm:px-8 pb-5">
+          {/* Description */}
+          {part.description && (
+            <p className="text-sm text-muted-foreground mb-4">{part.description}</p>
+          )}
+
           {/* Part Info Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-4">
             <InfoItem label="Category" value={part.category} />
+            <InfoItem label="UOM" value={part.uom?.toUpperCase() || "—"} />
             <InfoItem label="Stock" value={String(part.stock)} highlight={part.stock <= part.minStock} />
             <InfoItem label="Min Stock" value={String(part.minStock)} />
             <InfoItem label="Supplier" value={part.supplier || "—"} />

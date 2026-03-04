@@ -12,6 +12,8 @@ import {
   Trash2,
   Filter,
   X,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import AddPartDialog from "@/components/workshop/AddPartDialog";
 import EditPartDialog from "@/components/workshop/EditPartDialog";
@@ -40,6 +42,13 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface Part {
   id: string;
@@ -51,6 +60,8 @@ interface Part {
   costPrice: number;
   sellPrice: number;
   supplier: string;
+  uom: string;
+  description: string;
 }
 
 const mockParts: Part[] = [
@@ -64,6 +75,8 @@ const mockParts: Part[] = [
     costPrice: 35,
     sellPrice: 65,
     supplier: "AutoParts SG",
+    uom: "set",
+    description: "Front brake pad set for passenger vehicles. Semi-metallic compound with wear indicators.",
   },
   {
     id: "2",
@@ -75,6 +88,8 @@ const mockParts: Part[] = [
     costPrice: 28,
     sellPrice: 55,
     supplier: "Shell SG",
+    uom: "bottle",
+    description: "Fully synthetic 5W-30 engine oil. 5-litre bottle. Suitable for most modern petrol engines.",
   },
   {
     id: "3",
@@ -86,6 +101,8 @@ const mockParts: Part[] = [
     costPrice: 5,
     sellPrice: 15,
     supplier: "AutoParts SG",
+    uom: "pc",
+    description: "Universal spin-on oil filter. Fits most Japanese & Korean vehicles.",
   },
   {
     id: "4",
@@ -97,6 +114,8 @@ const mockParts: Part[] = [
     costPrice: 12,
     sellPrice: 28,
     supplier: "NGK Dist.",
+    uom: "pc",
+    description: "Iridium-tipped spark plug for improved ignition and fuel efficiency.",
   },
   {
     id: "5",
@@ -108,6 +127,8 @@ const mockParts: Part[] = [
     costPrice: 8,
     sellPrice: 22,
     supplier: "AutoParts SG",
+    uom: "pc",
+    description: "Panel-type air filter element. Washable and reusable up to 3 times.",
   },
   {
     id: "6",
@@ -119,6 +140,8 @@ const mockParts: Part[] = [
     costPrice: 65,
     sellPrice: 120,
     supplier: "Brembo SG",
+    uom: "pc",
+    description: "Ventilated front brake disc rotor. Direct OEM replacement.",
   },
   {
     id: "7",
@@ -130,6 +153,8 @@ const mockParts: Part[] = [
     costPrice: 8,
     sellPrice: 18,
     supplier: "Shell SG",
+    uom: "bottle",
+    description: "Pre-mixed long-life coolant. Compatible with aluminium radiators.",
   },
   {
     id: "8",
@@ -141,6 +166,8 @@ const mockParts: Part[] = [
     costPrice: 10,
     sellPrice: 25,
     supplier: "Bosch SG",
+    uom: "pair",
+    description: "Flat-blade frameless wiper set. Universal J-hook adapter included.",
   },
   {
     id: "9",
@@ -152,6 +179,8 @@ const mockParts: Part[] = [
     costPrice: 85,
     sellPrice: 160,
     supplier: "Amaron SG",
+    uom: "pc",
+    description: "Maintenance-free calcium battery. 24-month warranty.",
   },
   {
     id: "10",
@@ -163,6 +192,8 @@ const mockParts: Part[] = [
     costPrice: 15,
     sellPrice: 32,
     supplier: "Shell SG",
+    uom: "bottle",
+    description: "Multi-vehicle ATF suitable for most 4- and 6-speed automatic transmissions.",
   },
 ];
 
@@ -301,8 +332,10 @@ const mockMovements: StockMovement[] = [
   },
 ];
 
-type SortKey = "name" | "sku" | "category" | "stock" | "costPrice" | "sellPrice" | "supplier";
+type SortKey = "name" | "sku" | "category" | "stock" | "costPrice" | "sellPrice" | "supplier" | "uom";
 type SortDir = "asc" | "desc";
+
+const PAGE_SIZE_OPTIONS = [10, 25, 50];
 
 function TruncatedCell({ children, className }: { children: string; className?: string }) {
   return (
@@ -372,6 +405,8 @@ export default function Inventory() {
   const [detailPart, setDetailPart] = useState<Part | null>(null);
   const [detailDialogOpen, setDetailDialogOpen] = useState(false);
   const [movements, setMovements] = useState<StockMovement[]>(mockMovements);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
 
   const handleRecordMovement = (movData: Omit<StockMovement, "id" | "balanceAfter">) => {
     const currentPart = parts.find((p) => p.id === movData.partId);
@@ -384,7 +419,6 @@ export default function Inventory() {
     };
     setMovements((prev) => [...prev, newMovement]);
     setParts((prev) => prev.map((p) => (p.id === movData.partId ? { ...p, stock: newBalance } : p)));
-    // Update detailPart to reflect new stock
     setDetailPart((prev) => (prev && prev.id === movData.partId ? { ...prev, stock: newBalance } : prev));
   };
 
@@ -446,6 +480,14 @@ export default function Inventory() {
 
     return result;
   }, [parts, search, activeCategories, activeSuppliers, showLowStockOnly, sortKey, sortDir]);
+
+  // Reset page when filters change
+  useMemo(() => {
+    setCurrentPage(1);
+  }, [search, activeCategories, activeSuppliers, showLowStockOnly]);
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const paginatedParts = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   const totalValue = parts.reduce((sum, p) => sum + p.stock * p.costPrice, 0);
   const lowStockCount = parts.filter((p) => p.stock <= p.minStock).length;
@@ -732,6 +774,14 @@ export default function Inventory() {
                     className="w-[110px] hidden md:table-cell"
                   />
                   <SortableHead
+                    label="UOM"
+                    sortKey="uom"
+                    currentSort={sortKey}
+                    currentDir={sortDir}
+                    onSort={handleSort}
+                    className="w-[80px] hidden md:table-cell"
+                  />
+                  <SortableHead
                     label="Stock"
                     sortKey="stock"
                     currentSort={sortKey}
@@ -767,7 +817,7 @@ export default function Inventory() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filtered.map((part) => {
+                {paginatedParts.map((part) => {
                   const isLow = part.stock <= part.minStock;
                   return (
                     <TableRow
@@ -788,6 +838,9 @@ export default function Inventory() {
                         <Badge variant="secondary" className="text-[11px]">
                           {part.category}
                         </Badge>
+                      </TableCell>
+                      <TableCell className="hidden md:table-cell text-xs text-muted-foreground uppercase">
+                        {part.uom}
                       </TableCell>
                       <TableCell className="text-center">
                         <span className={`text-sm font-semibold ${isLow ? "text-destructive" : "text-foreground"}`}>
@@ -838,15 +891,55 @@ export default function Inventory() {
                     </TableRow>
                   );
                 })}
-                {filtered.length === 0 && (
+                {paginatedParts.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={8} className="text-center text-sm text-muted-foreground py-8">
+                    <TableCell colSpan={9} className="text-center text-sm text-muted-foreground py-8">
                       No parts found
                     </TableCell>
                   </TableRow>
                 )}
               </TableBody>
             </Table>
+          </div>
+
+          {/* Pagination */}
+          <div className="flex items-center justify-between px-4 py-3 border-t border-border/50">
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <span>Rows per page</span>
+              <Select value={String(pageSize)} onValueChange={(v) => { setPageSize(Number(v)); setCurrentPage(1); }}>
+                <SelectTrigger className="h-7 w-[60px] text-xs">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {PAGE_SIZE_OPTIONS.map((size) => (
+                    <SelectItem key={size} value={String(size)}>{size}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <span className="ml-2">
+                {filtered.length === 0 ? "0" : `${(currentPage - 1) * pageSize + 1}–${Math.min(currentPage * pageSize, filtered.length)}`} of {filtered.length}
+              </span>
+            </div>
+            <div className="flex items-center gap-1">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-7 w-7"
+                disabled={currentPage <= 1}
+                onClick={() => setCurrentPage((p) => p - 1)}
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-7 w-7"
+                disabled={currentPage >= totalPages}
+                onClick={() => setCurrentPage((p) => p + 1)}
+              >
+                <ChevronRight className="w-4 h-4" />
+              </Button>
+            </div>
           </div>
         </Card>
       </div>
