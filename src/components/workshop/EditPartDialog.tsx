@@ -11,13 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface Part {
   id: string;
@@ -40,7 +34,14 @@ interface EditPartDialogProps {
   onSave: (part: Part) => void;
 }
 
-export default function EditPartDialog({ open, onOpenChange, part, categories, suppliers, onSave }: EditPartDialogProps) {
+export default function EditPartDialog({
+  open,
+  onOpenChange,
+  part,
+  categories,
+  suppliers,
+  onSave,
+}: EditPartDialogProps) {
   const [name, setName] = useState("");
   const [sku, setSku] = useState("");
   const [categoryMode, setCategoryMode] = useState<"existing" | "custom">("existing");
@@ -91,13 +92,7 @@ export default function EditPartDialog({ open, onOpenChange, part, categories, s
   const supplier = supplierMode === "custom" ? customSupplier.trim() : selectedSupplier;
 
   const isValid =
-    name.trim() &&
-    sku.trim() &&
-    category &&
-    stock !== "" &&
-    minStock !== "" &&
-    costPrice !== "" &&
-    sellPrice !== "";
+    name.trim() && sku.trim() && category && stock !== "" && minStock !== "" && costPrice !== "" && sellPrice !== "";
 
   const handleSubmit = () => {
     if (!isValid || !part) return;
@@ -117,7 +112,7 @@ export default function EditPartDialog({ open, onOpenChange, part, categories, s
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto no-scrollbar">
         <DialogHeader>
           <DialogTitle>Edit Part</DialogTitle>
           <DialogDescription>Update the details for this spare part.</DialogDescription>
@@ -127,11 +122,21 @@ export default function EditPartDialog({ open, onOpenChange, part, categories, s
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
               <Label htmlFor="edit-part-name">Part Name *</Label>
-              <Input id="edit-part-name" placeholder="e.g. Brake Pads" value={name} onChange={(e) => setName(e.target.value)} />
+              <Input
+                id="edit-part-name"
+                placeholder="e.g. Brake Pads"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="edit-part-sku">SKU *</Label>
-              <Input id="edit-part-sku" placeholder="e.g. BP-FRT-001" value={sku} onChange={(e) => setSku(e.target.value)} />
+              <Input
+                id="edit-part-sku"
+                placeholder="e.g. BP-FRT-001"
+                value={sku}
+                onChange={(e) => setSku(e.target.value)}
+              />
             </div>
           </div>
 
@@ -155,7 +160,9 @@ export default function EditPartDialog({ open, onOpenChange, part, categories, s
               </SelectTrigger>
               <SelectContent>
                 {categories.map((cat) => (
-                  <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                  <SelectItem key={cat} value={cat}>
+                    {cat}
+                  </SelectItem>
                 ))}
                 <SelectItem value="__custom__">+ Add custom category</SelectItem>
               </SelectContent>
@@ -174,22 +181,52 @@ export default function EditPartDialog({ open, onOpenChange, part, categories, s
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
               <Label htmlFor="edit-part-stock">Current Stock *</Label>
-              <Input id="edit-part-stock" type="number" min={0} placeholder="0" value={stock} onChange={(e) => setStock(e.target.value)} />
+              <Input
+                id="edit-part-stock"
+                type="number"
+                min={0}
+                placeholder="0"
+                value={stock}
+                onChange={(e) => setStock(e.target.value)}
+              />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="edit-part-min-stock">Min Stock Level *</Label>
-              <Input id="edit-part-min-stock" type="number" min={0} placeholder="0" value={minStock} onChange={(e) => setMinStock(e.target.value)} />
+              <Input
+                id="edit-part-min-stock"
+                type="number"
+                min={0}
+                placeholder="0"
+                value={minStock}
+                onChange={(e) => setMinStock(e.target.value)}
+              />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
               <Label htmlFor="edit-part-cost">Cost Price ($) *</Label>
-              <Input id="edit-part-cost" type="number" min={0} step="0.01" placeholder="0.00" value={costPrice} onChange={(e) => setCostPrice(e.target.value)} />
+              <Input
+                id="edit-part-cost"
+                type="number"
+                min={0}
+                step="0.01"
+                placeholder="0.00"
+                value={costPrice}
+                onChange={(e) => setCostPrice(e.target.value)}
+              />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="edit-part-sell">Sell Price ($) *</Label>
-              <Input id="edit-part-sell" type="number" min={0} step="0.01" placeholder="0.00" value={sellPrice} onChange={(e) => setSellPrice(e.target.value)} />
+              <Input
+                id="edit-part-sell"
+                type="number"
+                min={0}
+                step="0.01"
+                placeholder="0.00"
+                value={sellPrice}
+                onChange={(e) => setSellPrice(e.target.value)}
+              />
             </div>
           </div>
 
@@ -214,7 +251,9 @@ export default function EditPartDialog({ open, onOpenChange, part, categories, s
                 </SelectTrigger>
                 <SelectContent>
                   {suppliers.map((s) => (
-                    <SelectItem key={s} value={s}>{s}</SelectItem>
+                    <SelectItem key={s} value={s}>
+                      {s}
+                    </SelectItem>
                   ))}
                   <SelectItem value="__custom__">+ Add custom supplier</SelectItem>
                 </SelectContent>
@@ -246,8 +285,12 @@ export default function EditPartDialog({ open, onOpenChange, part, categories, s
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
-          <Button onClick={handleSubmit} disabled={!isValid}>Save Changes</Button>
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
+            Cancel
+          </Button>
+          <Button onClick={handleSubmit} disabled={!isValid}>
+            Save Changes
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
