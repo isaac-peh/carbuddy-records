@@ -158,8 +158,20 @@ export default function AddPartDialog({ open, onOpenChange, categories, supplier
           {/* Stock */}
           <div className="grid grid-cols-2 gap-3 items-end">
             <div className="space-y-1.5">
-              <Label htmlFor="part-stock">Current Stock *</Label>
-              <Input id="part-stock" type="number" min={0} placeholder="0" value={stock} onChange={(e) => setStock(e.target.value)} />
+              <Label htmlFor="part-stock" className="flex items-center gap-1">
+                Current Stock *
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Info className="h-3.5 w-3.5 text-muted-foreground cursor-help" />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p className="max-w-[200px] text-xs">Stock is managed via movement records. Use the part detail view to record stock changes.</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </Label>
+              <Input id="part-stock" type="number" min={0} placeholder="0" value={stock} disabled className="disabled:opacity-70 disabled:cursor-not-allowed" />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="part-min-stock">Min Stock Level *</Label>
