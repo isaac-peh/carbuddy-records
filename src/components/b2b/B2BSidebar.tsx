@@ -17,7 +17,7 @@ import {
 
 const mainItems = [
   { title: "Dashboard", url: "/workshop", icon: LayoutDashboard },
-  { title: "Parts", url: "/workshop/parts", icon: Package },
+  { title: "Parts", url: "/workshop/inventory", icon: Package },
   { title: "Services", url: "/workshop/services", icon: Wrench },
   { title: "Invoices", url: "/workshop/invoices", icon: FileText },
 ];
@@ -41,7 +41,9 @@ export function B2BSidebar() {
     <Sidebar collapsible="icon">
       <SidebarHeader className={collapsed ? "p-2" : "p-4"}>
         <div className={`flex items-center overflow-hidden ${collapsed ? "justify-center" : "gap-3"}`}>
-          <div className={`flex items-center justify-center rounded-lg bg-accent shadow-soft shrink-0 transition-all duration-200 ${collapsed ? "w-7 h-7" : "w-8 h-8"}`}>
+          <div
+            className={`flex items-center justify-center rounded-lg bg-accent shadow-soft shrink-0 transition-all duration-200 ${collapsed ? "w-7 h-7" : "w-8 h-8"}`}
+          >
             <Car className="w-4 h-4 text-accent-foreground" strokeWidth={1.5} />
           </div>
           <div
