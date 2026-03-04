@@ -264,7 +264,7 @@ export default function PartDetailDialog({
           {/* Movement Table */}
           <div className="overflow-x-auto">
           <ScrollArea className="flex-1 max-h-[320px]">
-            <Table>
+            <Table className="min-w-[600px]">
               <TableHeader>
                 <TableRow className="bg-secondary/30 hover:bg-secondary/30">
                   <TableHead className="text-[11px] font-medium h-8">Date</TableHead>
