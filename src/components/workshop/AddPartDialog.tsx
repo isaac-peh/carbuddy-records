@@ -51,6 +51,7 @@ export default function AddPartDialog({ open, onOpenChange, categories, supplier
   const [supplierMode, setSupplierMode] = useState<"existing" | "custom">("existing");
   const [selectedSupplier, setSelectedSupplier] = useState("");
   const [customSupplier, setCustomSupplier] = useState("");
+  const [uom, setUom] = useState("");
 
   const category = categoryMode === "custom" ? customCategory.trim() : selectedCategory;
 
