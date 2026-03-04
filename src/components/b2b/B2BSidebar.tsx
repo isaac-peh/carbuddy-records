@@ -121,8 +121,8 @@ export function B2BSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="p-4 overflow-hidden">
-        <div className="rounded-lg border border-border/50 bg-secondary/30 p-3 overflow-hidden whitespace-nowrap">
+      <SidebarFooter className={collapsed ? "p-2" : "p-4"}>
+        <div className={`rounded-lg border border-border/50 bg-secondary/30 p-3 overflow-hidden whitespace-nowrap transition-opacity duration-200 ${collapsed ? "opacity-0 scale-95 h-0 p-0 border-0" : "opacity-100 scale-100"}`}>
           <p className="text-xs font-medium text-foreground">Free Plan</p>
           <p className="text-[11px] text-muted-foreground mt-0.5">
             Upgrade for full features
