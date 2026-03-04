@@ -21,6 +21,7 @@ import {
   SidebarMenuItem,
   SidebarHeader,
   SidebarFooter,
+  useSidebar,
 } from "@/components/ui/sidebar";
 
 const mainItems = [
@@ -37,6 +38,8 @@ const secondaryItems = [
 ];
 
 export function B2BSidebar() {
+  const { state } = useSidebar();
+  const collapsed = state === "collapsed";
   const location = useLocation();
   const currentPath = location.pathname;
 
@@ -47,12 +50,12 @@ export function B2BSidebar() {
 
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader className="p-4">
-        <div className="flex items-center gap-3 overflow-hidden">
+      <SidebarHeader className={collapsed ? "p-2" : "p-4"}>
+        <div className={`flex items-center overflow-hidden ${collapsed ? "justify-center" : "gap-3"}`}>
           <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-accent shadow-soft shrink-0">
             <Car className="w-4 h-4 text-accent-foreground" strokeWidth={1.5} />
           </div>
-          <div className="flex flex-col min-w-0 overflow-hidden whitespace-nowrap">
+          <div className={`flex flex-col min-w-0 overflow-hidden whitespace-nowrap transition-opacity duration-200 ${collapsed ? "opacity-0 w-0" : "opacity-100"}`}>
             <span className="text-sm font-bold text-sidebar-foreground tracking-tight">
               Mobilis
             </span>
@@ -118,8 +121,8 @@ export function B2BSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="p-4 overflow-hidden">
-        <div className="rounded-lg border border-border/50 bg-secondary/30 p-3 overflow-hidden whitespace-nowrap">
+      <SidebarFooter className={collapsed ? "p-2" : "p-4"}>
+        <div className={`rounded-lg border border-border/50 bg-secondary/30 p-3 overflow-hidden whitespace-nowrap transition-opacity duration-200 ${collapsed ? "opacity-0 scale-95 h-0 p-0 border-0" : "opacity-100 scale-100"}`}>
           <p className="text-xs font-medium text-foreground">Free Plan</p>
           <p className="text-[11px] text-muted-foreground mt-0.5">
             Upgrade for full features
