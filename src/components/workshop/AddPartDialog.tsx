@@ -155,7 +155,7 @@ export default function AddPartDialog({ open, onOpenChange, categories, supplier
           </div>
 
           {/* Stock */}
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-3 items-end">
             <div className="space-y-1.5">
               <Label htmlFor="part-stock">Current Stock *</Label>
               <Input id="part-stock" type="number" min={0} placeholder="0" value={stock} onChange={(e) => setStock(e.target.value)} />
