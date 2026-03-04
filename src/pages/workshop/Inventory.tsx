@@ -749,7 +749,7 @@ export default function Inventory() {
         })()}
 
         {/* Table */}
-        <Card className="shadow-soft border-border/50 overflow-hidden min-h-[300px]">
+        <Card className="shadow-soft border-border/50 overflow-hidden">
           <div className="overflow-x-auto">
             <Table className="table-fixed">
               <TableHeader>
