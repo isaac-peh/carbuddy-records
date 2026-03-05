@@ -353,6 +353,22 @@ export default function Services() {
         </Card>
 
         <AddServiceDialog open={addOpen} onOpenChange={setAddOpen} onAdd={handleAddService} />
+        <EditServiceDialog open={editOpen} onOpenChange={setEditOpen} service={editService} onSave={handleEditService} />
+
+        <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Delete Service</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure you want to delete "{deleteService?.name}"? This action cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel onClick={() => setDeleteService(null)}>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={handleDeleteService} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">Delete</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </TooltipProvider>
   );
