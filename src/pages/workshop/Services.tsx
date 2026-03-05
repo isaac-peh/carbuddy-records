@@ -206,7 +206,7 @@ export default function Services() {
                 <ListChecks className="w-4 h-4 text-muted-foreground" />
               </div>
               <div>
-                <p className="text-xl font-bold text-foreground">{mockServices.length}</p>
+                <p className="text-xl font-bold text-foreground">{services.length}</p>
                 <p className="text-xs text-muted-foreground">Total Services</p>
               </div>
             </CardContent>
