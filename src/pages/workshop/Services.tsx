@@ -138,8 +138,15 @@ export default function Services() {
     }
   };
 
+  const handleAddService = (svc: { name: string; description: string; flatPrice: number | null; hourlyRate: number | null }) => {
+    setServices((prev) => [
+      ...prev,
+      { id: String(Date.now()), ...svc },
+    ]);
+  };
+
   const filtered = useMemo(() => {
-    let result = mockServices.filter(
+    let result = services.filter(
       (s) =>
         s.name.toLowerCase().includes(search.toLowerCase()) ||
         s.description.toLowerCase().includes(search.toLowerCase())
@@ -152,14 +159,14 @@ export default function Services() {
         if (typeof aVal === "number" && typeof bVal === "number") {
           return sortDir === "asc" ? aVal - bVal : bVal - aVal;
         }
-        return sortDir === "asc"
-          ? String(aVal).localeCompare(String(bVal))
-          : String(bVal).localeCompare(String(aVal));
+        const aStr = aVal == null ? "" : String(aVal);
+        const bStr = bVal == null ? "" : String(bVal);
+        return sortDir === "asc" ? aStr.localeCompare(bStr) : bStr.localeCompare(aStr);
       });
     }
 
     return result;
-  }, [search, sortKey, sortDir]);
+  }, [services, search, sortKey, sortDir]);
 
   // Reset page on search change
   useMemo(() => {
