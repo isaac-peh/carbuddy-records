@@ -257,7 +257,8 @@ export default function Services() {
                     <TableCell className="hidden sm:table-cell">
                       <TruncatedCell className="text-sm text-muted-foreground">{service.description}</TruncatedCell>
                     </TableCell>
-                    <TableCell className="text-right text-sm font-medium">${service.price}</TableCell>
+                    <TableCell className="text-right text-sm font-medium">{service.flatPrice != null ? `$${service.flatPrice.toFixed(2)}` : "—"}</TableCell>
+                    <TableCell className="text-right text-sm font-medium">{service.hourlyRate != null ? `$${service.hourlyRate.toFixed(2)}/hr` : "—"}</TableCell>
                     <TableCell className="text-center">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
