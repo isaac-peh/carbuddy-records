@@ -325,6 +325,8 @@ export default function Services() {
             </div>
           </div>
         </Card>
+
+        <AddServiceDialog open={addOpen} onOpenChange={setAddOpen} onAdd={handleAddService} />
       </div>
     </TooltipProvider>
   );
