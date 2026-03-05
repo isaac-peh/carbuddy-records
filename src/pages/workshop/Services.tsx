@@ -217,8 +217,8 @@ export default function Services() {
                 <DollarSign className="w-4 h-4 text-muted-foreground" />
               </div>
               <div>
-                <p className="text-xl font-bold text-foreground">${avgPrice}</p>
-                <p className="text-xs text-muted-foreground">Average Price</p>
+                <p className="text-xl font-bold text-foreground">${avgFlatPrice}</p>
+                <p className="text-xs text-muted-foreground">Avg Flat Price</p>
               </div>
             </CardContent>
           </Card>
