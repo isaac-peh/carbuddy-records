@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { X, Info } from "lucide-react";
+import { X, Info, Plus } from "lucide-react";
 import { TapTooltip } from "@/components/ui/tap-tooltip";
 import {
   Dialog,
@@ -103,7 +103,10 @@ export default function AddPartDialog({ open, onOpenChange, categories, supplier
     <Dialog open={open} onOpenChange={(v) => { if (!v) resetForm(); onOpenChange(v); }}>
       <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Add New Part</DialogTitle>
+          <DialogTitle className="flex items-center gap-2">
+            <Plus className="w-5 h-5 text-muted-foreground" />
+            Add New Part
+          </DialogTitle>
           <DialogDescription>Fill in the details for the new spare part.</DialogDescription>
         </DialogHeader>
 

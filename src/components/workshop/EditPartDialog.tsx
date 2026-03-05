@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { X, Info } from "lucide-react";
+import { X, Info, Pencil } from "lucide-react";
 import { TapTooltip } from "@/components/ui/tap-tooltip";
 import {
   Dialog,
@@ -119,7 +119,10 @@ export default function EditPartDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto no-scrollbar">
         <DialogHeader>
-          <DialogTitle>Edit Part</DialogTitle>
+          <DialogTitle className="flex items-center gap-2">
+            <Pencil className="w-5 h-5 text-muted-foreground" />
+            Edit Part
+          </DialogTitle>
           <DialogDescription>Update the details for this spare part.</DialogDescription>
         </DialogHeader>
 

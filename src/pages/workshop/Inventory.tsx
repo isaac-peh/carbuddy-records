@@ -14,10 +14,12 @@ import {
   X,
   ChevronLeft,
   ChevronRight,
+  Tags,
 } from "lucide-react";
 import AddPartDialog from "@/components/workshop/AddPartDialog";
 import EditPartDialog from "@/components/workshop/EditPartDialog";
 import PartDetailDialog, { type StockMovement } from "@/components/workshop/PartDetailDialog";
+import ManageCategoriesDialog from "@/components/workshop/ManageCategoriesDialog";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -410,6 +412,7 @@ export default function Inventory() {
   const [movements, setMovements] = useState<StockMovement[]>(mockMovements);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [manageCategoriesOpen, setManageCategoriesOpen] = useState(false);
 
   const handleRecordMovement = (movData: Omit<StockMovement, "id" | "balanceAfter">) => {
     const currentPart = parts.find((p) => p.id === movData.partId);
@@ -506,6 +509,37 @@ export default function Inventory() {
     }
   };
 
+  const handleRenameCategory = (oldName: string, newName: string) => {
+    // Update parts that use this category
+    setParts((prev) => prev.map((p) => (p.category === oldName ? { ...p, category: newName } : p)));
+    // Update custom categories list
+    if (defaultCategories.includes(oldName)) {
+      // Renaming a default: remove old from defaults conceptually by adding new as custom
+      setCustomCategories((prev) => [...prev.filter((c) => c !== oldName), newName]);
+    } else {
+      setCustomCategories((prev) => prev.map((c) => (c === oldName ? newName : c)));
+    }
+    // Update active filters
+    setActiveCategories((prev) => prev.map((c) => (c === oldName ? newName : c)));
+  };
+
+  const handleDeleteCategory = (name: string) => {
+    // Move parts with this category to "Others"
+    setParts((prev) => prev.map((p) => (p.category === name ? { ...p, category: "Others" } : p)));
+    // Remove from custom categories
+    setCustomCategories((prev) => prev.filter((c) => c !== name));
+    // Remove from active filters
+    setActiveCategories((prev) => prev.filter((c) => c !== name));
+  };
+
+  const handleAddCategory = (name: string) => {
+    setCustomCategories((prev) => [...prev, name]);
+  };
+
+  const getPartCountForCategory = (category: string) => {
+    return parts.filter((p) => p.category === category).length;
+  };
+
   return (
     <TooltipProvider delayDuration={200}>
       <div className="space-y-6">
@@ -515,10 +549,16 @@ export default function Inventory() {
             <h1 className="text-2xl font-bold text-foreground tracking-tight">Parts</h1>
             <p className="text-sm text-muted-foreground mt-1">Manage your spare parts and supplies</p>
           </div>
-          <Button className="gap-2 shadow-soft" onClick={() => setAddDialogOpen(true)}>
-            <Plus className="w-4 h-4" />
-            Add Part
-          </Button>
+          <div className="flex gap-2">
+            <Button variant="outline" className="gap-2" onClick={() => setManageCategoriesOpen(true)}>
+              <Tags className="w-4 h-4" />
+              Manage Categories
+            </Button>
+            <Button className="gap-2 shadow-soft" onClick={() => setAddDialogOpen(true)}>
+              <Plus className="w-4 h-4" />
+              Add Part
+            </Button>
+          </div>
         </div>
 
         <AddPartDialog
@@ -527,6 +567,17 @@ export default function Inventory() {
           categories={allCategories}
           suppliers={allSuppliers}
           onAdd={handleAddPart}
+        />
+
+        <ManageCategoriesDialog
+          open={manageCategoriesOpen}
+          onOpenChange={setManageCategoriesOpen}
+          categories={allCategories}
+          defaultCategories={defaultCategories}
+          onRenameCategory={handleRenameCategory}
+          onDeleteCategory={handleDeleteCategory}
+          onAddCategory={handleAddCategory}
+          getPartCountForCategory={getPartCountForCategory}
         />
 
         <EditPartDialog
