@@ -42,6 +42,17 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import AddServiceDialog from "@/components/workshop/AddServiceDialog";
+import EditServiceDialog from "@/components/workshop/EditServiceDialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface Service {
   id: string;
