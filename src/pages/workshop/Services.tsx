@@ -121,11 +121,13 @@ function SortableHead({
 }
 
 export default function Services() {
+  const [services, setServices] = useState<Service[]>(initialServices);
   const [search, setSearch] = useState("");
   const [sortKey, setSortKey] = useState<SortKey | null>(null);
   const [sortDir, setSortDir] = useState<SortDir>("asc");
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [addOpen, setAddOpen] = useState(false);
 
   const handleSort = (key: SortKey) => {
     if (sortKey === key) {
