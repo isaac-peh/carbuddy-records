@@ -139,6 +139,10 @@ export default function Services() {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [addOpen, setAddOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
+  const [editService, setEditService] = useState<Service | null>(null);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [deleteService, setDeleteService] = useState<Service | null>(null);
 
   const handleSort = (key: SortKey) => {
     if (sortKey === key) {
