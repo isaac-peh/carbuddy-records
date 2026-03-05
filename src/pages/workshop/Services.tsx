@@ -293,8 +293,8 @@ export default function Services() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem>Edit</DropdownMenuItem>
-                          <DropdownMenuItem className="text-destructive">Delete</DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => { setEditService(service); setEditOpen(true); }}>Edit</DropdownMenuItem>
+                          <DropdownMenuItem className="text-destructive" onClick={() => { setDeleteService(service); setDeleteOpen(true); }}>Delete</DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
