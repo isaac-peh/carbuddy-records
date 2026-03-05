@@ -192,7 +192,7 @@ export default function Services() {
               Manage your labour & workmanship charges
             </p>
           </div>
-          <Button className="gap-2 shadow-soft">
+          <Button className="gap-2 shadow-soft" onClick={() => setAddOpen(true)}>
             <Plus className="w-4 h-4" />
             Add Service
           </Button>
