@@ -42,6 +42,17 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import AddServiceDialog from "@/components/workshop/AddServiceDialog";
+import EditServiceDialog from "@/components/workshop/EditServiceDialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface Service {
   id: string;
@@ -128,6 +139,10 @@ export default function Services() {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [addOpen, setAddOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
+  const [editService, setEditService] = useState<Service | null>(null);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [deleteService, setDeleteService] = useState<Service | null>(null);
 
   const handleSort = (key: SortKey) => {
     if (sortKey === key) {
@@ -143,6 +158,17 @@ export default function Services() {
       ...prev,
       { id: String(Date.now()), ...svc },
     ]);
+  };
+
+  const handleEditService = (updated: Service) => {
+    setServices((prev) => prev.map((s) => (s.id === updated.id ? updated : s)));
+  };
+
+  const handleDeleteService = () => {
+    if (!deleteService) return;
+    setServices((prev) => prev.filter((s) => s.id !== deleteService.id));
+    setDeleteOpen(false);
+    setDeleteService(null);
   };
 
   const filtered = useMemo(() => {
@@ -257,8 +283,8 @@ export default function Services() {
                     <TableCell className="hidden sm:table-cell">
                       <TruncatedCell className="text-sm text-muted-foreground">{service.description}</TruncatedCell>
                     </TableCell>
-                    <TableCell className="text-right text-sm font-medium">{service.flatPrice != null ? `$${service.flatPrice.toFixed(2)}` : "—"}</TableCell>
-                    <TableCell className="text-right text-sm font-medium">{service.hourlyRate != null ? `$${service.hourlyRate.toFixed(2)}/hr` : "—"}</TableCell>
+                    <TableCell className="text-right text-sm font-medium">{service.flatPrice != null ? `$${service.flatPrice.toFixed(2)}` : <span className="text-muted-foreground">N/A</span>}</TableCell>
+                    <TableCell className="text-right text-sm font-medium">{service.hourlyRate != null ? `$${service.hourlyRate.toFixed(2)}/hr` : <span className="text-muted-foreground">N/A</span>}</TableCell>
                     <TableCell className="text-center">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -267,8 +293,8 @@ export default function Services() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem>Edit</DropdownMenuItem>
-                          <DropdownMenuItem className="text-destructive">Delete</DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => { setEditService(service); setEditOpen(true); }}>Edit</DropdownMenuItem>
+                          <DropdownMenuItem className="text-destructive" onClick={() => { setDeleteService(service); setDeleteOpen(true); }}>Delete</DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
@@ -327,6 +353,22 @@ export default function Services() {
         </Card>
 
         <AddServiceDialog open={addOpen} onOpenChange={setAddOpen} onAdd={handleAddService} />
+        <EditServiceDialog open={editOpen} onOpenChange={setEditOpen} service={editService} onSave={handleEditService} />
+
+        <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Delete Service</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure you want to delete "{deleteService?.name}"? This action cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel onClick={() => setDeleteService(null)}>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={handleDeleteService} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">Delete</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </TooltipProvider>
   );
