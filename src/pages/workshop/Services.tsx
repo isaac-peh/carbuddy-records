@@ -62,10 +62,17 @@ const initialServices: Service[] = [
   { id: "8", name: "Spark Plug Replacement (Labor)", description: "Remove & replace spark plugs, gap check", flatPrice: null, hourlyRate: 45 },
 ];
 
-type SortKey = "name" | "description" | "price";
+type SortKey = "name" | "description" | "flatPrice" | "hourlyRate";
 type SortDir = "asc" | "desc";
 
 const PAGE_SIZE_OPTIONS = [10, 25, 50];
+
+function formatPrice(flat: number | null, hourly: number | null) {
+  const parts: string[] = [];
+  if (flat != null) parts.push(`$${flat.toFixed(2)}`);
+  if (hourly != null) parts.push(`$${hourly.toFixed(2)}/hr`);
+  return parts.length ? parts.join(" · ") : "—";
+}
 
 function TruncatedCell({ children, className }: { children: string; className?: string }) {
   return (
