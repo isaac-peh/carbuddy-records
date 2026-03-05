@@ -41,29 +41,38 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import AddServiceDialog from "@/components/workshop/AddServiceDialog";
 
 interface Service {
   id: string;
   name: string;
   description: string;
-  price: number;
+  flatPrice: number | null;
+  hourlyRate: number | null;
 }
 
-const mockServices: Service[] = [
-  { id: "1", name: "Engine Oil Change (Labor)", description: "Drain & replace engine oil, reset service indicator", price: 40 },
-  { id: "2", name: "Tyre Change", description: "Remove & mount tyre, balance wheel", price: 25 },
-  { id: "3", name: "Brake Pad Replacement (Labor)", description: "Remove caliper, swap pads, bleed if needed", price: 60 },
-  { id: "4", name: "Diagnostic Scan", description: "Full OBD-II scan & fault code report", price: 35 },
-  { id: "5", name: "A/C Regas", description: "Evacuate, vacuum & recharge A/C system", price: 80 },
-  { id: "6", name: "Wheel Alignment", description: "4-wheel alignment with printout", price: 50 },
-  { id: "7", name: "Battery Replacement (Labor)", description: "Remove old battery, install & test new unit", price: 20 },
-  { id: "8", name: "Spark Plug Replacement (Labor)", description: "Remove & replace spark plugs, gap check", price: 45 },
+const initialServices: Service[] = [
+  { id: "1", name: "Engine Oil Change (Labor)", description: "Drain & replace engine oil, reset service indicator", flatPrice: 40, hourlyRate: null },
+  { id: "2", name: "Tyre Change", description: "Remove & mount tyre, balance wheel", flatPrice: 25, hourlyRate: null },
+  { id: "3", name: "Brake Pad Replacement (Labor)", description: "Remove caliper, swap pads, bleed if needed", flatPrice: 60, hourlyRate: null },
+  { id: "4", name: "Diagnostic Scan", description: "Full OBD-II scan & fault code report", flatPrice: 35, hourlyRate: null },
+  { id: "5", name: "A/C Regas", description: "Evacuate, vacuum & recharge A/C system", flatPrice: 80, hourlyRate: null },
+  { id: "6", name: "Wheel Alignment", description: "4-wheel alignment with printout", flatPrice: 50, hourlyRate: null },
+  { id: "7", name: "Battery Replacement (Labor)", description: "Remove old battery, install & test new unit", flatPrice: 20, hourlyRate: null },
+  { id: "8", name: "Spark Plug Replacement (Labor)", description: "Remove & replace spark plugs, gap check", flatPrice: null, hourlyRate: 45 },
 ];
 
-type SortKey = "name" | "description" | "price";
+type SortKey = "name" | "description" | "flatPrice" | "hourlyRate";
 type SortDir = "asc" | "desc";
 
 const PAGE_SIZE_OPTIONS = [10, 25, 50];
+
+function formatPrice(flat: number | null, hourly: number | null) {
+  const parts: string[] = [];
+  if (flat != null) parts.push(`$${flat.toFixed(2)}`);
+  if (hourly != null) parts.push(`$${hourly.toFixed(2)}/hr`);
+  return parts.length ? parts.join(" · ") : "—";
+}
 
 function TruncatedCell({ children, className }: { children: string; className?: string }) {
   return (
@@ -112,11 +121,13 @@ function SortableHead({
 }
 
 export default function Services() {
+  const [services, setServices] = useState<Service[]>(initialServices);
   const [search, setSearch] = useState("");
   const [sortKey, setSortKey] = useState<SortKey | null>(null);
   const [sortDir, setSortDir] = useState<SortDir>("asc");
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [addOpen, setAddOpen] = useState(false);
 
   const handleSort = (key: SortKey) => {
     if (sortKey === key) {
@@ -127,8 +138,15 @@ export default function Services() {
     }
   };
 
+  const handleAddService = (svc: { name: string; description: string; flatPrice: number | null; hourlyRate: number | null }) => {
+    setServices((prev) => [
+      ...prev,
+      { id: String(Date.now()), ...svc },
+    ]);
+  };
+
   const filtered = useMemo(() => {
-    let result = mockServices.filter(
+    let result = services.filter(
       (s) =>
         s.name.toLowerCase().includes(search.toLowerCase()) ||
         s.description.toLowerCase().includes(search.toLowerCase())
@@ -141,14 +159,14 @@ export default function Services() {
         if (typeof aVal === "number" && typeof bVal === "number") {
           return sortDir === "asc" ? aVal - bVal : bVal - aVal;
         }
-        return sortDir === "asc"
-          ? String(aVal).localeCompare(String(bVal))
-          : String(bVal).localeCompare(String(aVal));
+        const aStr = aVal == null ? "" : String(aVal);
+        const bStr = bVal == null ? "" : String(bVal);
+        return sortDir === "asc" ? aStr.localeCompare(bStr) : bStr.localeCompare(aStr);
       });
     }
 
     return result;
-  }, [search, sortKey, sortDir]);
+  }, [services, search, sortKey, sortDir]);
 
   // Reset page on search change
   useMemo(() => {
@@ -158,10 +176,10 @@ export default function Services() {
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   const paginatedServices = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
-  const avgPrice =
-    mockServices.length > 0
-      ? Math.round(mockServices.reduce((sum, s) => sum + s.price, 0) / mockServices.length)
-      : 0;
+  const avgFlatPrice = (() => {
+    const withFlat = services.filter((s) => s.flatPrice != null);
+    return withFlat.length > 0 ? Math.round(withFlat.reduce((sum, s) => sum + (s.flatPrice ?? 0), 0) / withFlat.length) : 0;
+  })();
 
   return (
     <TooltipProvider delayDuration={200}>
@@ -174,7 +192,7 @@ export default function Services() {
               Manage your labour & workmanship charges
             </p>
           </div>
-          <Button className="gap-2 shadow-soft">
+          <Button className="gap-2 shadow-soft" onClick={() => setAddOpen(true)}>
             <Plus className="w-4 h-4" />
             Add Service
           </Button>
@@ -188,7 +206,7 @@ export default function Services() {
                 <ListChecks className="w-4 h-4 text-muted-foreground" />
               </div>
               <div>
-                <p className="text-xl font-bold text-foreground">{mockServices.length}</p>
+                <p className="text-xl font-bold text-foreground">{services.length}</p>
                 <p className="text-xs text-muted-foreground">Total Services</p>
               </div>
             </CardContent>
@@ -199,8 +217,8 @@ export default function Services() {
                 <DollarSign className="w-4 h-4 text-muted-foreground" />
               </div>
               <div>
-                <p className="text-xl font-bold text-foreground">${avgPrice}</p>
-                <p className="text-xs text-muted-foreground">Average Price</p>
+                <p className="text-xl font-bold text-foreground">${avgFlatPrice}</p>
+                <p className="text-xs text-muted-foreground">Avg Flat Price</p>
               </div>
             </CardContent>
           </Card>
@@ -225,7 +243,8 @@ export default function Services() {
                 <TableRow className="bg-secondary/30">
                   <SortableHead label="Service Name" sortKey="name" currentSort={sortKey} currentDir={sortDir} onSort={handleSort} className="w-[240px]" />
                   <SortableHead label="Description" sortKey="description" currentSort={sortKey} currentDir={sortDir} onSort={handleSort} className="hidden sm:table-cell" />
-                  <SortableHead label="Price" sortKey="price" currentSort={sortKey} currentDir={sortDir} onSort={handleSort} className="w-[100px] text-right" />
+                  <SortableHead label="Flat Price" sortKey="flatPrice" currentSort={sortKey} currentDir={sortDir} onSort={handleSort} className="w-[110px] text-right" />
+                  <SortableHead label="Hourly Rate" sortKey="hourlyRate" currentSort={sortKey} currentDir={sortDir} onSort={handleSort} className="w-[110px] text-right" />
                   <TableHead className="w-[60px]" />
                 </TableRow>
               </TableHeader>
@@ -238,7 +257,8 @@ export default function Services() {
                     <TableCell className="hidden sm:table-cell">
                       <TruncatedCell className="text-sm text-muted-foreground">{service.description}</TruncatedCell>
                     </TableCell>
-                    <TableCell className="text-right text-sm font-medium">${service.price}</TableCell>
+                    <TableCell className="text-right text-sm font-medium">{service.flatPrice != null ? `$${service.flatPrice.toFixed(2)}` : "—"}</TableCell>
+                    <TableCell className="text-right text-sm font-medium">{service.hourlyRate != null ? `$${service.hourlyRate.toFixed(2)}/hr` : "—"}</TableCell>
                     <TableCell className="text-center">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -256,7 +276,7 @@ export default function Services() {
                 ))}
                 {paginatedServices.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={4} className="text-center text-sm text-muted-foreground py-8">
+                    <TableCell colSpan={5} className="text-center text-sm text-muted-foreground py-8">
                       No services found
                     </TableCell>
                   </TableRow>
@@ -305,6 +325,8 @@ export default function Services() {
             </div>
           </div>
         </Card>
+
+        <AddServiceDialog open={addOpen} onOpenChange={setAddOpen} onAdd={handleAddService} />
       </div>
     </TooltipProvider>
   );
