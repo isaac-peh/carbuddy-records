@@ -276,7 +276,7 @@ export default function Services() {
                 ))}
                 {paginatedServices.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={4} className="text-center text-sm text-muted-foreground py-8">
+                    <TableCell colSpan={5} className="text-center text-sm text-muted-foreground py-8">
                       No services found
                     </TableCell>
                   </TableRow>
