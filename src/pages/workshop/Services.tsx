@@ -176,10 +176,10 @@ export default function Services() {
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   const paginatedServices = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
-  const avgPrice =
-    mockServices.length > 0
-      ? Math.round(mockServices.reduce((sum, s) => sum + s.price, 0) / mockServices.length)
-      : 0;
+  const avgFlatPrice = (() => {
+    const withFlat = services.filter((s) => s.flatPrice != null);
+    return withFlat.length > 0 ? Math.round(withFlat.reduce((sum, s) => sum + (s.flatPrice ?? 0), 0) / withFlat.length) : 0;
+  })();
 
   return (
     <TooltipProvider delayDuration={200}>
