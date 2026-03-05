@@ -160,6 +160,17 @@ export default function Services() {
     ]);
   };
 
+  const handleEditService = (updated: Service) => {
+    setServices((prev) => prev.map((s) => (s.id === updated.id ? updated : s)));
+  };
+
+  const handleDeleteService = () => {
+    if (!deleteService) return;
+    setServices((prev) => prev.filter((s) => s.id !== deleteService.id));
+    setDeleteOpen(false);
+    setDeleteService(null);
+  };
+
   const filtered = useMemo(() => {
     let result = services.filter(
       (s) =>
