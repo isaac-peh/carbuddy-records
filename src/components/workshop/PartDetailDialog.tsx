@@ -6,6 +6,7 @@ import {
   ArrowDownCircle,
   ArrowUpCircle,
   RefreshCw,
+  MessageSquare,
 } from "lucide-react";
 import {
   Dialog,
