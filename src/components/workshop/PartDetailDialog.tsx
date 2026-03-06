@@ -6,7 +6,7 @@ import {
   ArrowDownCircle,
   ArrowUpCircle,
   RefreshCw,
-  MessageSquare,
+  ChevronRight,
 } from "lucide-react";
 import {
   Dialog,
@@ -272,8 +272,9 @@ export default function PartDetailDialog({
           {/* Movement Table */}
           <div className="overflow-x-auto overflow-y-auto max-h-[320px] -mx-4 sm:-mx-8 px-4 sm:px-8">
             <Table className="min-w-[600px]">
-              <TableHeader>
+               <TableHeader>
                 <TableRow className="bg-secondary/30 hover:bg-secondary/30">
+                  <TableHead className="w-4 h-8 pr-0" />
                   <TableHead className="text-[11px] font-medium h-8">Date</TableHead>
                   <TableHead className="text-[11px] font-medium h-8">Type</TableHead>
                   <TableHead className="text-[11px] font-medium h-8 text-right">Qty</TableHead>
@@ -282,7 +283,7 @@ export default function PartDetailDialog({
                   <TableHead className="text-[11px] font-medium h-8 text-right">Cost</TableHead>
                   <TableHead className="text-[11px] font-medium h-8 text-right">Balance</TableHead>
                 </TableRow>
-              </TableHeader>
+               </TableHeader>
               <TableBody>
                 {partMovements.map((m) => {
                   const config = MOVEMENT_TYPE_CONFIG[m.type];
@@ -291,9 +292,12 @@ export default function PartDetailDialog({
                     <>
                       <TableRow
                         key={m.id}
-                        className="hover:bg-secondary/10 cursor-pointer"
+                        className="hover:bg-secondary/10 cursor-pointer group"
                         onClick={() => setExpandedMovement(isExpanded ? null : m.id)}
                       >
+                        <TableCell className="text-xs text-muted-foreground py-2 w-4 pr-0">
+                          <ChevronRight className={`w-3 h-3 text-muted-foreground/50 transition-transform ${isExpanded ? "rotate-90" : ""}`} />
+                        </TableCell>
                         <TableCell className="text-xs text-muted-foreground py-2">
                           {format(new Date(m.date), "dd MMM yy")}
                         </TableCell>
@@ -315,20 +319,14 @@ export default function PartDetailDialog({
                           ${m.costPriceAtTime}
                         </TableCell>
                         <TableCell className="text-xs text-right font-medium py-2">
-                          <span className="inline-flex items-center gap-1.5">
-                            {m.balanceAfter}
-                            {m.notes && <MessageSquare className="w-3 h-3 text-muted-foreground" />}
-                          </span>
+                          {m.balanceAfter}
                         </TableCell>
                       </TableRow>
                       {isExpanded && (
-                        <TableRow key={`${m.id}-notes`} className="hover:bg-transparent">
-                          <TableCell colSpan={7} className="py-2 px-4 bg-muted/30 border-b">
-                            <div className="flex items-start gap-2 text-xs text-muted-foreground">
-                              <MessageSquare className="w-3.5 h-3.5 mt-0.5 shrink-0" />
-                              <span className={m.notes ? "text-foreground" : "italic"}>
-                                {m.notes || "No notes recorded"}
-                              </span>
+                        <TableRow key={`${m.id}-notes`} className="hover:bg-transparent border-b-0">
+                          <TableCell colSpan={8} className="pt-0 pb-3 pl-10">
+                            <div className="text-xs leading-relaxed text-muted-foreground border-l-2 border-primary/20 pl-3">
+                              {m.notes || <span className="italic">No notes recorded</span>}
                             </div>
                           </TableCell>
                         </TableRow>
@@ -338,7 +336,7 @@ export default function PartDetailDialog({
                 })}
                 {partMovements.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={7} className="text-center text-xs text-muted-foreground py-6">
+                    <TableCell colSpan={8} className="text-center text-xs text-muted-foreground py-6">
                       No movements recorded yet
                     </TableCell>
                   </TableRow>
