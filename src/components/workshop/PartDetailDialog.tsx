@@ -139,7 +139,7 @@ export default function PartDetailDialog({
 
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) resetForm(); onOpenChange(v); }}>
-      <DialogContent className="w-[calc(100%-2rem)] max-w-4xl max-h-[90vh] flex flex-col gap-0 p-0 overflow-hidden">
+      <DialogContent className="w-[calc(100%-2rem)] max-w-3xl max-h-[90vh] flex flex-col gap-0 p-0 overflow-hidden">
         <div className="flex-1 overflow-y-auto no-scrollbar">
         <DialogHeader className="px-4 sm:px-8 pt-6 sm:pt-8 pb-4 sm:pb-5 text-left">
           <div className="flex items-center justify-between">
@@ -191,7 +191,7 @@ export default function PartDetailDialog({
 
           {/* Inline Form */}
           {showForm && (
-            <div className="border rounded-lg p-4 mb-6 bg-secondary/30 space-y-3">
+            <div className="border rounded-lg p-4 mb-3 bg-secondary/30 space-y-3">
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 <div className="space-y-1">
                   <label className="text-xs font-medium text-muted-foreground">Type</label>
@@ -270,7 +270,7 @@ export default function PartDetailDialog({
           {/* Movement Table */}
           <div className="overflow-x-auto overflow-y-auto max-h-[320px] -mx-4 sm:-mx-8 px-4 sm:px-8">
             <Table className="min-w-[600px]">
-               <TableHeader>
+              <TableHeader>
                 <TableRow className="bg-secondary/30 hover:bg-secondary/30">
                   <TableHead className="text-[11px] font-medium h-8">Date</TableHead>
                   <TableHead className="text-[11px] font-medium h-8">Type</TableHead>
@@ -280,19 +280,14 @@ export default function PartDetailDialog({
                   <TableHead className="text-[11px] font-medium h-8 text-right">Cost</TableHead>
                   <TableHead className="text-[11px] font-medium h-8 text-right">Balance</TableHead>
                 </TableRow>
-               </TableHeader>
+              </TableHeader>
               <TableBody>
                 {partMovements.map((m) => {
                   const config = MOVEMENT_TYPE_CONFIG[m.type];
                   return (
                     <TableRow key={m.id} className="hover:bg-secondary/10">
                       <TableCell className="text-xs text-muted-foreground py-2">
-                        <div>{format(new Date(m.date), "dd MMM yy")}</div>
-                        {m.notes && (
-                          <div className="text-[11px] text-muted-foreground/70 mt-0.5 max-w-[180px] truncate">
-                            {m.notes}
-                          </div>
-                        )}
+                        {format(new Date(m.date), "dd MMM yy")}
                       </TableCell>
                       <TableCell className="py-2">
                         <Badge variant="outline" className={`text-[10px] px-1.5 py-0 h-5 ${config.className}`}>
