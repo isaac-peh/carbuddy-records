@@ -272,8 +272,9 @@ export default function PartDetailDialog({
           {/* Movement Table */}
           <div className="overflow-x-auto overflow-y-auto max-h-[320px] -mx-4 sm:-mx-8 px-4 sm:px-8">
             <Table className="min-w-[600px]">
-              <TableHeader>
+               <TableHeader>
                 <TableRow className="bg-secondary/30 hover:bg-secondary/30">
+                  <TableHead className="w-4 h-8 pr-0" />
                   <TableHead className="text-[11px] font-medium h-8">Date</TableHead>
                   <TableHead className="text-[11px] font-medium h-8">Type</TableHead>
                   <TableHead className="text-[11px] font-medium h-8 text-right">Qty</TableHead>
@@ -282,7 +283,7 @@ export default function PartDetailDialog({
                   <TableHead className="text-[11px] font-medium h-8 text-right">Cost</TableHead>
                   <TableHead className="text-[11px] font-medium h-8 text-right">Balance</TableHead>
                 </TableRow>
-              </TableHeader>
+               </TableHeader>
               <TableBody>
                 {partMovements.map((m) => {
                   const config = MOVEMENT_TYPE_CONFIG[m.type];
