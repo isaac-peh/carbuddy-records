@@ -286,32 +286,54 @@ export default function PartDetailDialog({
               <TableBody>
                 {partMovements.map((m) => {
                   const config = MOVEMENT_TYPE_CONFIG[m.type];
+                  const isExpanded = expandedMovement === m.id;
                   return (
-                    <TableRow key={m.id} className="hover:bg-secondary/10">
-                      <TableCell className="text-xs text-muted-foreground py-2">
-                        {format(new Date(m.date), "dd MMM yy")}
-                      </TableCell>
-                      <TableCell className="py-2">
-                        <Badge variant="outline" className={`text-[10px] px-1.5 py-0 h-5 ${config.className}`}>
-                          {config.label}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className={`text-xs text-right font-semibold py-2 ${m.quantity > 0 ? "text-emerald-600" : "text-destructive"}`}>
-                        {m.quantity > 0 ? `+${m.quantity}` : m.quantity}
-                      </TableCell>
-                      <TableCell className="text-xs text-muted-foreground py-2">
-                        {REFERENCE_TYPE_LABELS[m.referenceType]}
-                      </TableCell>
-                      <TableCell className="text-xs font-mono text-muted-foreground py-2">
-                        {m.referenceId || "—"}
-                      </TableCell>
-                      <TableCell className="text-xs text-right text-muted-foreground py-2">
-                        ${m.costPriceAtTime}
-                      </TableCell>
-                      <TableCell className="text-xs text-right font-medium py-2">
-                        {m.balanceAfter}
-                      </TableCell>
-                    </TableRow>
+                    <>
+                      <TableRow
+                        key={m.id}
+                        className="hover:bg-secondary/10 cursor-pointer"
+                        onClick={() => setExpandedMovement(isExpanded ? null : m.id)}
+                      >
+                        <TableCell className="text-xs text-muted-foreground py-2">
+                          {format(new Date(m.date), "dd MMM yy")}
+                        </TableCell>
+                        <TableCell className="py-2">
+                          <Badge variant="outline" className={`text-[10px] px-1.5 py-0 h-5 ${config.className}`}>
+                            {config.label}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className={`text-xs text-right font-semibold py-2 ${m.quantity > 0 ? "text-emerald-600" : "text-destructive"}`}>
+                          {m.quantity > 0 ? `+${m.quantity}` : m.quantity}
+                        </TableCell>
+                        <TableCell className="text-xs text-muted-foreground py-2">
+                          {REFERENCE_TYPE_LABELS[m.referenceType]}
+                        </TableCell>
+                        <TableCell className="text-xs font-mono text-muted-foreground py-2">
+                          {m.referenceId || "—"}
+                        </TableCell>
+                        <TableCell className="text-xs text-right text-muted-foreground py-2">
+                          ${m.costPriceAtTime}
+                        </TableCell>
+                        <TableCell className="text-xs text-right font-medium py-2">
+                          <span className="inline-flex items-center gap-1.5">
+                            {m.balanceAfter}
+                            {m.notes && <MessageSquare className="w-3 h-3 text-muted-foreground" />}
+                          </span>
+                        </TableCell>
+                      </TableRow>
+                      {isExpanded && (
+                        <TableRow key={`${m.id}-notes`} className="hover:bg-transparent">
+                          <TableCell colSpan={7} className="py-2 px-4 bg-muted/30 border-b">
+                            <div className="flex items-start gap-2 text-xs text-muted-foreground">
+                              <MessageSquare className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+                              <span className={m.notes ? "text-foreground" : "italic"}>
+                                {m.notes || "No notes recorded"}
+                              </span>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      )}
+                    </>
                   );
                 })}
                 {partMovements.length === 0 && (
