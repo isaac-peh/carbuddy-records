@@ -193,7 +193,7 @@ export default function PartDetailDialog({
 
           {/* Inline Form */}
           {showForm && (
-            <div className="border rounded-lg p-4 mb-3 bg-secondary/30 space-y-3">
+            <div className="border rounded-lg p-4 mb-6 bg-secondary/30 space-y-3">
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 <div className="space-y-1">
                   <label className="text-xs font-medium text-muted-foreground">Type</label>
