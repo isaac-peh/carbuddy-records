@@ -272,7 +272,6 @@ export default function PartDetailDialog({
             <Table className="min-w-[600px]">
                <TableHeader>
                 <TableRow className="bg-secondary/30 hover:bg-secondary/30">
-                  <TableHead className="w-4 h-8 pr-0" />
                   <TableHead className="text-[11px] font-medium h-8">Date</TableHead>
                   <TableHead className="text-[11px] font-medium h-8">Type</TableHead>
                   <TableHead className="text-[11px] font-medium h-8 text-right">Qty</TableHead>
@@ -285,56 +284,42 @@ export default function PartDetailDialog({
               <TableBody>
                 {partMovements.map((m) => {
                   const config = MOVEMENT_TYPE_CONFIG[m.type];
-                  const isExpanded = expandedMovement === m.id;
                   return (
-                    <>
-                      <TableRow
-                        key={m.id}
-                        className="hover:bg-secondary/10 cursor-pointer group"
-                        onClick={() => setExpandedMovement(isExpanded ? null : m.id)}
-                      >
-                        <TableCell className="text-xs text-muted-foreground py-2 w-4 pr-0">
-                          <ChevronRight className={`w-3 h-3 text-muted-foreground/50 transition-transform ${isExpanded ? "rotate-90" : ""}`} />
-                        </TableCell>
-                        <TableCell className="text-xs text-muted-foreground py-2">
-                          {format(new Date(m.date), "dd MMM yy")}
-                        </TableCell>
-                        <TableCell className="py-2">
-                          <Badge variant="outline" className={`text-[10px] px-1.5 py-0 h-5 ${config.className}`}>
-                            {config.label}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className={`text-xs text-right font-semibold py-2 ${m.quantity > 0 ? "text-emerald-600" : "text-destructive"}`}>
-                          {m.quantity > 0 ? `+${m.quantity}` : m.quantity}
-                        </TableCell>
-                        <TableCell className="text-xs text-muted-foreground py-2">
-                          {REFERENCE_TYPE_LABELS[m.referenceType]}
-                        </TableCell>
-                        <TableCell className="text-xs font-mono text-muted-foreground py-2">
-                          {m.referenceId || "—"}
-                        </TableCell>
-                        <TableCell className="text-xs text-right text-muted-foreground py-2">
-                          ${m.costPriceAtTime}
-                        </TableCell>
-                        <TableCell className="text-xs text-right font-medium py-2">
-                          {m.balanceAfter}
-                        </TableCell>
-                      </TableRow>
-                      {isExpanded && (
-                        <TableRow key={`${m.id}-notes`} className="hover:bg-transparent border-b-0">
-                          <TableCell colSpan={8} className="pt-0 pb-3 pl-10">
-                            <div className="text-xs leading-relaxed text-muted-foreground border-l-2 border-primary/20 pl-3">
-                              {m.notes || <span className="italic">No notes recorded</span>}
-                            </div>
-                          </TableCell>
-                        </TableRow>
-                      )}
-                    </>
+                    <TableRow key={m.id} className="hover:bg-secondary/10">
+                      <TableCell className="text-xs text-muted-foreground py-2">
+                        <div>{format(new Date(m.date), "dd MMM yy")}</div>
+                        {m.notes && (
+                          <div className="text-[11px] text-muted-foreground/70 mt-0.5 max-w-[180px] truncate">
+                            {m.notes}
+                          </div>
+                        )}
+                      </TableCell>
+                      <TableCell className="py-2">
+                        <Badge variant="outline" className={`text-[10px] px-1.5 py-0 h-5 ${config.className}`}>
+                          {config.label}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className={`text-xs text-right font-semibold py-2 ${m.quantity > 0 ? "text-emerald-600" : "text-destructive"}`}>
+                        {m.quantity > 0 ? `+${m.quantity}` : m.quantity}
+                      </TableCell>
+                      <TableCell className="text-xs text-muted-foreground py-2">
+                        {REFERENCE_TYPE_LABELS[m.referenceType]}
+                      </TableCell>
+                      <TableCell className="text-xs font-mono text-muted-foreground py-2">
+                        {m.referenceId || "—"}
+                      </TableCell>
+                      <TableCell className="text-xs text-right text-muted-foreground py-2">
+                        ${m.costPriceAtTime}
+                      </TableCell>
+                      <TableCell className="text-xs text-right font-medium py-2">
+                        {m.balanceAfter}
+                      </TableCell>
+                    </TableRow>
                   );
                 })}
                 {partMovements.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={8} className="text-center text-xs text-muted-foreground py-6">
+                    <TableCell colSpan={7} className="text-center text-xs text-muted-foreground py-6">
                       No movements recorded yet
                     </TableCell>
                   </TableRow>
