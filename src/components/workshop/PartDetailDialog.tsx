@@ -6,6 +6,7 @@ import {
   ArrowDownCircle,
   ArrowUpCircle,
   RefreshCw,
+  MessageSquare,
 } from "lucide-react";
 import {
   Dialog,
@@ -99,6 +100,7 @@ export default function PartDetailDialog({
   const [refId, setRefId] = useState("");
   const [costPrice, setCostPrice] = useState("");
   const [notes, setNotes] = useState("");
+  const [expandedMovement, setExpandedMovement] = useState<string | null>(null);
 
   if (!part) return null;
 
@@ -139,7 +141,7 @@ export default function PartDetailDialog({
 
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) resetForm(); onOpenChange(v); }}>
-      <DialogContent className="w-[calc(100%-2rem)] max-w-3xl max-h-[90vh] flex flex-col gap-0 p-0 overflow-hidden">
+      <DialogContent className="w-[calc(100%-2rem)] max-w-4xl max-h-[90vh] flex flex-col gap-0 p-0 overflow-hidden">
         <div className="flex-1 overflow-y-auto no-scrollbar">
         <DialogHeader className="px-4 sm:px-8 pt-6 sm:pt-8 pb-4 sm:pb-5 text-left">
           <div className="flex items-center justify-between">
@@ -191,7 +193,7 @@ export default function PartDetailDialog({
 
           {/* Inline Form */}
           {showForm && (
-            <div className="border rounded-lg p-4 mb-3 bg-secondary/30 space-y-3">
+            <div className="border rounded-lg p-4 mb-6 bg-secondary/30 space-y-3">
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 <div className="space-y-1">
                   <label className="text-xs font-medium text-muted-foreground">Type</label>
@@ -284,32 +286,54 @@ export default function PartDetailDialog({
               <TableBody>
                 {partMovements.map((m) => {
                   const config = MOVEMENT_TYPE_CONFIG[m.type];
+                  const isExpanded = expandedMovement === m.id;
                   return (
-                    <TableRow key={m.id} className="hover:bg-secondary/10">
-                      <TableCell className="text-xs text-muted-foreground py-2">
-                        {format(new Date(m.date), "dd MMM yy")}
-                      </TableCell>
-                      <TableCell className="py-2">
-                        <Badge variant="outline" className={`text-[10px] px-1.5 py-0 h-5 ${config.className}`}>
-                          {config.label}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className={`text-xs text-right font-semibold py-2 ${m.quantity > 0 ? "text-emerald-600" : "text-destructive"}`}>
-                        {m.quantity > 0 ? `+${m.quantity}` : m.quantity}
-                      </TableCell>
-                      <TableCell className="text-xs text-muted-foreground py-2">
-                        {REFERENCE_TYPE_LABELS[m.referenceType]}
-                      </TableCell>
-                      <TableCell className="text-xs font-mono text-muted-foreground py-2">
-                        {m.referenceId || "—"}
-                      </TableCell>
-                      <TableCell className="text-xs text-right text-muted-foreground py-2">
-                        ${m.costPriceAtTime}
-                      </TableCell>
-                      <TableCell className="text-xs text-right font-medium py-2">
-                        {m.balanceAfter}
-                      </TableCell>
-                    </TableRow>
+                    <>
+                      <TableRow
+                        key={m.id}
+                        className="hover:bg-secondary/10 cursor-pointer"
+                        onClick={() => setExpandedMovement(isExpanded ? null : m.id)}
+                      >
+                        <TableCell className="text-xs text-muted-foreground py-2">
+                          {format(new Date(m.date), "dd MMM yy")}
+                        </TableCell>
+                        <TableCell className="py-2">
+                          <Badge variant="outline" className={`text-[10px] px-1.5 py-0 h-5 ${config.className}`}>
+                            {config.label}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className={`text-xs text-right font-semibold py-2 ${m.quantity > 0 ? "text-emerald-600" : "text-destructive"}`}>
+                          {m.quantity > 0 ? `+${m.quantity}` : m.quantity}
+                        </TableCell>
+                        <TableCell className="text-xs text-muted-foreground py-2">
+                          {REFERENCE_TYPE_LABELS[m.referenceType]}
+                        </TableCell>
+                        <TableCell className="text-xs font-mono text-muted-foreground py-2">
+                          {m.referenceId || "—"}
+                        </TableCell>
+                        <TableCell className="text-xs text-right text-muted-foreground py-2">
+                          ${m.costPriceAtTime}
+                        </TableCell>
+                        <TableCell className="text-xs text-right font-medium py-2">
+                          <span className="inline-flex items-center gap-1.5">
+                            {m.balanceAfter}
+                            {m.notes && <MessageSquare className="w-3 h-3 text-muted-foreground" />}
+                          </span>
+                        </TableCell>
+                      </TableRow>
+                      {isExpanded && (
+                        <TableRow key={`${m.id}-notes`} className="hover:bg-transparent">
+                          <TableCell colSpan={7} className="py-2 px-4 bg-muted/30 border-b">
+                            <div className="flex items-start gap-2 text-xs text-muted-foreground">
+                              <MessageSquare className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+                              <span className={m.notes ? "text-foreground" : "italic"}>
+                                {m.notes || "No notes recorded"}
+                              </span>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      )}
+                    </>
                   );
                 })}
                 {partMovements.length === 0 && (
