@@ -100,6 +100,7 @@ export default function PartDetailDialog({
   const [refId, setRefId] = useState("");
   const [costPrice, setCostPrice] = useState("");
   const [notes, setNotes] = useState("");
+  const [expandedMovement, setExpandedMovement] = useState<string | null>(null);
 
   if (!part) return null;
 
