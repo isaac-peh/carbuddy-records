@@ -23,6 +23,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/login" element={<Login />} />
 
           {/* B2B Workshop Platform */}
           <Route path="/workshop" element={<B2BLayout />}>
