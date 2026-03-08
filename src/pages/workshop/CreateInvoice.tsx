@@ -417,7 +417,7 @@ export default function CreateInvoice() {
 
           {/* ── Parts ──────────────────────────────────────────────── */}
           <Card className="shadow-soft border-border/50 overflow-hidden">
-            <CardHeader className="pb-4 flex flex-row items-center justify-between bg-secondary/20">
+            <CardHeader className="py-4 flex flex-row items-center justify-between bg-secondary/20">
               <SectionHeader icon={Package} title="Parts" />
               <Popover open={partSearchOpen} onOpenChange={setPartSearchOpen}>
                 <PopoverTrigger asChild>
