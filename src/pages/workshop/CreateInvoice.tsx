@@ -664,7 +664,7 @@ export default function CreateInvoice() {
                   <Table className="min-w-[760px]">
                     <TableHeader>
                       <TableRow className="bg-secondary/30">
-                        <TableHead className="text-xs font-medium min-w-[220px]">Description</TableHead>
+                        <TableHead className="text-xs font-medium min-w-[260px]">Description</TableHead>
                         <TableHead className="text-xs font-medium text-center w-24">Type</TableHead>
                         <TableHead className="text-xs font-medium text-center w-24">Hours</TableHead>
                         <TableHead className="text-xs font-medium text-right w-28">Rate</TableHead>
