@@ -138,8 +138,10 @@ export default function CreateInvoice() {
     [labour],
   );
 
-  const discountValue = Number(discount) || 0;
-  const grandTotal = partsTotal + labourTotal - discountValue;
+  const subtotal = partsTotal + labourTotal;
+  const discountRaw = Number(discount) || 0;
+  const discountValue = discountMode === "percent" ? subtotal * (discountRaw / 100) : discountRaw;
+  const grandTotal = subtotal - discountValue;
 
   // ── Handlers ──────────────────────────────────────────────────────────
 
