@@ -70,6 +70,14 @@ interface LabourLine {
 let lineCounter = 0;
 const nextId = () => `line-${++lineCounter}`;
 
+let dailyInvoiceCounter = 0;
+
+function generateInvoiceNumber(): string {
+  dailyInvoiceCounter++;
+  const today = format(new Date(), "yyyyMMdd");
+  return `INV-${today}-${String(dailyInvoiceCounter).padStart(3, "0")}`;
+}
+
 // ── Section Header ────────────────────────────────────────────────────
 
 function SectionHeader({ icon: Icon, title, accent }: { icon: React.ElementType; title: string; accent?: boolean }) {
