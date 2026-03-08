@@ -273,7 +273,7 @@ export default function CreateInvoice() {
           </Button>
           <Separator orientation="vertical" className="h-8 hidden sm:block" />
           <Button variant="outline" size="sm" className="gap-1.5 text-xs sm:text-sm" onClick={handleSaveDraft}>
-            <Save className="w-3.5 h-3.5" /> <span className="hidden xs:inline">Save Draft</span>
+            <Save className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Save Draft</span>
           </Button>
           <Button variant="outline" size="sm" className="gap-1.5 text-xs sm:text-sm" onClick={handlePrint}>
             <Printer className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Print</span>
