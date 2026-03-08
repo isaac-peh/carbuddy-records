@@ -243,69 +243,59 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
     });
   }, [matchedRecord, searchPlate, editVin, editMake, editModel, editVehicleType, onVehicleResolved]);
 
-  // ── State badge config ──────────────────────────────────────────────
-
-  const badgeConfig: Record<string, { icon: React.ElementType; label: string; sub: string; className: string }> = {
-    verified: {
-      icon: ShieldCheck,
-      label: "Verified Vehicle",
-      sub: "This vehicle is verified and shared across Mobilis.",
-      className: "bg-[hsl(var(--success)/0.1)] text-[hsl(var(--success))] border-[hsl(var(--success)/0.3)]",
-    },
-    "verified-vin-mismatch": {
-      icon: AlertTriangle,
-      label: "Verified Vehicle — VIN Mismatch",
-      sub: "",
-      className: "bg-[hsl(var(--warning)/0.1)] text-[hsl(var(--warning))] border-[hsl(var(--warning)/0.3)]",
-    },
-    workshop: {
-      icon: Building2,
-      label: "Known Vehicle",
-      sub: "This vehicle is from your workshop's records.",
-      className: "bg-primary/10 text-primary border-primary/30",
-    },
-    new: {
-      icon: PlusCircle,
-      label: "New Vehicle",
-      sub: "No record found. A new vehicle will be created.",
-      className: "bg-secondary text-muted-foreground border-border",
-    },
-  };
-
   // ── Render helpers ──────────────────────────────────────────────────
 
   const renderChangeLink = () => (
     <button
       onClick={reset}
-      className="text-xs text-primary hover:underline flex items-center gap-1 mt-1"
+      className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
     >
-      <RotateCcw className="w-3 h-3" /> Change Vehicle
+      <RotateCcw className="w-3 h-3" /> Change
     </button>
   );
 
-  const renderStateBadge = (key: string) => {
-    const cfg = badgeConfig[key];
+  const statusConfig: Record<string, { icon: React.ElementType; label: string; dotClass: string; iconClass: string }> = {
+    verified: {
+      icon: ShieldCheck,
+      label: "Verified",
+      dotClass: "bg-[hsl(var(--success))]",
+      iconClass: "text-[hsl(var(--success))]",
+    },
+    "verified-vin-mismatch": {
+      icon: AlertTriangle,
+      label: "VIN Mismatch",
+      dotClass: "bg-[hsl(var(--warning))]",
+      iconClass: "text-[hsl(var(--warning))]",
+    },
+    workshop: {
+      icon: Building2,
+      label: "Workshop Record",
+      dotClass: "bg-[hsl(var(--accent))]",
+      iconClass: "text-[hsl(var(--accent))]",
+    },
+    new: {
+      icon: PlusCircle,
+      label: "New Vehicle",
+      dotClass: "bg-muted-foreground",
+      iconClass: "text-muted-foreground",
+    },
+  };
+
+  const renderStatusLine = (key: string) => {
+    const cfg = statusConfig[key];
     if (!cfg) return null;
-    const Icon = cfg.icon;
     return (
-      <div className="space-y-1">
-        <div className="flex items-center gap-2">
-          <Badge variant="outline" className={cn("gap-1.5 py-1 px-2.5 text-xs font-medium", cfg.className)}>
-            <Icon className="w-3.5 h-3.5" />
-            {cfg.label}
-          </Badge>
-        </div>
-        {cfg.sub && <p className="text-xs text-muted-foreground">{cfg.sub}</p>}
+      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+        <span className={cn("w-1.5 h-1.5 rounded-full shrink-0", cfg.dotClass)} />
+        <span className="font-medium">{cfg.label}</span>
       </div>
     );
   };
 
   const renderReadOnlyField = (label: string, value: string) => (
-    <div className="space-y-1.5">
-      <Label className="text-xs text-muted-foreground">{label}</Label>
-      <div className="h-10 flex items-center px-3 rounded-md bg-secondary/50 border border-border/50 text-sm font-medium">
-        {value || "—"}
-      </div>
+    <div className="space-y-1">
+      <Label className="text-[11px] text-muted-foreground font-normal">{label}</Label>
+      <p className="text-sm font-medium truncate">{value || "—"}</p>
     </div>
   );
 
@@ -372,30 +362,23 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
   if (state === "verified" && matchedRecord) {
     return (
       <Card className="shadow-soft border-border/50 overflow-hidden">
-        <CardHeader className="py-4 bg-[hsl(var(--success)/0.05)]">
+        <CardHeader className="py-3 px-4">
           <div className="flex items-center justify-between">
-            <SectionHeader icon={ShieldCheck} title="Vehicle" />
+            <div className="flex items-center gap-3">
+              <SectionHeader icon={Car} title="Vehicle" />
+              {renderStatusLine("verified")}
+            </div>
             {renderChangeLink()}
           </div>
         </CardHeader>
-        <CardContent className="pt-5 space-y-4">
-          {renderStateBadge("verified")}
-          <div className="grid grid-cols-2 gap-3">
-            {renderReadOnlyField("Plate Number", matchedRecord.plateNumber)}
-            {renderReadOnlyField("VIN", matchedRecord.vin || "")}
-          </div>
-          <div className="grid grid-cols-2 gap-3">
+        <CardContent className="pt-0 pb-4 px-4 space-y-3">
+          <div className="grid grid-cols-3 gap-x-4 gap-y-3">
+            {renderReadOnlyField("Plate", matchedRecord.plateNumber)}
             {renderReadOnlyField("Make", matchedRecord.make || "")}
             {renderReadOnlyField("Model", matchedRecord.model || "")}
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-1.5">
-              <Label className="text-xs text-muted-foreground">Vehicle Type</Label>
-              <Badge variant="outline" className="text-xs py-1 px-2.5">
-                {matchedRecord.vehicleType || "—"}
-              </Badge>
-            </div>
-            {renderReadOnlyField("Current Mileage (km)", matchedRecord.mileage?.toLocaleString() || "—")}
+            {renderReadOnlyField("VIN", matchedRecord.vin || "")}
+            {renderReadOnlyField("Type", matchedRecord.vehicleType || "")}
+            {renderReadOnlyField("Mileage", matchedRecord.mileage?.toLocaleString() ? `${matchedRecord.mileage.toLocaleString()} km` : "—")}
           </div>
         </CardContent>
       </Card>
@@ -407,42 +390,39 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
   if (state === "verified-vin-mismatch" && matchedRecord) {
     return (
       <Card className="shadow-soft border-border/50 overflow-hidden">
-        <CardHeader className="py-4 bg-[hsl(var(--warning)/0.05)]">
+        <CardHeader className="py-3 px-4">
           <div className="flex items-center justify-between">
-            <SectionHeader icon={AlertTriangle} title="Vehicle" />
+            <div className="flex items-center gap-3">
+              <SectionHeader icon={Car} title="Vehicle" />
+              {renderStatusLine("verified-vin-mismatch")}
+            </div>
             {renderChangeLink()}
           </div>
         </CardHeader>
-        <CardContent className="pt-5 space-y-4">
-          {renderStateBadge("verified-vin-mismatch")}
-
+        <CardContent className="pt-0 pb-4 px-4 space-y-3">
           {/* Warning banner */}
-          <div className="rounded-lg border border-[hsl(var(--warning)/0.3)] bg-[hsl(var(--warning)/0.06)] p-3 space-y-3">
-            <div className="flex gap-2">
-              <AlertTriangle className="w-4 h-4 text-[hsl(var(--warning))] shrink-0 mt-0.5" />
-              <p className="text-sm text-foreground">
-                The VIN you entered does not match the verified record for this plate number.
-                This may indicate a plate transfer or data error.
+          <div className="rounded-md border border-[hsl(var(--warning)/0.25)] bg-[hsl(var(--warning)/0.05)] px-3 py-2.5 flex items-start gap-2.5">
+            <AlertTriangle className="w-3.5 h-3.5 text-[hsl(var(--warning))] shrink-0 mt-0.5" />
+            <div className="space-y-2 flex-1">
+              <p className="text-xs text-foreground/80 leading-relaxed">
+                VIN does not match the verified record. This may indicate a plate transfer or data error.
               </p>
-            </div>
-            <div className="flex gap-2">
-              <Button size="sm" variant="outline" className="gap-1.5 text-xs" onClick={acceptVerified}>
-                <ShieldCheck className="w-3.5 h-3.5" /> Use Verified Vehicle
-              </Button>
-              <Button size="sm" variant="outline" className="gap-1.5 text-xs" onClick={createNewFromMismatch}>
-                <PlusCircle className="w-3.5 h-3.5" /> Create New Vehicle Record
-              </Button>
+              <div className="flex gap-2">
+                <Button size="sm" variant="outline" className="h-7 gap-1.5 text-xs px-2.5" onClick={acceptVerified}>
+                  <ShieldCheck className="w-3 h-3" /> Use Verified
+                </Button>
+                <Button size="sm" variant="outline" className="h-7 gap-1.5 text-xs px-2.5" onClick={createNewFromMismatch}>
+                  <PlusCircle className="w-3 h-3" /> Create New
+                </Button>
+              </div>
             </div>
           </div>
 
-          {/* Show verified record for reference */}
-          <div className="grid grid-cols-2 gap-3 opacity-70">
-            {renderReadOnlyField("Plate Number", matchedRecord.plateNumber)}
-            {renderReadOnlyField("VIN (on record)", matchedRecord.vin || "")}
-          </div>
-          <div className="grid grid-cols-2 gap-3 opacity-70">
+          <div className="grid grid-cols-3 gap-x-4 gap-y-3 opacity-60">
+            {renderReadOnlyField("Plate", matchedRecord.plateNumber)}
             {renderReadOnlyField("Make", matchedRecord.make || "")}
             {renderReadOnlyField("Model", matchedRecord.model || "")}
+            {renderReadOnlyField("VIN (on record)", matchedRecord.vin || "")}
           </div>
         </CardContent>
       </Card>
@@ -455,56 +435,52 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
     const plate = matchedRecord?.plateNumber || searchPlate.trim().toUpperCase();
     return (
       <Card className="shadow-soft border-border/50 overflow-hidden">
-        <CardHeader className="py-4 bg-primary/5">
+        <CardHeader className="py-3 px-4">
           <div className="flex items-center justify-between">
-            <SectionHeader icon={Building2} title="Vehicle" />
+            <div className="flex items-center gap-3">
+              <SectionHeader icon={Car} title="Vehicle" />
+              {renderStatusLine("workshop")}
+            </div>
             {renderChangeLink()}
           </div>
         </CardHeader>
-        <CardContent className="pt-5 space-y-4">
-          {renderStateBadge("workshop")}
-
-          <div className="rounded-lg border border-primary/20 bg-primary/5 p-2.5">
-            <p className="text-xs text-muted-foreground">
-              Adding VIN, make, or model helps build a stronger vehicle record.
-            </p>
-          </div>
-
+        <CardContent className="pt-0 pb-4 px-4 space-y-3">
           <div className="grid grid-cols-2 gap-3">
-            {renderReadOnlyField("Plate Number", plate)}
-            <div className="space-y-1.5">
-              <Label className="text-xs text-muted-foreground">VIN</Label>
+            {renderReadOnlyField("Plate", plate)}
+            <div className="space-y-1">
+              <Label className="text-[11px] text-muted-foreground font-normal">VIN</Label>
               <Input
+                className="h-9"
                 value={editVin}
                 onChange={(e) => syncEditable("vin", e.target.value)}
                 placeholder="Enter VIN..."
               />
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-1.5">
-              <Label className="text-xs text-muted-foreground">Make</Label>
+          <div className="grid grid-cols-3 gap-3">
+            <div className="space-y-1">
+              <Label className="text-[11px] text-muted-foreground font-normal">Make</Label>
               <Input
+                className="h-9"
                 value={editMake}
                 onChange={(e) => syncEditable("make", e.target.value)}
                 placeholder="e.g. Toyota"
               />
             </div>
-            <div className="space-y-1.5">
-              <Label className="text-xs text-muted-foreground">Model</Label>
+            <div className="space-y-1">
+              <Label className="text-[11px] text-muted-foreground font-normal">Model</Label>
               <Input
+                className="h-9"
                 value={editModel}
                 onChange={(e) => syncEditable("model", e.target.value)}
                 placeholder="e.g. Corolla"
               />
             </div>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-1.5">
-              <Label className="text-xs text-muted-foreground">Vehicle Type <span className="text-destructive">*</span></Label>
+            <div className="space-y-1">
+              <Label className="text-[11px] text-muted-foreground font-normal">Type <span className="text-destructive">*</span></Label>
               <Select value={editVehicleType} onValueChange={(v) => syncEditable("vehicleType", v)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select type" />
+                <SelectTrigger className="h-9">
+                  <SelectValue placeholder="Select" />
                 </SelectTrigger>
                 <SelectContent>
                   {VEHICLE_TYPES.map((t) => (
@@ -513,7 +489,6 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
                 </SelectContent>
               </Select>
             </div>
-            {renderReadOnlyField("Current Mileage (km)", matchedRecord?.mileage?.toLocaleString() || "—")}
           </div>
         </CardContent>
       </Card>
@@ -526,22 +501,23 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
     const plate = searchPlate.trim().toUpperCase();
     return (
       <Card className="shadow-soft border-border/50 overflow-hidden">
-        <CardHeader className="py-4 bg-secondary/20">
+        <CardHeader className="py-3 px-4">
           <div className="flex items-center justify-between">
-            <SectionHeader icon={PlusCircle} title="Vehicle" />
+            <div className="flex items-center gap-3">
+              <SectionHeader icon={Car} title="Vehicle" />
+              {renderStatusLine("new")}
+            </div>
             {renderChangeLink()}
           </div>
         </CardHeader>
-        <CardContent className="pt-5 space-y-4">
-          {renderStateBadge("new")}
-
-          <div className="grid grid-cols-2 gap-3">
-            {renderReadOnlyField("Plate Number", plate)}
-            <div className="space-y-1.5">
-              <Label className="text-xs text-muted-foreground">Vehicle Type <span className="text-destructive">*</span></Label>
+        <CardContent className="pt-0 pb-4 px-4 space-y-3">
+          <div className="grid grid-cols-3 gap-3">
+            {renderReadOnlyField("Plate", plate)}
+            <div className="space-y-1">
+              <Label className="text-[11px] text-muted-foreground font-normal">Type <span className="text-destructive">*</span></Label>
               <Select value={editVehicleType} onValueChange={(v) => syncEditable("vehicleType", v)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select type" />
+                <SelectTrigger className="h-9">
+                  <SelectValue placeholder="Select" />
                 </SelectTrigger>
                 <SelectContent>
                   {VEHICLE_TYPES.map((t) => (
@@ -550,39 +526,35 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
                 </SelectContent>
               </Select>
             </div>
-          </div>
-          <div className="space-y-1.5">
-            <Label className="text-xs text-muted-foreground">VIN (optional)</Label>
-            <Input
-              value={editVin}
-              onChange={(e) => syncEditable("vin", e.target.value)}
-              placeholder="Providing a VIN creates an enriched record"
-            />
+            <div className="space-y-1">
+              <Label className="text-[11px] text-muted-foreground font-normal">VIN</Label>
+              <Input
+                className="h-9"
+                value={editVin}
+                onChange={(e) => syncEditable("vin", e.target.value)}
+                placeholder="Optional"
+              />
+            </div>
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-1.5">
-              <Label className="text-xs text-muted-foreground">Make</Label>
+            <div className="space-y-1">
+              <Label className="text-[11px] text-muted-foreground font-normal">Make</Label>
               <Input
+                className="h-9"
                 value={editMake}
                 onChange={(e) => syncEditable("make", e.target.value)}
                 placeholder="e.g. Toyota"
               />
             </div>
-            <div className="space-y-1.5">
-              <Label className="text-xs text-muted-foreground">Model</Label>
+            <div className="space-y-1">
+              <Label className="text-[11px] text-muted-foreground font-normal">Model</Label>
               <Input
+                className="h-9"
                 value={editModel}
                 onChange={(e) => syncEditable("model", e.target.value)}
                 placeholder="e.g. Corolla"
               />
             </div>
-          </div>
-
-          <div className="rounded-lg border border-border/50 bg-secondary/30 p-2.5">
-            <p className="text-xs text-muted-foreground">
-              A new vehicle record will be created when this invoice is saved.
-              Providing VIN, make, and model improves record quality.
-            </p>
           </div>
         </CardContent>
       </Card>
