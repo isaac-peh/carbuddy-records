@@ -153,7 +153,7 @@ export default function PartDetailDialog({
 
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) resetForm(); onOpenChange(v); }}>
-      <DialogContent className="w-[calc(100%-2rem)] max-w-6xl h-[85vh] flex flex-col gap-0 p-0 overflow-hidden">
+      <DialogContent className="w-[calc(100%-2rem)] max-w-7xl h-[85vh] flex flex-col gap-0 p-0 overflow-hidden">
         {/* ── Header ── */}
         <div className="px-6 pt-6 pb-4 border-b border-border/60 shrink-0 pr-12">
           <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
@@ -203,7 +203,7 @@ export default function PartDetailDialog({
           <TabsContent value="overview" className="flex-1 overflow-y-auto no-scrollbar m-0 p-6">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
               {/* Left Column */}
-              <div className="lg:col-span-7 space-y-5">
+              <div className="lg:col-span-8 space-y-5">
                 {/* Item Details */}
                 <Card>
                   <CardHeader className="pb-3">
@@ -282,7 +282,7 @@ export default function PartDetailDialog({
               </div>
 
               {/* Right Column */}
-              <div className="lg:col-span-5 space-y-5">
+              <div className="lg:col-span-4 space-y-5">
                 {/* Stock Status */}
                 <Card>
                   <CardHeader className="pb-3">
