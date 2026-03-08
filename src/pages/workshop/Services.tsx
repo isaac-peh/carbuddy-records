@@ -172,6 +172,7 @@ export default function Services() {
     setServices((prev) => prev.filter((s) => s.id !== deleteService.id));
     setDeleteOpen(false);
     setDeleteService(null);
+    toast.success("Service deleted successfully");
   };
 
   const filtered = useMemo(() => {

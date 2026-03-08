@@ -534,6 +534,7 @@ export default function Inventory() {
 
   const handleAddCategory = (name: string) => {
     setCustomCategories((prev) => [...prev, name]);
+    toast.success(`Category "${name}" added`);
   };
 
   const getPartCountForCategory = (category: string) => {

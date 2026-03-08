@@ -153,6 +153,12 @@ export default function EditPartDialog({
             </div>
           </div>
 
+          {/* Description */}
+          <div className="space-y-1.5">
+            <Label htmlFor="edit-part-desc">Description</Label>
+            <Textarea id="edit-part-desc" placeholder="Brief description of the part..." value={description} onChange={(e) => setDescription(e.target.value)} className="min-h-[60px]" />
+          </div>
+
           <div className="space-y-1.5">
             <Label>Category *</Label>
             <Select

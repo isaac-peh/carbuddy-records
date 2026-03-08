@@ -128,6 +128,12 @@ export default function AddPartDialog({ open, onOpenChange, categories, supplier
             </div>
           </div>
 
+          {/* Description */}
+          <div className="space-y-1.5">
+            <Label htmlFor="part-desc">Description</Label>
+            <Textarea id="part-desc" placeholder="Brief description of the part..." value={description} onChange={(e) => setDescription(e.target.value)} className="min-h-[60px]" />
+          </div>
+
           {/* Category */}
           <div className="space-y-1.5">
             <Label>Category *</Label>
