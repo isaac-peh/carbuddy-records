@@ -515,17 +515,14 @@ export default function Inventory() {
   };
 
   const handleRenameCategory = (oldName: string, newName: string) => {
-    // Update parts that use this category
     setParts((prev) => prev.map((p) => (p.category === oldName ? { ...p, category: newName } : p)));
-    // Update custom categories list
     if (defaultCategories.includes(oldName)) {
-      // Renaming a default: remove old from defaults conceptually by adding new as custom
       setCustomCategories((prev) => [...prev.filter((c) => c !== oldName), newName]);
     } else {
       setCustomCategories((prev) => prev.map((c) => (c === oldName ? newName : c)));
     }
-    // Update active filters
     setActiveCategories((prev) => prev.map((c) => (c === oldName ? newName : c)));
+    toast.success(`Category renamed to "${newName}"`);
   };
 
   const handleDeleteCategory = (name: string) => {
