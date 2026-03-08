@@ -267,21 +267,21 @@ export default function CreateInvoice() {
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-2 shrink-0">
-          <Button variant="outline" size="sm" className="gap-1.5 text-xs sm:text-sm" onClick={handleDuplicate}>
-            <Copy className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Duplicate</span>
+        <div className="flex flex-wrap gap-2">
+          <Button variant="outline" size="sm" className="gap-1.5 text-xs" onClick={handleDuplicate}>
+            <Copy className="w-3.5 h-3.5" /> <span className="hidden md:inline">Duplicate</span>
           </Button>
-          <Separator orientation="vertical" className="h-8 hidden sm:block" />
-          <Button variant="outline" size="sm" className="gap-1.5 text-xs sm:text-sm" onClick={handleSaveDraft}>
-            <Save className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Save Draft</span>
+          <Separator orientation="vertical" className="h-8 hidden md:block" />
+          <Button variant="outline" size="sm" className="gap-1.5 text-xs" onClick={handleSaveDraft}>
+            <Save className="w-3.5 h-3.5" /> <span className="hidden md:inline">Save Draft</span>
           </Button>
-          <Button variant="outline" size="sm" className="gap-1.5 text-xs sm:text-sm" onClick={handlePrint}>
-            <Printer className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Print</span>
+          <Button variant="outline" size="sm" className="gap-1.5 text-xs" onClick={handlePrint}>
+            <Printer className="w-3.5 h-3.5" /> <span className="hidden md:inline">Print</span>
           </Button>
-          <Button variant="outline" size="sm" className="gap-1.5 text-xs sm:text-sm" onClick={handleSend}>
-            <Send className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Send</span>
+          <Button variant="outline" size="sm" className="gap-1.5 text-xs" onClick={handleSend}>
+            <Send className="w-3.5 h-3.5" /> <span className="hidden md:inline">Send</span>
           </Button>
-          <Button size="sm" className="gap-1.5 text-xs sm:text-sm bg-accent text-accent-foreground hover:bg-accent/90" onClick={handleIssue}>
+          <Button size="sm" className="gap-1.5 text-xs bg-accent text-accent-foreground hover:bg-accent/90" onClick={handleIssue}>
             <FileText className="w-3.5 h-3.5" /> Issue
           </Button>
         </div>
