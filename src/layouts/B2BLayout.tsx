@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { useTheme } from "next-themes";
 
 export default function B2BLayout() {
-  return (
+  const { theme, setTheme } = useTheme();
     <SidebarProvider>
       <div className="min-h-screen flex w-full">
         <B2BSidebar />

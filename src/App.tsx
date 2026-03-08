@@ -17,29 +17,31 @@ import { Navigate } from "react-router-dom";
 const queryClient = new QueryClient();
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/login" element={<Login />} />
+  <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/login" element={<Login />} />
 
-          {/* B2B Workshop Platform */}
-          <Route path="/workshop" element={<B2BLayout />}>
-            <Route index element={<Dashboard />} />
-            <Route path="inventory" element={<Inventory />} />
-            <Route path="services" element={<Services />} />
-            <Route path="invoices" element={<Invoices />} />
-          </Route>
+            {/* B2B Workshop Platform */}
+            <Route path="/workshop" element={<B2BLayout />}>
+              <Route index element={<Dashboard />} />
+              <Route path="inventory" element={<Inventory />} />
+              <Route path="services" element={<Services />} />
+              <Route path="invoices" element={<Invoices />} />
+            </Route>
 
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  </ThemeProvider>
 );
 
 export default App;
