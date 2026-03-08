@@ -7,7 +7,7 @@ import {
   Copy, FileText, Wrench, Car, UserRound,
   Package, ClipboardList, StickyNote, Receipt, DollarSign, RefreshCw,
 } from "lucide-react";
-import { TapTooltip } from "@/components/ui/tap-tooltip";
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -296,19 +296,29 @@ export default function CreateInvoice() {
                 <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-1.5">
                     <Label className="text-xs text-muted-foreground">Invoice Number</Label>
-                    <div className="flex items-center gap-1.5">
+                    <div className="relative">
                       <Input
                         value={invoiceNumber}
                         onChange={(e) => setInvoiceNumber(e.target.value)}
                         placeholder="INV-0001"
-                        className="flex-1"
+                        className="pr-8"
                       />
-                      <TapTooltip content="Reset to suggested number">
-                        <RefreshCw
-                          className="w-3.5 h-3.5 shrink-0 text-muted-foreground/50 hover:text-muted-foreground transition-colors cursor-pointer"
-                          onClick={resetInvoiceNumber}
-                        />
-                      </TapTooltip>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <button
+                              type="button"
+                              onClick={resetInvoiceNumber}
+                              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground/50 hover:text-muted-foreground transition-colors"
+                            >
+                              <RefreshCw className="w-3.5 h-3.5" />
+                            </button>
+                          </TooltipTrigger>
+                          <TooltipContent side="top" className="text-xs">
+                            Reset to suggested number
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
                     </div>
                     <p className="text-[11px] text-muted-foreground/60">Auto-generated. Edit to use your own reference.</p>
                   </div>
