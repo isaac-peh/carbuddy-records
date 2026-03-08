@@ -526,12 +526,12 @@ export default function CreateInvoice() {
                   <span>No parts added yet. Click <strong>"Add Part"</strong> to begin.</span>
                 </div>
               ) : (
-                <div className="overflow-x-auto">
-                  <Table className="min-w-[640px]">
+                <div className="overflow-x-auto text-xs sm:text-sm">
+                  <Table className="min-w-[720px]">
                     <TableHeader>
                       <TableRow className="bg-secondary/30">
-                        <TableHead className="text-xs font-medium">Part</TableHead>
-                        <TableHead className="text-xs font-medium">SKU</TableHead>
+                        <TableHead className="text-xs font-medium min-w-[160px]">Part</TableHead>
+                        <TableHead className="text-xs font-medium min-w-[120px]">SKU</TableHead>
                         <TableHead className="text-xs font-medium text-center">Stock</TableHead>
                         <TableHead className="text-xs font-medium text-center w-20">Qty</TableHead>
                         <TableHead className="text-xs font-medium text-right w-28">Unit Price</TableHead>
@@ -660,11 +660,11 @@ export default function CreateInvoice() {
                   <span>No labour items yet. Add from <strong>Services</strong> or create a <strong>Custom</strong> entry.</span>
                 </div>
               ) : (
-                <div className="overflow-x-auto">
-                  <Table className="min-w-[700px]">
+                <div className="overflow-x-auto text-xs sm:text-sm">
+                  <Table className="min-w-[760px]">
                     <TableHeader>
                       <TableRow className="bg-secondary/30">
-                        <TableHead className="text-xs font-medium min-w-[200px]">Description</TableHead>
+                        <TableHead className="text-xs font-medium min-w-[220px]">Description</TableHead>
                         <TableHead className="text-xs font-medium text-center w-24">Type</TableHead>
                         <TableHead className="text-xs font-medium text-center w-24">Hours</TableHead>
                         <TableHead className="text-xs font-medium text-right w-28">Rate</TableHead>
