@@ -339,36 +339,13 @@ export default function CreateInvoice() {
             </CardContent>
           </Card>
 
-          {/* Vehicle Lookup — top of form */}
-          <VehicleLookup
-            onVehicleResolved={setResolvedVehicle}
-            onVehicleCleared={() => setResolvedVehicle(null)}
-          />
-
-          {/* Customer & Odometer */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Vehicle Lookup + Odometer — top of form */}
+          <div className="space-y-4">
+            <VehicleLookup
+              onVehicleResolved={setResolvedVehicle}
+              onVehicleCleared={() => setResolvedVehicle(null)}
+            />
             <Card className="shadow-soft border-border/50 overflow-hidden">
-              <CardHeader className="py-4 bg-secondary/20">
-                <SectionHeader icon={UserRound} title="Customer" />
-              </CardHeader>
-              <CardContent className="space-y-3 pt-5">
-                <div className="space-y-1.5">
-                  <Label className="text-xs text-muted-foreground">Name</Label>
-                  <Input value={customerName} onChange={(e) => setCustomerName(e.target.value)} placeholder="Customer name" />
-                </div>
-                <div className="space-y-1.5">
-                  <Label className="text-xs text-muted-foreground">Phone</Label>
-                  <Input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+65 ..." />
-                </div>
-                <div className="space-y-1.5">
-                  <Label className="text-xs text-muted-foreground">Email</Label>
-                  <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="email@example.com" />
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Odometer belongs to invoice header, not vehicle */}
-            <Card className="shadow-soft border-border/50 overflow-hidden h-fit">
               <CardContent className="p-4">
                 <div className="space-y-1.5">
                   <Label className="text-xs text-muted-foreground">Odometer at Service (km)</Label>
@@ -383,6 +360,27 @@ export default function CreateInvoice() {
               </CardContent>
             </Card>
           </div>
+
+          {/* Customer */}
+          <Card className="shadow-soft border-border/50 overflow-hidden">
+            <CardHeader className="py-4 bg-secondary/20">
+              <SectionHeader icon={UserRound} title="Customer" />
+            </CardHeader>
+            <CardContent className="space-y-3 pt-5">
+              <div className="space-y-1.5">
+                <Label className="text-xs text-muted-foreground">Name</Label>
+                <Input value={customerName} onChange={(e) => setCustomerName(e.target.value)} placeholder="Customer name" />
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-xs text-muted-foreground">Phone</Label>
+                <Input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+65 ..." />
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-xs text-muted-foreground">Email</Label>
+                <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="email@example.com" />
+              </div>
+            </CardContent>
+          </Card>
 
           {/* ── Parts ──────────────────────────────────────────────── */}
           <Card className="shadow-soft border-border/50 overflow-hidden">
