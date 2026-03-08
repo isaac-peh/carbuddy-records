@@ -4,7 +4,7 @@ import { format } from "date-fns";
 import { toast } from "sonner";
 import {
   ArrowLeft, CalendarIcon, Plus, Trash2, Save, Send, Printer,
-  Copy, XCircle, FileText, Search, Wrench, Car, UserRound,
+  Copy, FileText, Wrench, Car, UserRound,
   Package, ClipboardList, StickyNote, Receipt, DollarSign,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -118,6 +118,7 @@ export default function CreateInvoice() {
 
   // Discount
   const [discount, setDiscount] = useState("0");
+  const [discountMode, setDiscountMode] = useState<"value" | "percent">("value");
 
   // Pickers
   const [partSearchOpen, setPartSearchOpen] = useState(false);
@@ -137,8 +138,10 @@ export default function CreateInvoice() {
     [labour],
   );
 
-  const discountValue = Number(discount) || 0;
-  const grandTotal = partsTotal + labourTotal - discountValue;
+  const subtotal = partsTotal + labourTotal;
+  const discountRaw = Number(discount) || 0;
+  const discountValue = discountMode === "percent" ? subtotal * (discountRaw / 100) : discountRaw;
+  const grandTotal = subtotal - discountValue;
 
   // ── Handlers ──────────────────────────────────────────────────────────
 
@@ -220,7 +223,6 @@ export default function CreateInvoice() {
   const handleSend = () => toast.success("Invoice sent to customer");
   const handlePrint = () => window.print();
   const handleDuplicate = () => toast.info("Invoice duplicated");
-  const handleVoid = () => toast.warning("Invoice voided");
 
   // ── Render ────────────────────────────────────────────────────────────
 
@@ -249,9 +251,6 @@ export default function CreateInvoice() {
           <Button variant="outline" size="sm" className="gap-1.5" onClick={handleDuplicate}>
             <Copy className="w-3.5 h-3.5" /> Duplicate
           </Button>
-          <Button variant="outline" size="sm" className="gap-1.5 text-destructive hover:text-destructive" onClick={handleVoid}>
-            <XCircle className="w-3.5 h-3.5" /> Void
-          </Button>
           <Separator orientation="vertical" className="h-8 hidden sm:block" />
           <Button variant="outline" size="sm" className="gap-1.5" onClick={handleSaveDraft}>
             <Save className="w-3.5 h-3.5" /> Save Draft
@@ -274,7 +273,7 @@ export default function CreateInvoice() {
         <div className="space-y-6">
           {/* Invoice Header */}
           <Card className="shadow-soft border-border/50 overflow-hidden">
-            <CardHeader className="pb-4 bg-secondary/20">
+            <CardHeader className="py-4 bg-secondary/20">
               <SectionHeader icon={Receipt} title="Invoice Details" accent />
             </CardHeader>
             <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-5">
@@ -343,7 +342,7 @@ export default function CreateInvoice() {
           {/* Customer & Vehicle */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card className="shadow-soft border-border/50 overflow-hidden">
-              <CardHeader className="pb-4 bg-secondary/20">
+              <CardHeader className="py-4 bg-secondary/20">
                 <SectionHeader icon={UserRound} title="Customer" />
               </CardHeader>
               <CardContent className="space-y-3 pt-5">
@@ -363,7 +362,7 @@ export default function CreateInvoice() {
             </Card>
 
             <Card className="shadow-soft border-border/50 overflow-hidden">
-              <CardHeader className="pb-4 bg-secondary/20">
+              <CardHeader className="py-4 bg-secondary/20">
                 <SectionHeader icon={Car} title="Vehicle" />
               </CardHeader>
               <CardContent className="space-y-3 pt-5">
@@ -418,7 +417,7 @@ export default function CreateInvoice() {
 
           {/* ── Parts ──────────────────────────────────────────────── */}
           <Card className="shadow-soft border-border/50 overflow-hidden">
-            <CardHeader className="pb-4 flex flex-row items-center justify-between bg-secondary/20">
+            <CardHeader className="py-4 flex flex-row items-center justify-between bg-secondary/20">
               <SectionHeader icon={Package} title="Parts" />
               <Popover open={partSearchOpen} onOpenChange={setPartSearchOpen}>
                 <PopoverTrigger asChild>
@@ -543,7 +542,7 @@ export default function CreateInvoice() {
 
           {/* ── Labour ─────────────────────────────────────────────── */}
           <Card className="shadow-soft border-border/50 overflow-hidden">
-            <CardHeader className="pb-4 flex flex-row items-center justify-between bg-secondary/20">
+            <CardHeader className="py-4 flex flex-row items-center justify-between bg-secondary/20">
               <SectionHeader icon={Wrench} title="Labour" />
               <div className="flex items-center gap-2">
                 <Popover open={serviceSearchOpen} onOpenChange={setServiceSearchOpen}>
@@ -672,7 +671,7 @@ export default function CreateInvoice() {
 
           {/* ── Notes ──────────────────────────────────────────────── */}
           <Card className="shadow-soft border-border/50 overflow-hidden">
-            <CardHeader className="pb-4 bg-secondary/20">
+            <CardHeader className="py-4 bg-secondary/20">
               <SectionHeader icon={StickyNote} title="Notes" />
             </CardHeader>
             <CardContent className="space-y-4 pt-5">
@@ -710,7 +709,7 @@ export default function CreateInvoice() {
         {/* ═══ Right column — Summary sidebar ════════════════════════ */}
         <div className="lg:sticky lg:top-6 space-y-6">
           <Card className="shadow-soft border-border/50 overflow-hidden">
-            <CardHeader className="pb-3 bg-accent/5">
+            <CardHeader className="py-3 bg-accent/5">
               <SectionHeader icon={DollarSign} title="Invoice Summary" accent />
             </CardHeader>
             <CardContent className="space-y-4 pt-5">
@@ -725,18 +724,45 @@ export default function CreateInvoice() {
               <Separator />
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Subtotal</span>
-                <span className="font-medium">${(partsTotal + labourTotal).toFixed(2)}</span>
+                <span className="font-medium">${subtotal.toFixed(2)}</span>
               </div>
-              <div className="flex items-center justify-between text-sm gap-3">
-                <span className="text-muted-foreground">Discount</span>
-                <Input
-                  type="number"
-                  min={0}
-                  step={0.01}
-                  className="h-8 w-28 text-right"
-                  value={discount}
-                  onChange={(e) => setDiscount(e.target.value)}
-                />
+              <div className="space-y-2">
+                <div className="flex items-center justify-between text-sm gap-3">
+                  <span className="text-muted-foreground">Discount</span>
+                  <div className="flex items-center gap-1.5">
+                    <Input
+                      type="number"
+                      min={0}
+                      step={0.01}
+                      className="h-8 w-24 text-right"
+                      value={discount}
+                      onChange={(e) => setDiscount(e.target.value)}
+                    />
+                    <div className="flex h-8 rounded-md border border-input overflow-hidden shrink-0">
+                      <button
+                        className={cn(
+                          "px-2 text-xs font-medium transition-colors",
+                          discountMode === "value" ? "bg-secondary text-foreground" : "text-muted-foreground hover:text-foreground"
+                        )}
+                        onClick={() => setDiscountMode("value")}
+                      >
+                        $
+                      </button>
+                      <button
+                        className={cn(
+                          "px-2 text-xs font-medium transition-colors border-l border-input",
+                          discountMode === "percent" ? "bg-secondary text-foreground" : "text-muted-foreground hover:text-foreground"
+                        )}
+                        onClick={() => setDiscountMode("percent")}
+                      >
+                        %
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                {discountMode === "percent" && discountRaw > 0 && (
+                  <p className="text-xs text-muted-foreground text-right">−${discountValue.toFixed(2)}</p>
+                )}
               </div>
               <Separator />
               <div className="flex justify-between items-baseline pt-1">
