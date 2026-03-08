@@ -149,10 +149,10 @@ export default function PartDetailDialog({
     <Dialog open={open} onOpenChange={(v) => { if (!v) resetForm(); onOpenChange(v); }}>
       <DialogContent className="w-[calc(100%-2rem)] max-w-5xl h-[85vh] flex flex-col gap-0 p-0 overflow-hidden">
         {/* ── Header ── */}
-        <div className="px-6 pt-6 pb-4 border-b border-border/60 shrink-0">
-          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+        <div className="px-6 pt-6 pb-4 border-b border-border/60 shrink-0 pr-12">
+          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
             {/* Left: icon + name + category */}
-            <div className="flex items-start gap-3 min-w-0 pr-6">
+            <div className="flex items-start gap-3 min-w-0">
               <div className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center shrink-0 mt-0.5">
                 <Package className="w-5 h-5 text-muted-foreground" />
               </div>
@@ -161,7 +161,7 @@ export default function PartDetailDialog({
                   <DialogHeader className="p-0 space-y-0">
                     <DialogTitle className="text-lg font-semibold leading-tight">{part.name}</DialogTitle>
                   </DialogHeader>
-                  <Badge variant="secondary" className="text-[11px] font-medium shrink-0">
+                  <Badge variant="secondary" className="text-[11px] font-medium shrink-0 hidden sm:inline-flex">
                     {part.category}
                   </Badge>
                 </div>
@@ -170,7 +170,7 @@ export default function PartDetailDialog({
             </div>
 
             {/* Right: stats strip */}
-            <div className="flex items-center gap-0 bg-secondary/50 rounded-lg border border-border/40 px-1 shrink-0">
+            <div className="flex items-center justify-center w-full sm:w-auto bg-secondary/50 rounded-lg border border-border/40 shrink-0">
               <StatPill label="Stock" value={String(part.stock)} highlight={isLowStock} />
               <div className="w-px h-8 bg-border/50" />
               <StatPill label="Cost" value={`$${part.costPrice}`} />
@@ -184,8 +184,8 @@ export default function PartDetailDialog({
 
         {/* ── Tabs ── */}
         <Tabs defaultValue="overview" className="flex-1 flex flex-col min-h-0">
-          <div className="px-6 border-b border-border/60 shrink-0">
-            <TabsList className="bg-transparent h-10 p-0 gap-0 rounded-none">
+          <div className="px-6 border-b border-border/60 shrink-0 overflow-x-auto no-scrollbar">
+            <TabsList className="bg-transparent h-10 p-0 gap-0 rounded-none w-max min-w-full">
               <TabsTrigger value="overview" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none text-xs font-medium px-4">Overview</TabsTrigger>
               <TabsTrigger value="movements" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none text-xs font-medium px-4">Movements</TabsTrigger>
               <TabsTrigger value="purchase-orders" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none text-xs font-medium px-4">Purchase Orders</TabsTrigger>
@@ -387,7 +387,7 @@ export default function PartDetailDialog({
 
             {/* Movement Table */}
             <div className="overflow-x-auto">
-              <Table className="min-w-[600px]">
+              <Table className="min-w-[700px]">
                 <TableHeader>
                   <TableRow className="bg-secondary/30 hover:bg-secondary/30">
                     <TableHead className="text-[11px] font-medium h-8">Date</TableHead>
@@ -395,6 +395,7 @@ export default function PartDetailDialog({
                     <TableHead className="text-[11px] font-medium h-8 text-right">Qty</TableHead>
                     <TableHead className="text-[11px] font-medium h-8">Ref Type</TableHead>
                     <TableHead className="text-[11px] font-medium h-8">Ref ID</TableHead>
+                    <TableHead className="text-[11px] font-medium h-8">Notes</TableHead>
                     <TableHead className="text-[11px] font-medium h-8 text-right">Cost</TableHead>
                     <TableHead className="text-[11px] font-medium h-8 text-right">Balance</TableHead>
                   </TableRow>
@@ -413,6 +414,7 @@ export default function PartDetailDialog({
                         </TableCell>
                         <TableCell className="text-xs text-muted-foreground py-2">{REFERENCE_TYPE_LABELS[m.referenceType]}</TableCell>
                         <TableCell className="text-xs font-mono text-muted-foreground py-2">{m.referenceId || "—"}</TableCell>
+                        <TableCell className="text-xs text-muted-foreground py-2 max-w-[180px] truncate">{m.notes || "—"}</TableCell>
                         <TableCell className="text-xs text-right text-muted-foreground py-2">${m.costPriceAtTime}</TableCell>
                         <TableCell className="text-xs text-right font-medium py-2">{m.balanceAfter}</TableCell>
                       </TableRow>
@@ -420,7 +422,7 @@ export default function PartDetailDialog({
                   })}
                   {partMovements.length === 0 && (
                     <TableRow>
-                      <TableCell colSpan={7} className="text-center text-xs text-muted-foreground py-6">No movements recorded yet</TableCell>
+                      <TableCell colSpan={8} className="text-center text-xs text-muted-foreground py-6">No movements recorded yet</TableCell>
                     </TableRow>
                   )}
                 </TableBody>
@@ -455,9 +457,9 @@ export default function PartDetailDialog({
 
 function StatPill({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) {
   return (
-    <div className="flex flex-col items-center px-4 py-2">
+    <div className="flex flex-col items-center px-3 sm:px-4 py-2 flex-1 sm:flex-none">
       <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium">{label}</span>
-      <span className={`text-sm font-semibold tabular-nums ${highlight ? "text-destructive" : "text-foreground"}`}>{value}</span>
+      <span className={`text-xs sm:text-sm font-semibold tabular-nums ${highlight ? "text-destructive" : "text-foreground"}`}>{value}</span>
     </div>
   );
 }
