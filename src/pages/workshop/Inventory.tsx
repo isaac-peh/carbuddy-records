@@ -458,6 +458,7 @@ export default function Inventory() {
     if (updatedPart.supplier && !allSuppliers.includes(updatedPart.supplier)) {
       setCustomSuppliers((prev) => [...prev, updatedPart.supplier]);
     }
+    toast.success("Part updated successfully");
   };
 
   const handleDeletePart = (id: string) => {
