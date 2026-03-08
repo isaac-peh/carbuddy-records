@@ -372,7 +372,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
       <Card className="shadow-soft border-border/50 overflow-hidden">
         <CardHeader className="py-4 bg-[hsl(var(--success)/0.05)]">
           <div className="flex items-center justify-between">
-            <SectionHeader icon={ShieldCheck} title="Vehicle" />
+            <SectionHeader icon={Car} title="Vehicle" />
             {renderChangeLink()}
           </div>
         </CardHeader>
