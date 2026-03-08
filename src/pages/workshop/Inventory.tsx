@@ -427,6 +427,7 @@ export default function Inventory() {
     setMovements((prev) => [...prev, newMovement]);
     setParts((prev) => prev.map((p) => (p.id === movData.partId ? { ...p, stock: newBalance } : p)));
     setDetailPart((prev) => (prev && prev.id === movData.partId ? { ...prev, stock: newBalance } : prev));
+    toast.success("Stock movement recorded");
   };
 
   const allCategories = useMemo(() => {
