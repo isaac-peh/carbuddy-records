@@ -4,7 +4,7 @@ import { format } from "date-fns";
 import { toast } from "sonner";
 import {
   ArrowLeft, CalendarIcon, Plus, Trash2, Save, Send, Printer,
-  Copy, XCircle, FileText, Search, Wrench, Car, UserRound,
+  Copy, FileText, Wrench, Car, UserRound,
   Package, ClipboardList, StickyNote, Receipt, DollarSign,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
