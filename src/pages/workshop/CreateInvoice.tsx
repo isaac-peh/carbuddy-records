@@ -247,7 +247,7 @@ export default function CreateInvoice() {
   // ── Render ────────────────────────────────────────────────────────────
 
   return (
-    <div className="space-y-6 pb-8">
+    <div className="space-y-6 pb-8 min-w-0">
       {/* ── Action Bar ─────────────────────────────────────────────── */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
