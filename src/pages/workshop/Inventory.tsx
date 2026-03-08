@@ -511,6 +511,7 @@ export default function Inventory() {
     if (partData.supplier && !allSuppliers.includes(partData.supplier)) {
       setCustomSuppliers((prev) => [...prev, partData.supplier]);
     }
+    toast.success("Part added successfully");
   };
 
   const handleRenameCategory = (oldName: string, newName: string) => {
