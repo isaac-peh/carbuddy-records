@@ -725,18 +725,45 @@ export default function CreateInvoice() {
               <Separator />
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Subtotal</span>
-                <span className="font-medium">${(partsTotal + labourTotal).toFixed(2)}</span>
+                <span className="font-medium">${subtotal.toFixed(2)}</span>
               </div>
-              <div className="flex items-center justify-between text-sm gap-3">
-                <span className="text-muted-foreground">Discount</span>
-                <Input
-                  type="number"
-                  min={0}
-                  step={0.01}
-                  className="h-8 w-28 text-right"
-                  value={discount}
-                  onChange={(e) => setDiscount(e.target.value)}
-                />
+              <div className="space-y-2">
+                <div className="flex items-center justify-between text-sm gap-3">
+                  <span className="text-muted-foreground">Discount</span>
+                  <div className="flex items-center gap-1.5">
+                    <Input
+                      type="number"
+                      min={0}
+                      step={0.01}
+                      className="h-8 w-24 text-right"
+                      value={discount}
+                      onChange={(e) => setDiscount(e.target.value)}
+                    />
+                    <div className="flex h-8 rounded-md border border-input overflow-hidden shrink-0">
+                      <button
+                        className={cn(
+                          "px-2 text-xs font-medium transition-colors",
+                          discountMode === "value" ? "bg-secondary text-foreground" : "text-muted-foreground hover:text-foreground"
+                        )}
+                        onClick={() => setDiscountMode("value")}
+                      >
+                        $
+                      </button>
+                      <button
+                        className={cn(
+                          "px-2 text-xs font-medium transition-colors border-l border-input",
+                          discountMode === "percent" ? "bg-secondary text-foreground" : "text-muted-foreground hover:text-foreground"
+                        )}
+                        onClick={() => setDiscountMode("percent")}
+                      >
+                        %
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                {discountMode === "percent" && discountRaw > 0 && (
+                  <p className="text-xs text-muted-foreground text-right">−${discountValue.toFixed(2)}</p>
+                )}
               </div>
               <Separator />
               <div className="flex justify-between items-baseline pt-1">
