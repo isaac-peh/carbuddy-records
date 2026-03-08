@@ -107,7 +107,13 @@ export default function CreateInvoice() {
     setInvoiceNumber(suggestedInvoiceNumber);
   }, [suggestedInvoiceNumber]);
   const [serviceDate, setServiceDate] = useState<Date | undefined>(new Date());
-  const [serviceType, setServiceType] = useState("");
+  const [serviceTypes, setServiceTypes] = useState<string[]>([]);
+
+  const toggleServiceType = useCallback((type: string) => {
+    setServiceTypes(prev =>
+      prev.includes(type) ? prev.filter(t => t !== type) : [...prev, type]
+    );
+  }, []);
   const [technician, setTechnician] = useState("");
 
   // Customer
@@ -353,16 +359,48 @@ export default function CreateInvoice() {
 
                 <div className="space-y-1.5">
                   <Label className="text-xs text-muted-foreground">Service Type</Label>
-                  <Select value={serviceType} onValueChange={setServiceType}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {SERVICE_TYPES.map((t) => (
-                        <SelectItem key={t} value={t}>{t}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button variant="outline" className="w-full justify-start font-normal text-left h-10">
+                        {serviceTypes.length === 0 ? (
+                          <span className="text-muted-foreground">Select types</span>
+                        ) : serviceTypes.length <= 2 ? (
+                          <span className="truncate">{serviceTypes.join(", ")}</span>
+                        ) : (
+                          <span className="truncate">{serviceTypes.length} types selected</span>
+                        )}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[220px] p-2" align="start">
+                      <div className="space-y-1 max-h-[240px] overflow-y-auto">
+                        {SERVICE_TYPES.map((t) => (
+                          <button
+                            key={t}
+                            type="button"
+                            onClick={() => toggleServiceType(t)}
+                            className={cn(
+                              "flex items-center gap-2 w-full rounded-md px-2 py-1.5 text-sm transition-colors text-left",
+                              serviceTypes.includes(t)
+                                ? "bg-primary/10 text-primary"
+                                : "hover:bg-secondary"
+                            )}
+                          >
+                            <div className={cn(
+                              "w-3.5 h-3.5 rounded-sm border flex items-center justify-center shrink-0",
+                              serviceTypes.includes(t)
+                                ? "bg-primary border-primary"
+                                : "border-input"
+                            )}>
+                              {serviceTypes.includes(t) && (
+                                <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5L4.5 7.5L8 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-primary-foreground" /></svg>
+                              )}
+                            </div>
+                            {t}
+                          </button>
+                        ))}
+                      </div>
+                    </PopoverContent>
+                  </Popover>
                 </div>
 
                 <div className="space-y-1.5">
@@ -821,10 +859,14 @@ export default function CreateInvoice() {
                 <span>Labour items</span>
                 <Badge variant="secondary" className="text-[10px] h-5">{labour.length}</Badge>
               </div>
-              {serviceType && (
-                <div className="flex justify-between">
-                  <span>Service type</span>
-                  <Badge variant="outline" className="text-[10px]">{serviceType}</Badge>
+              {serviceTypes.length > 0 && (
+                <div className="flex justify-between items-start gap-2">
+                  <span className="shrink-0">Service type</span>
+                  <div className="flex flex-wrap justify-end gap-1">
+                    {serviceTypes.map(t => (
+                      <Badge key={t} variant="outline" className="text-[10px]">{t}</Badge>
+                    ))}
+                  </div>
                 </div>
               )}
               {resolvedVehicle?.vehicleType && (
