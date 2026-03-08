@@ -247,7 +247,7 @@ export default function CreateInvoice() {
   // ── Render ────────────────────────────────────────────────────────────
 
   return (
-    <div className="space-y-6 pb-8">
+    <div className="space-y-6 pb-8 min-w-0">
       {/* ── Action Bar ─────────────────────────────────────────────── */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
@@ -267,7 +267,7 @@ export default function CreateInvoice() {
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 shrink-0">
           <Button variant="outline" size="sm" className="gap-1.5 text-xs sm:text-sm" onClick={handleDuplicate}>
             <Copy className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Duplicate</span>
           </Button>
@@ -288,11 +288,11 @@ export default function CreateInvoice() {
       </div>
 
       {/* ── Two‑column grid ────────────────────────────────────────── */}
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6 items-start">
+      <div className="grid grid-cols-1 xl:grid-cols-[1fr_360px] gap-6 items-start min-w-0">
         {/* ═══ Left column ═══════════════════════════════════════════ */}
         <div className="space-y-6">
           {/* Invoice Details + Vehicle Lookup side by side */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Invoice Header */}
             <Card className="shadow-soft border-border/50 overflow-hidden">
               <CardHeader className="py-4 bg-secondary/20">
@@ -794,7 +794,7 @@ export default function CreateInvoice() {
         </div>
 
         {/* ═══ Right column — Summary sidebar ════════════════════════ */}
-        <div className="lg:sticky lg:top-[calc(3.5rem+1.5rem)] space-y-6">
+        <div className="xl:sticky xl:top-[calc(3.5rem+1.5rem)] space-y-6">
           <Card className="shadow-soft border-border/50 overflow-hidden">
             <CardHeader className="py-3 bg-accent/5">
               <SectionHeader icon={DollarSign} title="Invoice Summary" accent />
