@@ -271,82 +271,71 @@ export default function CreateInvoice() {
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6 items-start">
         {/* ═══ Left column ═══════════════════════════════════════════ */}
         <div className="space-y-6">
-          {/* Invoice Header */}
-          <Card className="shadow-soft border-border/50 overflow-hidden">
-            <CardHeader className="py-4 bg-secondary/20">
-              <SectionHeader icon={Receipt} title="Invoice Details" accent />
-            </CardHeader>
-            <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-5">
-              <div className="space-y-1.5">
-                <Label className="text-xs text-muted-foreground">Invoice Number</Label>
-                <Input
-                  placeholder="e.g. INV-2024-043"
-                  value={invoiceNumber}
-                  onChange={(e) => setInvoiceNumber(e.target.value)}
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <Label className="text-xs text-muted-foreground">Service Date</Label>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className={cn(
-                        "w-full justify-start text-left font-normal",
-                        !serviceDate && "text-muted-foreground",
-                      )}
-                    >
-                      <CalendarIcon className="mr-2 w-4 h-4" />
-                      {serviceDate ? format(serviceDate, "PPP") : "Pick a date"}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={serviceDate}
-                      onSelect={setServiceDate}
-                      disabled={(d) => d > new Date()}
-                      initialFocus
-                      className="p-3 pointer-events-auto"
-                    />
-                  </PopoverContent>
-                </Popover>
-              </div>
-
-              <div className="space-y-1.5">
-                <Label className="text-xs text-muted-foreground">Service Type</Label>
-                <Select value={serviceType} onValueChange={setServiceType}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {SERVICE_TYPES.map((t) => (
-                      <SelectItem key={t} value={t}>{t}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-1.5">
-                <Label className="text-xs text-muted-foreground">Technician</Label>
-                <Input
-                  placeholder="Technician name"
-                  value={technician}
-                  onChange={(e) => setTechnician(e.target.value)}
-                />
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Vehicle Lookup + Odometer — top of form */}
-          <div className="space-y-4">
-            <VehicleLookup
-              onVehicleResolved={setResolvedVehicle}
-              onVehicleCleared={() => setResolvedVehicle(null)}
-            />
+          {/* Invoice Details + Vehicle Lookup side by side */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Invoice Header */}
             <Card className="shadow-soft border-border/50 overflow-hidden">
-              <CardContent className="p-4">
+              <CardHeader className="py-4 bg-secondary/20">
+                <SectionHeader icon={FileText} title="Invoice Details" />
+              </CardHeader>
+              <CardContent className="space-y-3 pt-5">
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-1.5">
+                    <Label className="text-xs text-muted-foreground">Invoice Number</Label>
+                    <Input value={invoiceNumber} onChange={(e) => setInvoiceNumber(e.target.value)} placeholder="INV-0001" />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label className="text-xs text-muted-foreground">Service Date</Label>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className={cn(
+                            "w-full justify-start text-left font-normal",
+                            !serviceDate && "text-muted-foreground",
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 w-4 h-4" />
+                          {serviceDate ? format(serviceDate, "PPP") : "Pick a date"}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={serviceDate}
+                          onSelect={setServiceDate}
+                          disabled={(d) => d > new Date()}
+                          initialFocus
+                          className="p-3 pointer-events-auto"
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label className="text-xs text-muted-foreground">Service Type</Label>
+                  <Select value={serviceType} onValueChange={setServiceType}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {SERVICE_TYPES.map((t) => (
+                        <SelectItem key={t} value={t}>{t}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label className="text-xs text-muted-foreground">Technician</Label>
+                  <Input
+                    placeholder="Technician name"
+                    value={technician}
+                    onChange={(e) => setTechnician(e.target.value)}
+                  />
+                </div>
+
                 <div className="space-y-1.5">
                   <Label className="text-xs text-muted-foreground">Odometer at Service (km)</Label>
                   <Input
@@ -359,6 +348,12 @@ export default function CreateInvoice() {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Vehicle Lookup */}
+            <VehicleLookup
+              onVehicleResolved={setResolvedVehicle}
+              onVehicleCleared={() => setResolvedVehicle(null)}
+            />
           </div>
 
           {/* Customer */}
