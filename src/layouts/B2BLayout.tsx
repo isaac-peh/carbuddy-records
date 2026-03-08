@@ -1,9 +1,10 @@
 import { Outlet } from "react-router-dom";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { B2BSidebar } from "@/components/b2b/B2BSidebar";
-import { Bell, Search, User } from "lucide-react";
+import { Bell, Search, User, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useTheme } from "next-themes";
 
 export default function B2BLayout() {
   return (
