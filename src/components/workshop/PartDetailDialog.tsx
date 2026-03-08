@@ -192,10 +192,10 @@ export default function PartDetailDialog({
         <Tabs defaultValue="overview" className="flex-1 flex flex-col min-h-0">
           <div className="px-6 border-b border-border/60 shrink-0 overflow-x-auto no-scrollbar">
             <TabsList className="bg-transparent h-11 p-0 gap-1 rounded-none w-max">
-              <TabsTrigger value="overview" className="rounded-md data-[state=active]:bg-secondary data-[state=active]:text-foreground data-[state=active]:shadow-none text-xs font-medium px-3 py-1.5 h-7 my-auto">Overview</TabsTrigger>
-              <TabsTrigger value="movements" className="rounded-md data-[state=active]:bg-secondary data-[state=active]:text-foreground data-[state=active]:shadow-none text-xs font-medium px-3 py-1.5 h-7 my-auto">Movements</TabsTrigger>
-              <TabsTrigger value="purchase-orders" className="rounded-md data-[state=active]:bg-secondary data-[state=active]:text-foreground data-[state=active]:shadow-none text-xs font-medium px-3 py-1.5 h-7 my-auto">Purchase Orders</TabsTrigger>
-              <TabsTrigger value="sales" className="rounded-md data-[state=active]:bg-secondary data-[state=active]:text-foreground data-[state=active]:shadow-none text-xs font-medium px-3 py-1.5 h-7 my-auto">Sales</TabsTrigger>
+              <TabsTrigger value="overview" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm text-xs font-medium px-3 py-1.5 h-7 my-auto transition-colors">Overview</TabsTrigger>
+              <TabsTrigger value="movements" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm text-xs font-medium px-3 py-1.5 h-7 my-auto transition-colors">Movements</TabsTrigger>
+              <TabsTrigger value="purchase-orders" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm text-xs font-medium px-3 py-1.5 h-7 my-auto transition-colors">Purchase Orders</TabsTrigger>
+              <TabsTrigger value="sales" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm text-xs font-medium px-3 py-1.5 h-7 my-auto transition-colors">Sales</TabsTrigger>
             </TabsList>
           </div>
 
