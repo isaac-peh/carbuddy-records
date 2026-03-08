@@ -273,7 +273,7 @@ export default function CreateInvoice() {
         <div className="space-y-6">
           {/* Invoice Header */}
           <Card className="shadow-soft border-border/50 overflow-hidden">
-            <CardHeader className="pb-4 bg-secondary/20">
+            <CardHeader className="py-4 bg-secondary/20">
               <SectionHeader icon={Receipt} title="Invoice Details" accent />
             </CardHeader>
             <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-5">
