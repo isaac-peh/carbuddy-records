@@ -508,7 +508,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
                   <Button
                     size="sm"
                     variant="outline"
-                    className="gap-1.5 text-xs border-[hsl(var(--warning)/0.4)] text-[hsl(var(--warning))] hover:bg-[hsl(var(--warning)/0.08)]"
+                    className="gap-1.5 text-xs"
                     onClick={proceedWithDispute}
                     disabled={!disputeVehicleType}
                   >
