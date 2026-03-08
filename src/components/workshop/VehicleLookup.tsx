@@ -291,8 +291,8 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
       <div className={cn("w-full flex items-center gap-2.5 rounded-lg border px-3 py-2.5", cfg.className)}>
         <Icon className="w-4 h-4 shrink-0" />
         <div className="min-w-0">
-          <p className="text-xs font-semibold leading-tight">{cfg.label}</p>
-          {cfg.sub && <p className="text-[11px] opacity-70 leading-tight mt-0.5">{cfg.sub}</p>}
+          <p className="text-sm font-semibold leading-tight">{cfg.label}</p>
+          {cfg.sub && <p className="text-xs opacity-70 leading-snug mt-0.5">{cfg.sub}</p>}
         </div>
       </div>
     );
