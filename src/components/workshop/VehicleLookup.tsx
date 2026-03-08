@@ -433,9 +433,9 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
           {!showDisputePanel && (
             <button
               onClick={() => setShowDisputePanel(true)}
-              className="text-xs text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5 pt-1"
+              className="w-full text-xs text-muted-foreground hover:text-foreground transition-all flex items-center justify-center gap-2 py-2.5 rounded-lg border border-dashed border-border/60 hover:border-border hover:bg-secondary/40"
             >
-              <AlertTriangle className="w-3 h-3" />
+              <AlertTriangle className="w-3.5 h-3.5" />
               This is not the vehicle at my workshop
             </button>
           )}
