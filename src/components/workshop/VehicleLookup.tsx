@@ -671,7 +671,16 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
         <CardContent className="pt-5 space-y-4">
           {renderStateBadge("new")}
 
-          <div className="grid grid-cols-2 gap-3">
+          {disputeCreated && (
+            <div className="rounded-lg border border-[hsl(var(--warning)/0.3)] bg-[hsl(var(--warning)/0.06)] px-3 py-2.5 flex items-start gap-2">
+              <AlertTriangle className="w-4 h-4 text-[hsl(var(--warning))] shrink-0 mt-0.5" />
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                A new record will be created for this plate. The existing verified record will not be affected.
+              </p>
+            </div>
+          )}
+
+
             {renderReadOnlyField("Plate Number", plate)}
             <div className="space-y-1.5">
               <Label className="text-xs text-muted-foreground">Vehicle Type <span className="text-destructive">*</span></Label>
