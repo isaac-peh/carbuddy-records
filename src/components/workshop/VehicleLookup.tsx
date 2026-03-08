@@ -526,7 +526,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
       <Card className="shadow-soft border-border/50 overflow-hidden">
         <CardHeader className="py-4 bg-secondary/20">
           <div className="flex items-center justify-between">
-            <SectionHeader icon={PlusCircle} title="Vehicle" />
+            <SectionHeader icon={Car} title="Vehicle" />
             {renderChangeLink()}
           </div>
         </CardHeader>
