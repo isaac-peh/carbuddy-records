@@ -107,6 +107,7 @@ export default function PartDetailDialog({
   const [costPrice, setCostPrice] = useState("");
   const [notes, setNotes] = useState("");
   const [movFilter, setMovFilter] = useState<"all" | StockMovement["type"]>("all");
+  const [activeTab, setActiveTab] = useState("overview");
 
   if (!part) return null;
 
@@ -189,7 +190,7 @@ export default function PartDetailDialog({
         </div>
 
         {/* ── Tabs ── */}
-        <Tabs defaultValue="overview" className="flex-1 flex flex-col min-h-0">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col min-h-0">
           <div className="px-6 border-b border-border/60 shrink-0 overflow-x-auto no-scrollbar">
             <TabsList className="bg-transparent h-11 p-0 gap-1 rounded-none w-max">
               <TabsTrigger value="overview" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm text-xs font-medium px-3 py-1.5 h-7 my-auto transition-colors">Overview</TabsTrigger>
@@ -300,7 +301,17 @@ export default function PartDetailDialog({
                     {isLowStock && (
                       <div className="flex items-center gap-2 bg-destructive/10 border border-destructive/20 rounded-lg px-3 py-2.5 mb-4">
                         <AlertTriangle className="w-4 h-4 text-destructive shrink-0" />
-                        <span className="text-xs text-destructive font-medium">Stock is at or below minimum level</span>
+                        <div className="flex-1">
+                          <span className="text-xs text-destructive font-medium">Stock is at or below minimum level</span>
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-6 text-[11px] text-destructive hover:text-destructive hover:bg-destructive/10 px-2 shrink-0"
+                          onClick={() => setActiveTab("purchase-orders")}
+                        >
+                          Create PO →
+                        </Button>
                       </div>
                     )}
                     <Separator className="mb-3" />
