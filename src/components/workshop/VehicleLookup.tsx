@@ -443,7 +443,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
           {/* Dispute resolution panel */}
           <Collapsible open={showDisputePanel} onOpenChange={setShowDisputePanel}>
             <CollapsibleContent className="overflow-hidden data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up">
-              <div className="rounded-lg border-l-4 border-l-[hsl(var(--warning))] border border-[hsl(var(--warning)/0.2)] bg-[hsl(var(--warning)/0.04)] p-4 space-y-4 mt-1">
+              <div className="rounded-lg border border-border/50 bg-secondary/30 p-4 space-y-4 mt-1">
                 <div className="space-y-1">
                   <p className="text-sm font-medium text-foreground">Resolve vehicle mismatch</p>
                   <p className="text-xs text-muted-foreground leading-relaxed">
@@ -508,7 +508,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
                   <Button
                     size="sm"
                     variant="outline"
-                    className="gap-1.5 text-xs border-[hsl(var(--warning)/0.4)] text-[hsl(var(--warning))] hover:bg-[hsl(var(--warning)/0.08)]"
+                    className="gap-1.5 text-xs"
                     onClick={proceedWithDispute}
                     disabled={!disputeVehicleType}
                   >
