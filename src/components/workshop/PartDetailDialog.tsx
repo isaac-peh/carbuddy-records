@@ -6,6 +6,10 @@ import {
   ArrowDownCircle,
   ArrowUpCircle,
   RefreshCw,
+  ShoppingCart,
+  TrendingUp,
+  AlertTriangle,
+  Clock,
 } from "lucide-react";
 import {
   Dialog,
@@ -18,6 +22,8 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -119,9 +125,7 @@ export default function PartDetailDialog({
   const handleSubmit = () => {
     const qty = Number(quantity);
     if (!qty) return;
-
     const signedQty = movType === "out" ? -Math.abs(qty) : movType === "in" ? Math.abs(qty) : qty;
-
     onRecordMovement({
       partId: part.id,
       date: new Date().toISOString(),
@@ -136,204 +140,358 @@ export default function PartDetailDialog({
   };
 
   const isValid = quantity !== "" && Number(quantity) !== 0;
+  const isLowStock = part.stock <= part.minStock;
+  const margin = part.sellPrice - part.costPrice;
+  const marginPct = part.costPrice > 0 ? ((margin / part.costPrice) * 100).toFixed(1) : "—";
+  const stockValue = part.stock * part.costPrice;
 
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) resetForm(); onOpenChange(v); }}>
-      <DialogContent className="w-[calc(100%-2rem)] max-w-4xl max-h-[90vh] flex flex-col gap-0 p-0 overflow-hidden">
-        <div className="flex-1 overflow-y-auto no-scrollbar">
-        <DialogHeader className="px-4 sm:px-8 pt-6 sm:pt-8 pb-4 sm:pb-5 text-left">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center">
+      <DialogContent className="w-[calc(100%-2rem)] max-w-5xl h-[85vh] flex flex-col gap-0 p-0 overflow-hidden">
+        {/* ── Header ── */}
+        <div className="px-6 pt-6 pb-4 border-b border-border/60 shrink-0">
+          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+            {/* Left: icon + name + category */}
+            <div className="flex items-start gap-3 min-w-0 pr-6">
+              <div className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center shrink-0 mt-0.5">
                 <Package className="w-5 h-5 text-muted-foreground" />
               </div>
-              <div>
-                <DialogTitle className="text-xl font-semibold">{part.name}</DialogTitle>
+              <div className="min-w-0">
+                <div className="flex items-center gap-2.5 flex-wrap">
+                  <DialogHeader className="p-0 space-y-0">
+                    <DialogTitle className="text-lg font-semibold leading-tight">{part.name}</DialogTitle>
+                  </DialogHeader>
+                  <Badge variant="secondary" className="text-[11px] font-medium shrink-0">
+                    {part.category}
+                  </Badge>
+                </div>
                 <p className="text-xs font-mono text-muted-foreground mt-1">{part.sku}</p>
               </div>
             </div>
-          </div>
-        </DialogHeader>
 
-        <div className="px-4 sm:px-8 pb-5">
-          {/* Description */}
-          {part.description && (
-            <p className="text-sm text-muted-foreground mb-4">{part.description}</p>
-          )}
-
-          {/* Part Info Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-4">
-            <InfoItem label="Category" value={part.category} />
-            <InfoItem label="UOM" value={part.uom?.toUpperCase() || "—"} />
-            <InfoItem label="Stock" value={String(part.stock)} highlight={part.stock <= part.minStock} />
-            <InfoItem label="Min Stock" value={String(part.minStock)} />
-            <InfoItem label="Supplier" value={part.supplier || "—"} />
-            <InfoItem label="Cost Price" value={`$${part.costPrice}`} />
-            <InfoItem label="Sell Price" value={`$${part.sellPrice}`} />
-            <InfoItem label="Margin" value={`$${part.sellPrice - part.costPrice}`} />
-            <InfoItem label="Stock Value" value={`$${(part.stock * part.costPrice).toLocaleString()}`} />
+            {/* Right: stats strip */}
+            <div className="flex items-center gap-0 bg-secondary/50 rounded-lg border border-border/40 px-1 shrink-0">
+              <StatPill label="Stock" value={String(part.stock)} highlight={isLowStock} />
+              <div className="w-px h-8 bg-border/50" />
+              <StatPill label="Cost" value={`$${part.costPrice}`} />
+              <div className="w-px h-8 bg-border/50" />
+              <StatPill label="Sell" value={`$${part.sellPrice}`} />
+              <div className="w-px h-8 bg-border/50" />
+              <StatPill label="Value" value={`$${stockValue.toLocaleString()}`} />
+            </div>
           </div>
         </div>
 
-        <Separator />
-
-        {/* Movement Section */}
-        <div className="flex-1 flex flex-col min-h-0 px-4 sm:px-8 py-5 shrink-0">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-sm font-semibold text-foreground">Stock Movements</h3>
-            {!showForm && (
-              <Button size="sm" variant="outline" className="gap-1.5 h-7 text-xs" onClick={() => setShowForm(true)}>
-                <Plus className="w-3 h-3" />
-                Record Movement
-              </Button>
-            )}
+        {/* ── Tabs ── */}
+        <Tabs defaultValue="overview" className="flex-1 flex flex-col min-h-0">
+          <div className="px-6 border-b border-border/60 shrink-0">
+            <TabsList className="bg-transparent h-10 p-0 gap-0 rounded-none">
+              <TabsTrigger value="overview" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none text-xs font-medium px-4">Overview</TabsTrigger>
+              <TabsTrigger value="movements" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none text-xs font-medium px-4">Movements</TabsTrigger>
+              <TabsTrigger value="purchase-orders" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none text-xs font-medium px-4">Purchase Orders</TabsTrigger>
+              <TabsTrigger value="sales" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none text-xs font-medium px-4">Sales</TabsTrigger>
+            </TabsList>
           </div>
 
-          {/* Inline Form */}
-          {showForm && (
-            <div className="border rounded-lg p-4 mb-3 bg-secondary/30 space-y-3">
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                <div className="space-y-1">
-                  <label className="text-xs font-medium text-muted-foreground">Type</label>
-                  <Select value={movType} onValueChange={(v) => setMovType(v as StockMovement["type"])}>
-                    <SelectTrigger className="h-9 text-sm"><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="in">Stock In</SelectItem>
-                      <SelectItem value="out">Stock Out</SelectItem>
-                      <SelectItem value="adjustment">Adjustment</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-1">
-                  <label className="text-xs font-medium text-muted-foreground">Quantity</label>
-                  <Input
-                    type="number"
-                    placeholder="e.g. 10"
-                    value={quantity}
-                    onChange={(e) => setQuantity(e.target.value)}
-                    className="h-9 text-sm"
-                  />
-                </div>
-                <div className="space-y-1">
-                  <label className="text-xs font-medium text-muted-foreground">Cost Price</label>
-                  <Input
-                    type="number"
-                    placeholder={`${part.costPrice}`}
-                    value={costPrice}
-                    onChange={(e) => setCostPrice(e.target.value)}
-                    className="h-9 text-sm"
-                  />
-                </div>
-                <div className="space-y-1">
-                  <label className="text-xs font-medium text-muted-foreground">Reference Type</label>
-                  <Select value={refType} onValueChange={(v) => setRefType(v as StockMovement["referenceType"])}>
-                    <SelectTrigger className="h-9 text-sm"><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="manual">Manual</SelectItem>
-                      <SelectItem value="purchase_order">Purchase Order</SelectItem>
-                      <SelectItem value="service_job">Service Job</SelectItem>
-                      <SelectItem value="return">Return</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-1">
-                  <label className="text-xs font-medium text-muted-foreground">Reference ID</label>
-                  <Input
-                    placeholder={refType === "manual" ? "N/A" : "e.g. PO-0012"}
-                    value={refId}
-                    onChange={(e) => setRefId(e.target.value)}
-                    disabled={refType === "manual"}
-                    className="h-9 text-sm"
-                  />
-                </div>
+          {/* ── Overview Tab ── */}
+          <TabsContent value="overview" className="flex-1 overflow-y-auto no-scrollbar m-0 p-6">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+              {/* Left Column */}
+              <div className="lg:col-span-7 space-y-5">
+                {/* Item Details */}
+                <Card>
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-sm font-semibold">Item Details</CardTitle>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-4">
+                      <DetailItem label="Category" value={part.category} />
+                      <DetailItem label="Unit of Measure" value={part.uom?.toUpperCase() || "—"} />
+                      <DetailItem label="Supplier" value={part.supplier || "—"} />
+                      <DetailItem label="Item Type" value="Good" />
+                      <DetailItem label="Min Stock Level" value={String(part.minStock)} />
+                      <DetailItem label="SKU" value={part.sku} mono />
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Description */}
+                <Card>
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-sm font-semibold">Description</CardTitle>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      {part.description || "No description provided."}
+                    </p>
+                  </CardContent>
+                </Card>
+
+                {/* Recent Activity */}
+                <Card>
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-sm font-semibold">Recent Activity</CardTitle>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    {partMovements.length === 0 ? (
+                      <p className="text-xs text-muted-foreground py-4 text-center">No activity recorded yet.</p>
+                    ) : (
+                      <div className="space-y-0">
+                        {partMovements.slice(0, 5).map((m, i) => {
+                          const config = MOVEMENT_TYPE_CONFIG[m.type];
+                          const Icon = config.icon;
+                          return (
+                            <div key={m.id} className={`flex items-start gap-3 py-3 ${i < Math.min(partMovements.length, 5) - 1 ? "border-b border-border/40" : ""}`}>
+                              <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 mt-0.5 ${config.className}`}>
+                                <Icon className="w-3.5 h-3.5" />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-2">
+                                  <span className="text-xs font-medium">{config.label}</span>
+                                  <span className="text-[11px] text-muted-foreground">
+                                    {REFERENCE_TYPE_LABELS[m.referenceType]}
+                                    {m.referenceId && ` · ${m.referenceId}`}
+                                  </span>
+                                </div>
+                                <div className="flex items-center gap-1.5 mt-0.5">
+                                  <Clock className="w-3 h-3 text-muted-foreground/60" />
+                                  <span className="text-[11px] text-muted-foreground">
+                                    {format(new Date(m.date), "dd MMM yyyy, HH:mm")}
+                                  </span>
+                                </div>
+                                {m.notes && (
+                                  <p className="text-[11px] text-muted-foreground/70 mt-1 truncate">{m.notes}</p>
+                                )}
+                              </div>
+                              <span className={`text-sm font-semibold shrink-0 ${m.quantity > 0 ? "text-emerald-600" : "text-destructive"}`}>
+                                {m.quantity > 0 ? `+${m.quantity}` : m.quantity}
+                              </span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
               </div>
-              <div className="space-y-1">
-                <label className="text-xs font-medium text-muted-foreground">Notes (optional)</label>
-                <Textarea
-                  placeholder="Reason for movement..."
-                  value={notes}
-                  onChange={(e) => setNotes(e.target.value)}
-                  className="text-sm min-h-[60px]"
-                />
-              </div>
-              <div className="flex justify-end gap-2">
-                <Button variant="ghost" size="sm" onClick={resetForm}>
-                  Cancel
-                </Button>
-                <Button size="sm" disabled={!isValid} onClick={handleSubmit}>
-                  Save Movement
-                </Button>
+
+              {/* Right Column */}
+              <div className="lg:col-span-5 space-y-5">
+                {/* Stock Status */}
+                <Card>
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-sm font-semibold">Stock Status</CardTitle>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    <div className="flex flex-col items-center py-4">
+                      <span className={`text-4xl font-bold tabular-nums ${isLowStock ? "text-destructive" : "text-foreground"}`}>
+                        {part.stock}
+                      </span>
+                      <span className="text-xs text-muted-foreground mt-1">
+                        {part.uom?.toUpperCase() || "units"} in stock
+                      </span>
+                    </div>
+                    {isLowStock && (
+                      <div className="flex items-center gap-2 bg-destructive/10 border border-destructive/20 rounded-lg px-3 py-2.5 mb-4">
+                        <AlertTriangle className="w-4 h-4 text-destructive shrink-0" />
+                        <span className="text-xs text-destructive font-medium">Stock is at or below minimum level</span>
+                      </div>
+                    )}
+                    <Separator className="mb-3" />
+                    <div className="flex items-center justify-between py-1.5">
+                      <span className="text-xs text-muted-foreground">Reorder Point</span>
+                      <span className="text-sm font-medium">{part.minStock}</span>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Pricing */}
+                <Card>
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-sm font-semibold">Pricing</CardTitle>
+                  </CardHeader>
+                  <CardContent className="pt-0 space-y-0">
+                    <PricingRow label="Cost Price" value={`$${part.costPrice}`} />
+                    <PricingRow label="Sell Price" value={`$${part.sellPrice}`} />
+                    <PricingRow label="Margin" value={`$${margin}`} sub={`${marginPct}%`} highlight />
+                    <Separator className="my-2" />
+                    <PricingRow label="Stock Value" value={`$${stockValue.toLocaleString()}`} bold />
+                  </CardContent>
+                </Card>
               </div>
             </div>
-          )}
+          </TabsContent>
 
-          {/* Movement Table */}
-          <div className="overflow-x-auto overflow-y-auto max-h-[320px] -mx-4 sm:-mx-8 px-4 sm:px-8">
-            <Table className="min-w-[600px]">
-              <TableHeader>
-                <TableRow className="bg-secondary/30 hover:bg-secondary/30">
-                  <TableHead className="text-[11px] font-medium h-8">Date</TableHead>
-                  <TableHead className="text-[11px] font-medium h-8">Type</TableHead>
-                  <TableHead className="text-[11px] font-medium h-8 text-right">Qty</TableHead>
-                  <TableHead className="text-[11px] font-medium h-8">Ref Type</TableHead>
-                  <TableHead className="text-[11px] font-medium h-8">Ref ID</TableHead>
-                  <TableHead className="text-[11px] font-medium h-8 text-right">Cost</TableHead>
-                  <TableHead className="text-[11px] font-medium h-8 text-right">Balance</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {partMovements.map((m) => {
-                  const config = MOVEMENT_TYPE_CONFIG[m.type];
-                  return (
-                    <TableRow key={m.id} className="hover:bg-secondary/10">
-                      <TableCell className="text-xs text-muted-foreground py-2">
-                        {format(new Date(m.date), "dd MMM yy")}
-                      </TableCell>
-                      <TableCell className="py-2">
-                        <Badge variant="outline" className={`text-[10px] px-1.5 py-0 h-5 ${config.className}`}>
-                          {config.label}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className={`text-xs text-right font-semibold py-2 ${m.quantity > 0 ? "text-emerald-600" : "text-destructive"}`}>
-                        {m.quantity > 0 ? `+${m.quantity}` : m.quantity}
-                      </TableCell>
-                      <TableCell className="text-xs text-muted-foreground py-2">
-                        {REFERENCE_TYPE_LABELS[m.referenceType]}
-                      </TableCell>
-                      <TableCell className="text-xs font-mono text-muted-foreground py-2">
-                        {m.referenceId || "—"}
-                      </TableCell>
-                      <TableCell className="text-xs text-right text-muted-foreground py-2">
-                        ${m.costPriceAtTime}
-                      </TableCell>
-                      <TableCell className="text-xs text-right font-medium py-2">
-                        {m.balanceAfter}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-                {partMovements.length === 0 && (
-                  <TableRow>
-                    <TableCell colSpan={7} className="text-center text-xs text-muted-foreground py-6">
-                      No movements recorded yet
-                    </TableCell>
+          {/* ── Movements Tab ── */}
+          <TabsContent value="movements" className="flex-1 overflow-y-auto no-scrollbar m-0 p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-sm font-semibold text-foreground">Stock Movements</h3>
+              {!showForm && (
+                <Button size="sm" variant="outline" className="gap-1.5 h-7 text-xs" onClick={() => setShowForm(true)}>
+                  <Plus className="w-3 h-3" />
+                  Record Movement
+                </Button>
+              )}
+            </div>
+
+            {/* Inline Form */}
+            {showForm && (
+              <div className="border rounded-lg p-4 mb-4 bg-secondary/30 space-y-3">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  <div className="space-y-1">
+                    <label className="text-xs font-medium text-muted-foreground">Type</label>
+                    <Select value={movType} onValueChange={(v) => setMovType(v as StockMovement["type"])}>
+                      <SelectTrigger className="h-9 text-sm"><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="in">Stock In</SelectItem>
+                        <SelectItem value="out">Stock Out</SelectItem>
+                        <SelectItem value="adjustment">Adjustment</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-xs font-medium text-muted-foreground">Quantity</label>
+                    <Input type="number" placeholder="e.g. 10" value={quantity} onChange={(e) => setQuantity(e.target.value)} className="h-9 text-sm" />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-xs font-medium text-muted-foreground">Cost Price</label>
+                    <Input type="number" placeholder={`${part.costPrice}`} value={costPrice} onChange={(e) => setCostPrice(e.target.value)} className="h-9 text-sm" />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-xs font-medium text-muted-foreground">Reference Type</label>
+                    <Select value={refType} onValueChange={(v) => setRefType(v as StockMovement["referenceType"])}>
+                      <SelectTrigger className="h-9 text-sm"><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="manual">Manual</SelectItem>
+                        <SelectItem value="purchase_order">Purchase Order</SelectItem>
+                        <SelectItem value="service_job">Service Job</SelectItem>
+                        <SelectItem value="return">Return</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-xs font-medium text-muted-foreground">Reference ID</label>
+                    <Input placeholder={refType === "manual" ? "N/A" : "e.g. PO-0012"} value={refId} onChange={(e) => setRefId(e.target.value)} disabled={refType === "manual"} className="h-9 text-sm" />
+                  </div>
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs font-medium text-muted-foreground">Notes (optional)</label>
+                  <Textarea placeholder="Reason for movement..." value={notes} onChange={(e) => setNotes(e.target.value)} className="text-sm min-h-[60px]" />
+                </div>
+                <div className="flex justify-end gap-2">
+                  <Button variant="ghost" size="sm" onClick={resetForm}>Cancel</Button>
+                  <Button size="sm" disabled={!isValid} onClick={handleSubmit}>Save Movement</Button>
+                </div>
+              </div>
+            )}
+
+            {/* Movement Table */}
+            <div className="overflow-x-auto">
+              <Table className="min-w-[600px]">
+                <TableHeader>
+                  <TableRow className="bg-secondary/30 hover:bg-secondary/30">
+                    <TableHead className="text-[11px] font-medium h-8">Date</TableHead>
+                    <TableHead className="text-[11px] font-medium h-8">Type</TableHead>
+                    <TableHead className="text-[11px] font-medium h-8 text-right">Qty</TableHead>
+                    <TableHead className="text-[11px] font-medium h-8">Ref Type</TableHead>
+                    <TableHead className="text-[11px] font-medium h-8">Ref ID</TableHead>
+                    <TableHead className="text-[11px] font-medium h-8 text-right">Cost</TableHead>
+                    <TableHead className="text-[11px] font-medium h-8 text-right">Balance</TableHead>
                   </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </div>
-        </div>
-        </div>
+                </TableHeader>
+                <TableBody>
+                  {partMovements.map((m) => {
+                    const config = MOVEMENT_TYPE_CONFIG[m.type];
+                    return (
+                      <TableRow key={m.id} className="hover:bg-secondary/10">
+                        <TableCell className="text-xs text-muted-foreground py-2">{format(new Date(m.date), "dd MMM yy")}</TableCell>
+                        <TableCell className="py-2">
+                          <Badge variant="outline" className={`text-[10px] px-1.5 py-0 h-5 ${config.className}`}>{config.label}</Badge>
+                        </TableCell>
+                        <TableCell className={`text-xs text-right font-semibold py-2 ${m.quantity > 0 ? "text-emerald-600" : "text-destructive"}`}>
+                          {m.quantity > 0 ? `+${m.quantity}` : m.quantity}
+                        </TableCell>
+                        <TableCell className="text-xs text-muted-foreground py-2">{REFERENCE_TYPE_LABELS[m.referenceType]}</TableCell>
+                        <TableCell className="text-xs font-mono text-muted-foreground py-2">{m.referenceId || "—"}</TableCell>
+                        <TableCell className="text-xs text-right text-muted-foreground py-2">${m.costPriceAtTime}</TableCell>
+                        <TableCell className="text-xs text-right font-medium py-2">{m.balanceAfter}</TableCell>
+                      </TableRow>
+                    );
+                  })}
+                  {partMovements.length === 0 && (
+                    <TableRow>
+                      <TableCell colSpan={7} className="text-center text-xs text-muted-foreground py-6">No movements recorded yet</TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </div>
+          </TabsContent>
+
+          {/* ── Purchase Orders Tab ── */}
+          <TabsContent value="purchase-orders" className="flex-1 m-0">
+            <ComingSoon
+              icon={ShoppingCart}
+              title="Purchase Orders"
+              description="Track and manage purchase orders for this part. Create POs, monitor deliveries, and link them to stock movements."
+            />
+          </TabsContent>
+
+          {/* ── Sales Tab ── */}
+          <TabsContent value="sales" className="flex-1 m-0">
+            <ComingSoon
+              icon={TrendingUp}
+              title="Sales Tracking"
+              description="View sales history and trends for this part. Track which jobs consumed stock and analyze demand over time."
+            />
+          </TabsContent>
+        </Tabs>
       </DialogContent>
     </Dialog>
   );
 }
 
-function InfoItem({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) {
+/* ── Sub-components ── */
+
+function StatPill({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) {
+  return (
+    <div className="flex flex-col items-center px-4 py-2">
+      <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium">{label}</span>
+      <span className={`text-sm font-semibold tabular-nums ${highlight ? "text-destructive" : "text-foreground"}`}>{value}</span>
+    </div>
+  );
+}
+
+function DetailItem({ label, value, mono }: { label: string; value: string; mono?: boolean }) {
   return (
     <div className="space-y-1">
       <p className="text-[11px] uppercase tracking-wider text-muted-foreground">{label}</p>
-      <p className={`text-sm font-semibold ${highlight ? "text-destructive" : "text-foreground"}`}>{value}</p>
+      <p className={`text-sm font-medium ${mono ? "font-mono" : ""}`}>{value}</p>
+    </div>
+  );
+}
+
+function PricingRow({ label, value, sub, highlight, bold }: { label: string; value: string; sub?: string; highlight?: boolean; bold?: boolean }) {
+  return (
+    <div className="flex items-center justify-between py-2">
+      <span className="text-xs text-muted-foreground">{label}</span>
+      <div className="flex items-center gap-1.5">
+        <span className={`text-sm tabular-nums ${bold ? "font-bold" : "font-medium"} ${highlight ? "text-emerald-600" : "text-foreground"}`}>{value}</span>
+        {sub && <span className="text-[11px] text-emerald-600/70">({sub})</span>}
+      </div>
+    </div>
+  );
+}
+
+function ComingSoon({ icon: Icon, title, description }: { icon: typeof ShoppingCart; title: string; description: string }) {
+  return (
+    <div className="flex flex-col items-center justify-center h-full py-20">
+      <div className="w-14 h-14 rounded-2xl bg-secondary flex items-center justify-center mb-4">
+        <Icon className="w-7 h-7 text-muted-foreground/60" />
+      </div>
+      <h3 className="text-base font-semibold text-foreground mb-1.5">{title}</h3>
+      <p className="text-sm text-muted-foreground text-center max-w-sm leading-relaxed">{description}</p>
+      <Badge variant="secondary" className="mt-4 text-[11px]">Coming Soon</Badge>
     </div>
   );
 }
