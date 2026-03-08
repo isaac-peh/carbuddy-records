@@ -84,7 +84,7 @@ export default function Invoices() {
             Create and manage service invoices for your customers
           </p>
         </div>
-        <Button className="gap-2 shadow-soft">
+        <Button className="gap-2 shadow-soft" onClick={() => navigate("/workshop/invoices/new")}>
           <Plus className="w-4 h-4" />
           New Invoice
         </Button>
