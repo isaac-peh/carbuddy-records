@@ -186,14 +186,16 @@ export default function CreateInvoice() {
     setParts((prev) => prev.filter((p) => p.id !== id));
 
   const addLabourFromService = (svc: ServiceItem) => {
+    const isFlat = svc.flatPrice != null;
     setLabour((prev) => [
       ...prev,
       {
         id: nextId(),
         serviceId: svc.id,
         description: svc.name,
-        hours: svc.flatPrice != null ? 1 : 1,
-        hourlyRate: svc.hourlyRate ?? svc.flatPrice ?? 0,
+        pricingMode: isFlat ? "flat" : "hourly",
+        hours: 1,
+        rate: isFlat ? (svc.flatPrice ?? 0) : (svc.hourlyRate ?? 0),
       },
     ]);
     setServiceSearchOpen(false);
