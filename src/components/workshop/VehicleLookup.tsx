@@ -268,7 +268,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
       icon: PlusCircle,
       label: "New Vehicle",
       sub: "No record found. A new vehicle will be created.",
-      className: "bg-secondary text-muted-foreground border-border",
+      className: "bg-secondary text-foreground border-border",
     },
   };
 
