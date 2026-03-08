@@ -408,6 +408,7 @@ export default function Inventory() {
   const [editPart, setEditPart] = useState<Part | null>(null);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [deletePart, setDeletePart] = useState<Part | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [detailPart, setDetailPart] = useState<Part | null>(null);
   const [detailDialogOpen, setDetailDialogOpen] = useState(false);
   const [movements, setMovements] = useState<StockMovement[]>(mockMovements);
