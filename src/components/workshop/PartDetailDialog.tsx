@@ -342,7 +342,7 @@ export default function PartDetailDialog({
 
           {/* ── Movements Tab ── */}
           <TabsContent value="movements" className="flex-1 overflow-y-auto no-scrollbar m-0 p-6">
-            <div className="flex items-center justify-between gap-3 mb-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
               <div className="flex items-center gap-3">
                 <Select value={movFilter} onValueChange={(v) => setMovFilter(v as "all" | StockMovement["type"])}>
                   <SelectTrigger className="h-8 text-xs w-[130px]">
@@ -358,7 +358,7 @@ export default function PartDetailDialog({
                 <span className="text-xs text-muted-foreground">{filteredMovements.length} movements</span>
               </div>
               {!showForm && (
-                <Button size="sm" className="gap-1.5 h-7 text-xs" onClick={() => setShowForm(true)}>
+                <Button size="sm" className="gap-1.5 h-7 text-xs w-full sm:w-auto" onClick={() => setShowForm(true)}>
                   <Plus className="w-3 h-3" />
                   Record Movement
                 </Button>
