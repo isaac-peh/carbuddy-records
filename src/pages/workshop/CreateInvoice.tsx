@@ -544,7 +544,7 @@ export default function CreateInvoice() {
                         <TableRow key={line.id} className="hover:bg-secondary/10">
                           <TableCell className="text-sm font-medium">{line.name}</TableCell>
                           <TableCell className="hidden md:table-cell text-xs text-muted-foreground font-mono">{line.sku}</TableCell>
-                          <TableCell className="text-center">
+                          <TableCell className="text-center hidden sm:table-cell">
                             <Badge
                               variant="outline"
                               className={cn(
