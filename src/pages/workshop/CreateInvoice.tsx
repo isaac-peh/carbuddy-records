@@ -859,10 +859,14 @@ export default function CreateInvoice() {
                 <span>Labour items</span>
                 <Badge variant="secondary" className="text-[10px] h-5">{labour.length}</Badge>
               </div>
-              {serviceType && (
-                <div className="flex justify-between">
-                  <span>Service type</span>
-                  <Badge variant="outline" className="text-[10px]">{serviceType}</Badge>
+              {serviceTypes.length > 0 && (
+                <div className="flex justify-between items-start gap-2">
+                  <span className="shrink-0">Service type</span>
+                  <div className="flex flex-wrap justify-end gap-1">
+                    {serviceTypes.map(t => (
+                      <Badge key={t} variant="outline" className="text-[10px]">{t}</Badge>
+                    ))}
+                  </div>
                 </div>
               )}
               {resolvedVehicle?.vehicleType && (
