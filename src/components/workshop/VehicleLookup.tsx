@@ -387,12 +387,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
             {renderReadOnlyField("Model", matchedRecord.model || "")}
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-1.5">
-              <Label className="text-xs text-muted-foreground">Vehicle Type</Label>
-              <Badge variant="outline" className="text-xs py-1 px-2.5">
-                {matchedRecord.vehicleType || "—"}
-              </Badge>
-            </div>
+            {renderReadOnlyField("Vehicle Type", matchedRecord.vehicleType || "—")}
             {renderReadOnlyField("Current Mileage (km)", matchedRecord.mileage?.toLocaleString() || "—")}
           </div>
         </CardContent>
