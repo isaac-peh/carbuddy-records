@@ -561,7 +561,7 @@ export default function CreateInvoice() {
                             <Input
                               type="number"
                               min={1}
-                              className="h-8 w-20 text-center mx-auto"
+                              className="h-7 sm:h-8 w-20 text-center mx-auto text-xs sm:text-sm"
                               value={line.quantity}
                               onChange={(e) => {
                                 const qty = Math.max(1, Number(e.target.value));
@@ -577,7 +577,7 @@ export default function CreateInvoice() {
                               type="number"
                               min={0}
                               step={0.01}
-                              className="h-8 w-24 text-right ml-auto"
+                              className="h-7 sm:h-8 w-24 text-right ml-auto text-xs sm:text-sm"
                               value={line.unitPrice}
                               onChange={(e) =>
                                 updatePartField(line.id, "unitPrice", Number(e.target.value))
@@ -683,7 +683,7 @@ export default function CreateInvoice() {
                                   <Badge variant="secondary" className="text-[10px] shrink-0">Service</Badge>
                                 )}
                                 <Input
-                                  className="h-8"
+                                  className="h-7 sm:h-8 text-xs sm:text-sm"
                                   placeholder="e.g. Oil change labour"
                                   value={line.description}
                                   onChange={(e) =>
@@ -693,7 +693,7 @@ export default function CreateInvoice() {
                               </div>
                             </TableCell>
                             <TableCell className="text-center">
-                              <div className="flex h-8 rounded-md border border-input overflow-hidden mx-auto w-fit">
+                              <div className="flex h-7 sm:h-8 rounded-md border border-input overflow-hidden mx-auto w-fit">
                                 <button
                                   className={cn(
                                     "w-14 text-[10px] font-medium transition-colors",
@@ -720,7 +720,7 @@ export default function CreateInvoice() {
                                   type="number"
                                   min={0.25}
                                   step={0.25}
-                                  className="h-8 w-20 text-center mx-auto"
+                                  className="h-7 sm:h-8 w-20 text-center mx-auto text-xs sm:text-sm"
                                   value={line.hours}
                                   onChange={(e) =>
                                     updateLabourField(line.id, "hours", Number(e.target.value))
@@ -735,7 +735,7 @@ export default function CreateInvoice() {
                                 type="number"
                                 min={0}
                                 step={0.5}
-                                className="h-8 w-24 text-right ml-auto"
+                                className="h-7 sm:h-8 w-24 text-right ml-auto text-xs sm:text-sm"
                                 value={line.rate}
                                 onChange={(e) =>
                                   updateLabourField(line.id, "rate", Number(e.target.value))
