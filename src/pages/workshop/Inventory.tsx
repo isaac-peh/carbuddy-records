@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { toast } from "sonner";
 import {
   Package,
   Search,
@@ -426,6 +427,7 @@ export default function Inventory() {
     setMovements((prev) => [...prev, newMovement]);
     setParts((prev) => prev.map((p) => (p.id === movData.partId ? { ...p, stock: newBalance } : p)));
     setDetailPart((prev) => (prev && prev.id === movData.partId ? { ...prev, stock: newBalance } : prev));
+    toast.success("Stock movement recorded");
   };
 
   const allCategories = useMemo(() => {
@@ -456,11 +458,13 @@ export default function Inventory() {
     if (updatedPart.supplier && !allSuppliers.includes(updatedPart.supplier)) {
       setCustomSuppliers((prev) => [...prev, updatedPart.supplier]);
     }
+    toast.success("Part updated successfully");
   };
 
   const handleDeletePart = (id: string) => {
     setParts((prev) => prev.filter((p) => p.id !== id));
     setDeletePart(null);
+    toast.success("Part deleted successfully");
   };
 
   const filtered = useMemo(() => {
@@ -507,33 +511,30 @@ export default function Inventory() {
     if (partData.supplier && !allSuppliers.includes(partData.supplier)) {
       setCustomSuppliers((prev) => [...prev, partData.supplier]);
     }
+    toast.success("Part added successfully");
   };
 
   const handleRenameCategory = (oldName: string, newName: string) => {
-    // Update parts that use this category
     setParts((prev) => prev.map((p) => (p.category === oldName ? { ...p, category: newName } : p)));
-    // Update custom categories list
     if (defaultCategories.includes(oldName)) {
-      // Renaming a default: remove old from defaults conceptually by adding new as custom
       setCustomCategories((prev) => [...prev.filter((c) => c !== oldName), newName]);
     } else {
       setCustomCategories((prev) => prev.map((c) => (c === oldName ? newName : c)));
     }
-    // Update active filters
     setActiveCategories((prev) => prev.map((c) => (c === oldName ? newName : c)));
+    toast.success(`Category renamed to "${newName}"`);
   };
 
   const handleDeleteCategory = (name: string) => {
-    // Move parts with this category to "Others"
     setParts((prev) => prev.map((p) => (p.category === name ? { ...p, category: "Others" } : p)));
-    // Remove from custom categories
     setCustomCategories((prev) => prev.filter((c) => c !== name));
-    // Remove from active filters
     setActiveCategories((prev) => prev.filter((c) => c !== name));
+    toast.success(`Category "${name}" deleted`);
   };
 
   const handleAddCategory = (name: string) => {
     setCustomCategories((prev) => [...prev, name]);
+    toast.success(`Category "${name}" added`);
   };
 
   const getPartCountForCategory = (category: string) => {

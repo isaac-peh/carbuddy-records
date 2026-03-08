@@ -1,51 +1,29 @@
 
 
-## Plan: Add Description Field, Resize Dialogs, and Add Toast Notifications
+## Plan: Add Services Page & Refine Inventory
 
-### 1. Add Description Field to Add/Edit Part Dialogs
+### What changes
 
-- **AddPartDialog.tsx**: Add a `description` state and a `Textarea` input field (between Name/SKU and Category). Update the `onAdd` callback interface to include `description: string`. Pass it through on submit and reset on close.
-- **EditPartDialog.tsx**: Same treatment — add `description` state, populate from `part` on open, add `Textarea` field, include in `onSave` payload.
-- **Inventory.tsx**: The `Part` interface already has `description: string`. Just ensure the handlers pass it through correctly and mock data has descriptions.
+1. **Rename "Inventory" sidebar item to "Parts"** — since we're splitting the concept, "Parts" is more specific. Add a new "Services" item with a `Wrench` or `HandCoins` icon right below it.
 
-### 2. Increase Dialog Sizes for Large Screens
+2. **Rename the current Inventory page to Parts** (`/workshop/parts`) — the existing page already tracks spare parts well. Minor rename of heading from "Inventory" to "Parts". Keep the route and file as-is or rename for clarity.
 
-Update `max-w` class on `DialogContent` across all workshop dialogs from `sm:max-w-md` to a larger breakpoint like `sm:max-w-lg` or `sm:max-w-xl`:
+3. **Create a new Services page** (`/workshop/services`) with:
+   - Header: "Services" with an "Add Service" button
+   - Summary cards: Total services count, average price
+   - A simple table with columns: **Service Name**, **Description** (short), **Price** (flat rate for now)
+   - No stock tracking, no supplier, no SKU — these don't apply to labor
+   - Search bar to filter services
+   - Mock data: Oil Change Labor, Tyre Change, Brake Pad Replacement (Labor), Diagnostic Scan, A/C Regas, etc.
+   - Each row has a "more" menu (edit/delete) like the parts table
 
-| Dialog | Current | New |
-|--------|---------|-----|
-| AddPartDialog | `sm:max-w-md` | `sm:max-w-xl` |
-| EditPartDialog | `sm:max-w-md` | `sm:max-w-xl` |
-| AddServiceDialog | `sm:max-w-md` | `sm:max-w-lg` |
-| EditServiceDialog | `sm:max-w-md` | `sm:max-w-lg` |
-| PartDetailDialog | (check current) | `sm:max-w-2xl` |
-| ManageCategoriesDialog | (check current) | `sm:max-w-lg` |
+4. **Update sidebar** — reorder main items: Dashboard → Parts → Services → Invoices → Jobs
 
-Also increase the base `DialogContent` default `max-w-lg` to `max-w-xl` in `dialog.tsx` so AlertDialogs (delete confirmations) also scale up slightly.
+5. **Update routing** in `App.tsx` — add `/workshop/services` route, optionally rename `/workshop/inventory` to `/workshop/parts` (with redirect from old URL)
 
-### 3. Add Toast Notifications for All Actions
-
-Import `toast` from `sonner` (already wired in `App.tsx` via `<Sonner />`) and add success toasts to:
-
-**Inventory.tsx:**
-- `handleAddPart` → `toast.success("Part added successfully")`
-- `handleEditPart` → `toast.success("Part updated successfully")`
-- `handleDeletePart` → `toast.success("Part deleted successfully")`
-- `handleRecordMovement` → `toast.success("Stock movement recorded")`
-- Category rename/delete/add actions → appropriate toasts
-
-**Services.tsx:**
-- `handleAddService` → `toast.success("Service added successfully")`
-- `handleEditService` → `toast.success("Service updated successfully")`
-- `handleDeleteService` → `toast.success("Service deleted successfully")`
-
-### Files to Edit
-1. `src/components/workshop/AddPartDialog.tsx` — add description field + resize
-2. `src/components/workshop/EditPartDialog.tsx` — add description field + resize
-3. `src/components/workshop/AddServiceDialog.tsx` — resize
-4. `src/components/workshop/EditServiceDialog.tsx` — resize
-5. `src/pages/workshop/Inventory.tsx` — add toasts to all handlers
-6. `src/pages/workshop/Services.tsx` — add toasts to all handlers
-7. `src/components/workshop/PartDetailDialog.tsx` — resize
-8. `src/components/workshop/ManageCategoriesDialog.tsx` — resize
+### Files to create/modify
+- **Create**: `src/pages/workshop/Services.tsx`
+- **Modify**: `src/components/b2b/B2BSidebar.tsx` (add Services nav item, rename Inventory → Parts)
+- **Modify**: `src/App.tsx` (add Services route, rename inventory route)
+- **Modify**: `src/pages/workshop/Inventory.tsx` (rename heading from "Inventory" to "Parts")
 

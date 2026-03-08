@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { toast } from "sonner";
 import {
   Search,
   Plus,
@@ -158,10 +159,12 @@ export default function Services() {
       ...prev,
       { id: String(Date.now()), ...svc },
     ]);
+    toast.success("Service added successfully");
   };
 
   const handleEditService = (updated: Service) => {
     setServices((prev) => prev.map((s) => (s.id === updated.id ? updated : s)));
+    toast.success("Service updated successfully");
   };
 
   const handleDeleteService = () => {
@@ -169,6 +172,7 @@ export default function Services() {
     setServices((prev) => prev.filter((s) => s.id !== deleteService.id));
     setDeleteOpen(false);
     setDeleteService(null);
+    toast.success("Service deleted successfully");
   };
 
   const filtered = useMemo(() => {

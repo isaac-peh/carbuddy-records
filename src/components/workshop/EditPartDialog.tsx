@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface Part {
@@ -25,6 +26,7 @@ interface Part {
   sellPrice: number;
   supplier: string;
   uom: string;
+  description: string;
 }
 
 interface EditPartDialogProps {
@@ -57,6 +59,7 @@ export default function EditPartDialog({
   const [selectedSupplier, setSelectedSupplier] = useState("");
   const [customSupplier, setCustomSupplier] = useState("");
   const [uom, setUom] = useState("");
+  const [description, setDescription] = useState("");
 
   useEffect(() => {
     if (part && open) {
@@ -76,6 +79,7 @@ export default function EditPartDialog({
       setCostPrice(String(part.costPrice));
       setSellPrice(String(part.sellPrice));
       setUom(part.uom || "");
+      setDescription(part.description || "");
       if (part.supplier && suppliers.includes(part.supplier)) {
         setSupplierMode("existing");
         setSelectedSupplier(part.supplier);
@@ -111,13 +115,14 @@ export default function EditPartDialog({
       sellPrice: Number(sellPrice),
       supplier: supplier.trim(),
       uom: uom.trim(),
+      description: description.trim(),
     });
     onOpenChange(false);
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto no-scrollbar">
+      <DialogContent className="sm:max-w-xl max-h-[90vh] overflow-y-auto no-scrollbar">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Pencil className="w-5 h-5 text-muted-foreground" />
@@ -146,6 +151,12 @@ export default function EditPartDialog({
                 onChange={(e) => setSku(e.target.value)}
               />
             </div>
+          </div>
+
+          {/* Description */}
+          <div className="space-y-1.5">
+            <Label htmlFor="edit-part-desc">Description</Label>
+            <Textarea id="edit-part-desc" placeholder="Brief description of the part..." value={description} onChange={(e) => setDescription(e.target.value)} className="min-h-[60px]" />
           </div>
 
           <div className="space-y-1.5">

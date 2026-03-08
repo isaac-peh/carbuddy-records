@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -35,6 +36,7 @@ interface AddPartDialogProps {
     sellPrice: number;
     supplier: string;
     uom: string;
+    description: string;
   }) => void;
 }
 
@@ -52,6 +54,7 @@ export default function AddPartDialog({ open, onOpenChange, categories, supplier
   const [selectedSupplier, setSelectedSupplier] = useState("");
   const [customSupplier, setCustomSupplier] = useState("");
   const [uom, setUom] = useState("");
+  const [description, setDescription] = useState("");
 
   const category = categoryMode === "custom" ? customCategory.trim() : selectedCategory;
 
@@ -80,6 +83,7 @@ export default function AddPartDialog({ open, onOpenChange, categories, supplier
     setSelectedSupplier("");
     setCustomSupplier("");
     setUom("");
+    setDescription("");
   };
 
   const handleSubmit = () => {
@@ -94,6 +98,7 @@ export default function AddPartDialog({ open, onOpenChange, categories, supplier
       sellPrice: Number(sellPrice),
       supplier: supplier.trim(),
       uom: uom.trim(),
+      description: description.trim(),
     });
     resetForm();
     onOpenChange(false);
@@ -101,7 +106,7 @@ export default function AddPartDialog({ open, onOpenChange, categories, supplier
 
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) resetForm(); onOpenChange(v); }}>
-      <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Plus className="w-5 h-5 text-muted-foreground" />
@@ -121,6 +126,12 @@ export default function AddPartDialog({ open, onOpenChange, categories, supplier
               <Label htmlFor="part-sku">SKU *</Label>
               <Input id="part-sku" placeholder="e.g. BP-FRT-001" value={sku} onChange={(e) => setSku(e.target.value)} />
             </div>
+          </div>
+
+          {/* Description */}
+          <div className="space-y-1.5">
+            <Label htmlFor="part-desc">Description</Label>
+            <Textarea id="part-desc" placeholder="Brief description of the part..." value={description} onChange={(e) => setDescription(e.target.value)} className="min-h-[60px]" />
           </div>
 
           {/* Category */}
