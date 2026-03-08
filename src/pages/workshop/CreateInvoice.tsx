@@ -7,7 +7,7 @@ import {
   Copy, FileText, Wrench, Car, UserRound,
   Package, ClipboardList, StickyNote, Receipt, DollarSign, RefreshCw,
 } from "lucide-react";
-import { TapTooltip } from "@/components/ui/tap-tooltip";
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
