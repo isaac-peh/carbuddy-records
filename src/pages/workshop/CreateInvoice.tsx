@@ -288,7 +288,7 @@ export default function CreateInvoice() {
       </div>
 
       {/* ── Two‑column grid ────────────────────────────────────────── */}
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6 items-start">
+      <div className="grid grid-cols-1 xl:grid-cols-[1fr_360px] gap-6 items-start min-w-0">
         {/* ═══ Left column ═══════════════════════════════════════════ */}
         <div className="space-y-6">
           {/* Invoice Details + Vehicle Lookup side by side */}
