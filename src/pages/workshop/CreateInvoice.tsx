@@ -339,7 +339,13 @@ export default function CreateInvoice() {
             </CardContent>
           </Card>
 
-          {/* Customer & Vehicle */}
+          {/* Vehicle Lookup — top of form */}
+          <VehicleLookup
+            onVehicleResolved={setResolvedVehicle}
+            onVehicleCleared={() => setResolvedVehicle(null)}
+          />
+
+          {/* Customer & Odometer */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card className="shadow-soft border-border/50 overflow-hidden">
               <CardHeader className="py-4 bg-secondary/20">
@@ -361,27 +367,21 @@ export default function CreateInvoice() {
               </CardContent>
             </Card>
 
-            <div className="space-y-4">
-              <VehicleLookup
-                onVehicleResolved={setResolvedVehicle}
-                onVehicleCleared={() => setResolvedVehicle(null)}
-              />
-              {/* Odometer belongs to invoice header, shown here for proximity */}
-              <Card className="shadow-soft border-border/50 overflow-hidden">
-                <CardContent className="p-4">
-                  <div className="space-y-1.5">
-                    <Label className="text-xs text-muted-foreground">Odometer at Service (km)</Label>
-                    <Input
-                      type="number"
-                      min={1}
-                      value={odometer}
-                      onChange={(e) => setOdometer(e.target.value)}
-                      placeholder="Current reading"
-                    />
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
+            {/* Odometer belongs to invoice header, not vehicle */}
+            <Card className="shadow-soft border-border/50 overflow-hidden h-fit">
+              <CardContent className="p-4">
+                <div className="space-y-1.5">
+                  <Label className="text-xs text-muted-foreground">Odometer at Service (km)</Label>
+                  <Input
+                    type="number"
+                    min={1}
+                    value={odometer}
+                    onChange={(e) => setOdometer(e.target.value)}
+                    placeholder="Current reading"
+                  />
+                </div>
+              </CardContent>
+            </Card>
           </div>
 
           {/* ── Parts ──────────────────────────────────────────────── */}
