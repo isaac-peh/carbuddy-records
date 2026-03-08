@@ -387,7 +387,7 @@ export default function PartDetailDialog({
 
             {/* Movement Table */}
             <div className="overflow-x-auto">
-              <Table className="min-w-[600px]">
+              <Table className="min-w-[700px]">
                 <TableHeader>
                   <TableRow className="bg-secondary/30 hover:bg-secondary/30">
                     <TableHead className="text-[11px] font-medium h-8">Date</TableHead>
@@ -395,6 +395,7 @@ export default function PartDetailDialog({
                     <TableHead className="text-[11px] font-medium h-8 text-right">Qty</TableHead>
                     <TableHead className="text-[11px] font-medium h-8">Ref Type</TableHead>
                     <TableHead className="text-[11px] font-medium h-8">Ref ID</TableHead>
+                    <TableHead className="text-[11px] font-medium h-8">Notes</TableHead>
                     <TableHead className="text-[11px] font-medium h-8 text-right">Cost</TableHead>
                     <TableHead className="text-[11px] font-medium h-8 text-right">Balance</TableHead>
                   </TableRow>
@@ -413,6 +414,7 @@ export default function PartDetailDialog({
                         </TableCell>
                         <TableCell className="text-xs text-muted-foreground py-2">{REFERENCE_TYPE_LABELS[m.referenceType]}</TableCell>
                         <TableCell className="text-xs font-mono text-muted-foreground py-2">{m.referenceId || "—"}</TableCell>
+                        <TableCell className="text-xs text-muted-foreground py-2 max-w-[180px] truncate">{m.notes || "—"}</TableCell>
                         <TableCell className="text-xs text-right text-muted-foreground py-2">${m.costPriceAtTime}</TableCell>
                         <TableCell className="text-xs text-right font-medium py-2">{m.balanceAfter}</TableCell>
                       </TableRow>
@@ -420,7 +422,7 @@ export default function PartDetailDialog({
                   })}
                   {partMovements.length === 0 && (
                     <TableRow>
-                      <TableCell colSpan={7} className="text-center text-xs text-muted-foreground py-6">No movements recorded yet</TableCell>
+                      <TableCell colSpan={8} className="text-center text-xs text-muted-foreground py-6">No movements recorded yet</TableCell>
                     </TableRow>
                   )}
                 </TableBody>
