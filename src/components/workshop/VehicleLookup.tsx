@@ -321,7 +321,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
             <Input
               autoFocus
               placeholder="Enter plate number to begin..."
-              className="text-base font-medium h-12 tracking-wide uppercase placeholder:normal-case"
+              className="text-sm font-medium tracking-wide uppercase placeholder:normal-case"
               value={searchPlate}
               onChange={(e) => setSearchPlate(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && performLookup()}
@@ -332,7 +332,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
             <Label className="text-xs text-muted-foreground">VIN (optional)</Label>
             <Input
               placeholder="Enter VIN for cross-reference..."
-              className="text-base font-medium h-12 tracking-wide uppercase placeholder:normal-case"
+              className="text-sm font-medium tracking-wide uppercase placeholder:normal-case"
               value={searchVin}
               onChange={(e) => setSearchVin(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && performLookup()}
