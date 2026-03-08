@@ -267,7 +267,7 @@ export default function CreateInvoice() {
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 shrink-0">
           <Button variant="outline" size="sm" className="gap-1.5 text-xs sm:text-sm" onClick={handleDuplicate}>
             <Copy className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Duplicate</span>
           </Button>
