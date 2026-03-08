@@ -125,6 +125,14 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
   const [editModel, setEditModel] = useState("");
   const [editVehicleType, setEditVehicleType] = useState("");
 
+  // Dispute resolution panel state
+  const [showDisputePanel, setShowDisputePanel] = useState(false);
+  const [disputeVin, setDisputeVin] = useState("");
+  const [disputeMake, setDisputeMake] = useState("");
+  const [disputeModel, setDisputeModel] = useState("");
+  const [disputeVehicleType, setDisputeVehicleType] = useState("");
+  const [disputeCreated, setDisputeCreated] = useState(false);
+
   const reset = useCallback(() => {
     setState("idle");
     setSearchPlate("");
