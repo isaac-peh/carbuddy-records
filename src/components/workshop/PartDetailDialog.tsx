@@ -10,6 +10,7 @@ import {
   TrendingUp,
   AlertTriangle,
   Clock,
+  Filter,
 } from "lucide-react";
 import {
   Dialog,
@@ -105,12 +106,17 @@ export default function PartDetailDialog({
   const [refId, setRefId] = useState("");
   const [costPrice, setCostPrice] = useState("");
   const [notes, setNotes] = useState("");
+  const [movFilter, setMovFilter] = useState<"all" | StockMovement["type"]>("all");
 
   if (!part) return null;
 
   const partMovements = movements
     .filter((m) => m.partId === part.id)
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+  const filteredMovements = movFilter === "all"
+    ? partMovements
+    : partMovements.filter((m) => m.type === movFilter);
 
   const resetForm = () => {
     setMovType("in");
@@ -169,7 +175,7 @@ export default function PartDetailDialog({
               </div>
             </div>
 
-            {/* Right: stats strip */}
+            {/* Right: stats strip — equal sizing */}
             <div className="flex items-center justify-center w-full sm:w-auto bg-secondary/50 rounded-lg border border-border/40 shrink-0">
               <StatPill label="Stock" value={String(part.stock)} highlight={isLowStock} />
               <div className="w-px h-8 bg-border/50" />
@@ -185,11 +191,11 @@ export default function PartDetailDialog({
         {/* ── Tabs ── */}
         <Tabs defaultValue="overview" className="flex-1 flex flex-col min-h-0">
           <div className="px-6 border-b border-border/60 shrink-0 overflow-x-auto no-scrollbar">
-            <TabsList className="bg-transparent h-10 p-0 gap-0 rounded-none w-max min-w-full">
-              <TabsTrigger value="overview" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none text-xs font-medium px-4">Overview</TabsTrigger>
-              <TabsTrigger value="movements" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none text-xs font-medium px-4">Movements</TabsTrigger>
-              <TabsTrigger value="purchase-orders" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none text-xs font-medium px-4">Purchase Orders</TabsTrigger>
-              <TabsTrigger value="sales" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none text-xs font-medium px-4">Sales</TabsTrigger>
+            <TabsList className="bg-transparent h-11 p-0 gap-1 rounded-none w-max">
+              <TabsTrigger value="overview" className="rounded-md data-[state=active]:bg-secondary data-[state=active]:text-foreground data-[state=active]:shadow-none text-xs font-medium px-3 py-1.5 h-7 my-auto">Overview</TabsTrigger>
+              <TabsTrigger value="movements" className="rounded-md data-[state=active]:bg-secondary data-[state=active]:text-foreground data-[state=active]:shadow-none text-xs font-medium px-3 py-1.5 h-7 my-auto">Movements</TabsTrigger>
+              <TabsTrigger value="purchase-orders" className="rounded-md data-[state=active]:bg-secondary data-[state=active]:text-foreground data-[state=active]:shadow-none text-xs font-medium px-3 py-1.5 h-7 my-auto">Purchase Orders</TabsTrigger>
+              <TabsTrigger value="sales" className="rounded-md data-[state=active]:bg-secondary data-[state=active]:text-foreground data-[state=active]:shadow-none text-xs font-medium px-3 py-1.5 h-7 my-auto">Sales</TabsTrigger>
             </TabsList>
           </div>
 
@@ -313,7 +319,7 @@ export default function PartDetailDialog({
                   <CardContent className="pt-0 space-y-0">
                     <PricingRow label="Cost Price" value={`$${part.costPrice}`} />
                     <PricingRow label="Sell Price" value={`$${part.sellPrice}`} />
-                    <PricingRow label="Margin" value={`$${margin}`} sub={`${marginPct}%`} highlight />
+                    <PricingRow label="Margin" value={`$${margin.toFixed(2)}`} sub={`(${marginPct}%)`} highlight />
                     <Separator className="my-2" />
                     <PricingRow label="Stock Value" value={`$${stockValue.toLocaleString()}`} bold />
                   </CardContent>
@@ -324,14 +330,36 @@ export default function PartDetailDialog({
 
           {/* ── Movements Tab ── */}
           <TabsContent value="movements" className="flex-1 overflow-y-auto no-scrollbar m-0 p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-sm font-semibold text-foreground">Stock Movements</h3>
-              {!showForm && (
-                <Button size="sm" variant="outline" className="gap-1.5 h-7 text-xs" onClick={() => setShowForm(true)}>
-                  <Plus className="w-3 h-3" />
-                  Record Movement
-                </Button>
-              )}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+              <div className="flex items-center gap-2">
+                <h3 className="text-sm font-semibold text-foreground">Stock Movements</h3>
+                <Badge variant="secondary" className="text-[10px] h-5 px-1.5">{partMovements.length}</Badge>
+              </div>
+              <div className="flex items-center gap-2">
+                {/* Filter by movement type */}
+                <div className="flex items-center gap-1 bg-secondary/50 rounded-lg p-0.5 border border-border/40">
+                  <Filter className="w-3 h-3 text-muted-foreground ml-2" />
+                  {(["all", "in", "out", "adjustment"] as const).map((type) => (
+                    <button
+                      key={type}
+                      onClick={() => setMovFilter(type)}
+                      className={`text-[11px] font-medium px-2.5 py-1 rounded-md transition-colors ${
+                        movFilter === type
+                          ? "bg-primary text-primary-foreground shadow-sm"
+                          : "text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      {type === "all" ? "All" : type === "adjustment" ? "Adj" : type.toUpperCase()}
+                    </button>
+                  ))}
+                </div>
+                {!showForm && (
+                  <Button size="sm" className="gap-1.5 h-7 text-xs" onClick={() => setShowForm(true)}>
+                    <Plus className="w-3 h-3" />
+                    Record Movement
+                  </Button>
+                )}
+              </div>
             </div>
 
             {/* Inline Form */}
@@ -401,7 +429,7 @@ export default function PartDetailDialog({
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {partMovements.map((m) => {
+                  {filteredMovements.map((m) => {
                     const config = MOVEMENT_TYPE_CONFIG[m.type];
                     return (
                       <TableRow key={m.id} className="hover:bg-secondary/10">
@@ -420,9 +448,11 @@ export default function PartDetailDialog({
                       </TableRow>
                     );
                   })}
-                  {partMovements.length === 0 && (
+                  {filteredMovements.length === 0 && (
                     <TableRow>
-                      <TableCell colSpan={8} className="text-center text-xs text-muted-foreground py-6">No movements recorded yet</TableCell>
+                      <TableCell colSpan={8} className="text-center text-xs text-muted-foreground py-6">
+                        {movFilter === "all" ? "No movements recorded yet" : `No ${movFilter} movements found`}
+                      </TableCell>
                     </TableRow>
                   )}
                 </TableBody>
@@ -457,9 +487,9 @@ export default function PartDetailDialog({
 
 function StatPill({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) {
   return (
-    <div className="flex flex-col items-center px-3 sm:px-4 py-2 flex-1 sm:flex-none">
+    <div className="flex flex-col items-center px-3 sm:px-4 py-2 flex-1 min-w-0">
       <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium">{label}</span>
-      <span className={`text-xs sm:text-sm font-semibold tabular-nums ${highlight ? "text-destructive" : "text-foreground"}`}>{value}</span>
+      <span className={`text-xs sm:text-sm font-semibold tabular-nums truncate ${highlight ? "text-destructive" : "text-foreground"}`}>{value}</span>
     </div>
   );
 }
@@ -475,12 +505,11 @@ function DetailItem({ label, value, mono }: { label: string; value: string; mono
 
 function PricingRow({ label, value, sub, highlight, bold }: { label: string; value: string; sub?: string; highlight?: boolean; bold?: boolean }) {
   return (
-    <div className="flex items-center justify-between py-2">
-      <span className="text-xs text-muted-foreground">{label}</span>
-      <div className="flex items-center gap-1.5">
-        <span className={`text-sm tabular-nums ${bold ? "font-bold" : "font-medium"} ${highlight ? "text-emerald-600" : "text-foreground"}`}>{value}</span>
-        {sub && <span className="text-[11px] text-emerald-600/70">({sub})</span>}
-      </div>
+    <div className="flex items-center justify-between py-2.5">
+      <span className="text-sm text-muted-foreground">{label}</span>
+      <span className={`text-sm tabular-nums ${bold ? "font-bold" : "font-semibold"} ${highlight ? "text-emerald-600" : "text-foreground"}`}>
+        {value}{sub && <span className="text-sm font-semibold text-foreground ml-1">{sub}</span>}
+      </span>
     </div>
   );
 }
