@@ -99,7 +99,8 @@ export default function ManageCategoriesDialog({
   const confirmDelete = () => {
     if (deleteTarget) {
       onDeleteCategory(deleteTarget);
-      setDeleteTarget(null);
+      setDeleteDialogOpen(false);
+      setTimeout(() => setDeleteTarget(null), 200);
     }
   };
 
