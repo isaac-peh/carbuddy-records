@@ -577,7 +577,7 @@ export default function CreateInvoice() {
                               type="number"
                               min={0}
                               step={0.01}
-                              className="h-8 w-24 text-right ml-auto"
+                              className="h-7 sm:h-8 w-24 text-right ml-auto text-xs sm:text-sm"
                               value={line.unitPrice}
                               onChange={(e) =>
                                 updatePartField(line.id, "unitPrice", Number(e.target.value))
