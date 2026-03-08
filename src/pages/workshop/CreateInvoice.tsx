@@ -118,6 +118,7 @@ export default function CreateInvoice() {
 
   // Discount
   const [discount, setDiscount] = useState("0");
+  const [discountMode, setDiscountMode] = useState<"value" | "percent">("value");
 
   // Pickers
   const [partSearchOpen, setPartSearchOpen] = useState(false);
