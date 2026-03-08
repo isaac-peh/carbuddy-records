@@ -331,21 +331,19 @@ export default function PartDetailDialog({
           {/* ── Movements Tab ── */}
           <TabsContent value="movements" className="flex-1 overflow-y-auto no-scrollbar m-0 p-6">
             <div className="flex items-center justify-between gap-3 mb-4">
-              <div className="flex items-center gap-2">
-                <h3 className="text-sm font-semibold text-foreground">Stock Movements</h3>
-                <Badge variant="secondary" className="text-[10px] h-5 px-1.5">{filteredMovements.length}</Badge>
+              <div className="flex items-center gap-3">
                 <Select value={movFilter} onValueChange={(v) => setMovFilter(v as "all" | StockMovement["type"])}>
-                  <SelectTrigger className="h-7 text-[11px] w-[100px] gap-1">
-                    <Filter className="w-3 h-3 text-muted-foreground shrink-0" />
+                  <SelectTrigger className="h-8 text-xs w-[130px]">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All</SelectItem>
+                    <SelectItem value="all">All Types</SelectItem>
                     <SelectItem value="in">Stock In</SelectItem>
                     <SelectItem value="out">Stock Out</SelectItem>
                     <SelectItem value="adjustment">Adjustment</SelectItem>
                   </SelectContent>
                 </Select>
+                <span className="text-xs text-muted-foreground">{filteredMovements.length} movements</span>
               </div>
               {!showForm && (
                 <Button size="sm" className="gap-1.5 h-7 text-xs" onClick={() => setShowForm(true)}>
