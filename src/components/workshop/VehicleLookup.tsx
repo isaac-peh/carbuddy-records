@@ -372,7 +372,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
       <Card className="shadow-soft border-border/50 overflow-hidden">
         <CardHeader className="py-4 bg-[hsl(var(--success)/0.05)]">
           <div className="flex items-center justify-between">
-            <SectionHeader icon={ShieldCheck} title="Vehicle" />
+            <SectionHeader icon={Car} title="Vehicle" />
             {renderChangeLink()}
           </div>
         </CardHeader>
@@ -407,7 +407,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
       <Card className="shadow-soft border-border/50 overflow-hidden">
         <CardHeader className="py-4 bg-[hsl(var(--warning)/0.05)]">
           <div className="flex items-center justify-between">
-            <SectionHeader icon={AlertTriangle} title="Vehicle" />
+            <SectionHeader icon={Car} title="Vehicle" />
             {renderChangeLink()}
           </div>
         </CardHeader>
@@ -455,7 +455,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
       <Card className="shadow-soft border-border/50 overflow-hidden">
         <CardHeader className="py-4 bg-primary/5">
           <div className="flex items-center justify-between">
-            <SectionHeader icon={Building2} title="Vehicle" />
+            <SectionHeader icon={Car} title="Vehicle" />
             {renderChangeLink()}
           </div>
         </CardHeader>
@@ -526,7 +526,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
       <Card className="shadow-soft border-border/50 overflow-hidden">
         <CardHeader className="py-4 bg-secondary/20">
           <div className="flex items-center justify-between">
-            <SectionHeader icon={PlusCircle} title="Vehicle" />
+            <SectionHeader icon={Car} title="Vehicle" />
             {renderChangeLink()}
           </div>
         </CardHeader>
