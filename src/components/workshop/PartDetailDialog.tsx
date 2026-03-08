@@ -107,6 +107,8 @@ export default function PartDetailDialog({
   const [costPrice, setCostPrice] = useState("");
   const [notes, setNotes] = useState("");
   const [movFilter, setMovFilter] = useState<"all" | StockMovement["type"]>("all");
+  const [activeTab, setActiveTab] = useState("overview");
+  const [movFilter, setMovFilter] = useState<"all" | StockMovement["type"]>("all");
 
   if (!part) return null;
 
