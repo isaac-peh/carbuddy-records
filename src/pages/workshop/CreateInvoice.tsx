@@ -292,7 +292,7 @@ export default function CreateInvoice() {
         {/* ═══ Left column ═══════════════════════════════════════════ */}
         <div className="space-y-6">
           {/* Invoice Details + Vehicle Lookup side by side */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Invoice Header */}
             <Card className="shadow-soft border-border/50 overflow-hidden">
               <CardHeader className="py-4 bg-secondary/20">
