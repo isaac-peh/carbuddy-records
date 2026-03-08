@@ -505,7 +505,7 @@ function PricingRow({ label, value, sub, highlight, bold }: { label: string; val
     <div className="flex items-center justify-between py-2.5">
       <span className="text-sm text-muted-foreground">{label}</span>
       <span className={`text-sm tabular-nums ${bold ? "font-bold" : "font-semibold"} ${highlight ? "text-emerald-600" : "text-foreground"}`}>
-        {value}{sub && <span className="text-sm font-semibold text-foreground ml-1">{sub}</span>}
+        {value}{sub && <span className="text-sm font-normal text-muted-foreground ml-1">{sub}</span>}
       </span>
     </div>
   );
