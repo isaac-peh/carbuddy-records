@@ -415,7 +415,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
         <CardContent className="pt-5 space-y-4">
           {renderStateBadge("verified")}
           <div className={cn("space-y-4 transition-opacity duration-200", showDisputePanel && "opacity-50")}>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {renderReadOnlyField("Plate Number", matchedRecord.plateNumber)}
               {renderReadOnlyField("VIN", matchedRecord.vin || "")}
             </div>
