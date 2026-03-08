@@ -254,19 +254,19 @@ export default function PartDetailDialog({
                               <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-2">
                                   <span className="text-xs font-medium">{config.label}</span>
-                                  <span className="text-[11px] text-muted-foreground">
+                                  <span className="text-xs text-muted-foreground">
                                     {REFERENCE_TYPE_LABELS[m.referenceType]}
                                     {m.referenceId && ` · ${m.referenceId}`}
                                   </span>
                                 </div>
                                 <div className="flex items-center gap-1.5 mt-0.5">
-                                  <Clock className="w-3 h-3 text-muted-foreground/60" />
-                                  <span className="text-[11px] text-muted-foreground">
+                                  <Clock className="w-3 h-3 text-muted-foreground" />
+                                  <span className="text-xs text-muted-foreground">
                                     {format(new Date(m.date), "dd MMM yyyy, HH:mm")}
                                   </span>
                                 </div>
                                 {m.notes && (
-                                  <p className="text-[11px] text-muted-foreground/70 mt-1 truncate">{m.notes}</p>
+                                  <p className="text-xs text-muted-foreground mt-1 truncate">{m.notes}</p>
                                 )}
                               </div>
                               <span className={`text-sm font-semibold shrink-0 ${m.quantity > 0 ? "text-emerald-600" : "text-destructive"}`}>
