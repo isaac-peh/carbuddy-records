@@ -235,6 +235,26 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
     });
   }, [searchPlate, searchVin, onVehicleResolved]);
 
+  // Dispute resolution: proceed with new vehicle from dispute panel
+  const proceedWithDispute = useCallback(() => {
+    const plate = matchedRecord?.plateNumber || searchPlate.trim().toUpperCase();
+    setState("new");
+    setMatchedRecord(null);
+    setEditVin(disputeVin);
+    setEditMake(disputeMake);
+    setEditModel(disputeModel);
+    setEditVehicleType(disputeVehicleType);
+    setShowDisputePanel(false);
+    setDisputeCreated(true);
+    onVehicleResolved({
+      plateNumber: plate,
+      vin: disputeVin,
+      make: disputeMake,
+      model: disputeModel,
+      vehicleType: disputeVehicleType,
+    });
+  }, [matchedRecord, searchPlate, disputeVin, disputeMake, disputeModel, disputeVehicleType, onVehicleResolved]);
+
   // Sync editable fields up
   const syncEditable = useCallback((field: string, value: string) => {
     const plate = matchedRecord?.plateNumber || searchPlate.trim().toUpperCase();
