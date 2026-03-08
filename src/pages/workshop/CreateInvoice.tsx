@@ -720,7 +720,7 @@ export default function CreateInvoice() {
                                   type="number"
                                   min={0.25}
                                   step={0.25}
-                                  className="h-8 w-20 text-center mx-auto"
+                                  className="h-7 sm:h-8 w-20 text-center mx-auto text-xs sm:text-sm"
                                   value={line.hours}
                                   onChange={(e) =>
                                     updateLabourField(line.id, "hours", Number(e.target.value))
