@@ -561,7 +561,7 @@ export default function CreateInvoice() {
                             <Input
                               type="number"
                               min={1}
-                              className="h-8 w-20 text-center mx-auto"
+                              className="h-8 w-16 sm:w-20 text-center mx-auto"
                               value={line.quantity}
                               onChange={(e) => {
                                 const qty = Math.max(1, Number(e.target.value));
