@@ -425,7 +425,7 @@ export default function CreateInvoice() {
                     <Plus className="w-3.5 h-3.5" /> Add Part
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-72 p-0" align="end">
+                <PopoverContent className="w-[420px] p-0" align="end">
                   <Command>
                     <CommandInput
                       placeholder="Search inventory..."
@@ -440,15 +440,26 @@ export default function CreateInvoice() {
                             key={p.id}
                             value={p.name}
                             onSelect={() => addPart(p)}
-                            className="flex items-center justify-between"
+                            className="flex items-center justify-between gap-3"
                           >
-                            <div>
-                              <span className="text-sm">{p.name}</span>
-                              <span className="ml-2 text-xs text-muted-foreground">{p.sku}</span>
+                            <div className="min-w-0 flex-1">
+                              <p className="text-sm font-medium truncate">{p.name}</p>
+                              <p className="text-xs text-muted-foreground font-mono">{p.sku}</p>
                             </div>
-                            <Badge variant="outline" className="text-[10px]">
-                              {p.stock} in stock
-                            </Badge>
+                            <div className="flex items-center gap-2 shrink-0">
+                              <span className="text-xs font-medium">${p.sellPrice.toFixed(2)}</span>
+                              <Badge
+                                variant="outline"
+                                className={cn(
+                                  "text-[10px]",
+                                  p.stock <= 5
+                                    ? "bg-destructive/10 text-destructive border-destructive/20"
+                                    : ""
+                                )}
+                              >
+                                {p.stock}
+                              </Badge>
+                            </div>
                           </CommandItem>
                         ))}
                       </CommandGroup>
