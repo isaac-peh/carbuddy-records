@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   FileText,
   Search,
@@ -56,6 +57,7 @@ const statusConfig: Record<string, { icon: typeof CheckCircle2; color: string }>
 const tabs = ["All", "Paid", "Pending", "Overdue", "Draft"] as const;
 
 export default function Invoices() {
+  const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [activeTab, setActiveTab] = useState<string>("All");
 
@@ -82,7 +84,7 @@ export default function Invoices() {
             Create and manage service invoices for your customers
           </p>
         </div>
-        <Button className="gap-2 shadow-soft">
+        <Button className="gap-2 shadow-soft" onClick={() => navigate("/workshop/invoices/new")}>
           <Plus className="w-4 h-4" />
           New Invoice
         </Button>
