@@ -299,20 +299,21 @@ export default function PartDetailDialog({
                       </span>
                     </div>
                     {isLowStock && (
-                      <div className="flex items-center gap-2 bg-destructive/10 border border-destructive/20 rounded-lg px-3 py-2.5 mb-4">
-                        <AlertTriangle className="w-4 h-4 text-destructive shrink-0" />
-                        <div className="flex-1">
+                      <>
+                        <div className="flex items-center gap-2 bg-destructive/10 border border-destructive/20 rounded-lg px-3 py-2.5 mb-3">
+                          <AlertTriangle className="w-4 h-4 text-destructive shrink-0" />
                           <span className="text-xs text-destructive font-medium">Stock is at or below minimum level</span>
                         </div>
                         <Button
-                          variant="ghost"
+                          variant="outline"
                           size="sm"
-                          className="h-6 text-[11px] text-destructive hover:text-destructive hover:bg-destructive/10 px-2 shrink-0"
+                          className="w-full h-8 text-xs gap-1.5 mb-4"
                           onClick={() => setActiveTab("purchase-orders")}
                         >
-                          Create PO →
+                          <ShoppingCart className="w-3.5 h-3.5" />
+                          Create Purchase Order
                         </Button>
-                      </div>
+                      </>
                     )}
                     <Separator className="mb-3" />
                     <div className="flex items-center justify-between py-1.5">
