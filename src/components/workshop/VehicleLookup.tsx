@@ -1,8 +1,9 @@
 import { useState, useCallback } from "react";
 import {
   Search, ShieldCheck, AlertTriangle, Building2, PlusCircle,
-  RotateCcw, Loader2, Car,
+  RotateCcw, Loader2, Car, ChevronDown,
 } from "lucide-react";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -125,6 +126,14 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
   const [editModel, setEditModel] = useState("");
   const [editVehicleType, setEditVehicleType] = useState("");
 
+  // Dispute resolution panel state
+  const [showDisputePanel, setShowDisputePanel] = useState(false);
+  const [disputeVin, setDisputeVin] = useState("");
+  const [disputeMake, setDisputeMake] = useState("");
+  const [disputeModel, setDisputeModel] = useState("");
+  const [disputeVehicleType, setDisputeVehicleType] = useState("");
+  const [disputeCreated, setDisputeCreated] = useState(false);
+
   const reset = useCallback(() => {
     setState("idle");
     setSearchPlate("");
@@ -134,6 +143,12 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
     setEditMake("");
     setEditModel("");
     setEditVehicleType("");
+    setShowDisputePanel(false);
+    setDisputeVin("");
+    setDisputeMake("");
+    setDisputeModel("");
+    setDisputeVehicleType("");
+    setDisputeCreated(false);
     onVehicleCleared();
   }, [onVehicleCleared]);
 
@@ -220,6 +235,26 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
       vehicleType: "",
     });
   }, [searchPlate, searchVin, onVehicleResolved]);
+
+  // Dispute resolution: proceed with new vehicle from dispute panel
+  const proceedWithDispute = useCallback(() => {
+    const plate = matchedRecord?.plateNumber || searchPlate.trim().toUpperCase();
+    setState("new");
+    setMatchedRecord(null);
+    setEditVin(disputeVin);
+    setEditMake(disputeMake);
+    setEditModel(disputeModel);
+    setEditVehicleType(disputeVehicleType);
+    setShowDisputePanel(false);
+    setDisputeCreated(true);
+    onVehicleResolved({
+      plateNumber: plate,
+      vin: disputeVin,
+      make: disputeMake,
+      model: disputeModel,
+      vehicleType: disputeVehicleType,
+    });
+  }, [matchedRecord, searchPlate, disputeVin, disputeMake, disputeModel, disputeVehicleType, onVehicleResolved]);
 
   // Sync editable fields up
   const syncEditable = useCallback((field: string, value: string) => {
@@ -379,18 +414,125 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
         </CardHeader>
         <CardContent className="pt-5 space-y-4">
           {renderStateBadge("verified")}
-          <div className="grid grid-cols-2 gap-3">
-            {renderReadOnlyField("Plate Number", matchedRecord.plateNumber)}
-            {renderReadOnlyField("VIN", matchedRecord.vin || "")}
+          <div className={cn("space-y-4 transition-opacity duration-200", showDisputePanel && "opacity-50")}>
+            <div className="grid grid-cols-2 gap-3">
+              {renderReadOnlyField("Plate Number", matchedRecord.plateNumber)}
+              {renderReadOnlyField("VIN", matchedRecord.vin || "")}
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              {renderReadOnlyField("Make", matchedRecord.make || "")}
+              {renderReadOnlyField("Model", matchedRecord.model || "")}
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              {renderReadOnlyField("Vehicle Type", matchedRecord.vehicleType || "—")}
+              {renderReadOnlyField("Current Mileage (km)", matchedRecord.mileage?.toLocaleString() || "—")}
+            </div>
           </div>
-          <div className="grid grid-cols-2 gap-3">
-            {renderReadOnlyField("Make", matchedRecord.make || "")}
-            {renderReadOnlyField("Model", matchedRecord.model || "")}
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            {renderReadOnlyField("Vehicle Type", matchedRecord.vehicleType || "—")}
-            {renderReadOnlyField("Current Mileage (km)", matchedRecord.mileage?.toLocaleString() || "—")}
-          </div>
+
+          {/* Dispute trigger */}
+          {!showDisputePanel && (
+            <button
+              onClick={() => setShowDisputePanel(true)}
+              className="text-xs text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5 pt-1"
+            >
+              <AlertTriangle className="w-3 h-3" />
+              This is not the vehicle at my workshop
+            </button>
+          )}
+
+          {/* Dispute resolution panel */}
+          <Collapsible open={showDisputePanel} onOpenChange={setShowDisputePanel}>
+            <CollapsibleContent className="overflow-hidden data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up">
+              <div className="rounded-lg border-l-4 border-l-[hsl(var(--warning))] border border-[hsl(var(--warning)/0.2)] bg-[hsl(var(--warning)/0.04)] p-4 space-y-4 mt-1">
+                <div className="space-y-1">
+                  <p className="text-sm font-medium text-foreground">Resolve vehicle mismatch</p>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    The verified record may belong to a different physical vehicle.
+                    This can happen when a plate has been transferred to a new car
+                    or re-registered to a new owner.
+                  </p>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="space-y-1.5">
+                    <Label className="text-xs text-muted-foreground">VIN (optional)</Label>
+                    <Input
+                      value={disputeVin}
+                      onChange={(e) => setDisputeVin(e.target.value)}
+                      placeholder="Enter VIN if known"
+                      className="text-sm"
+                    />
+                    {disputeVin.trim() && matchedRecord.vin && normalize(disputeVin) !== normalize(matchedRecord.vin) && (
+                      <p className="text-xs text-[hsl(var(--warning))] flex items-center gap-1 mt-1">
+                        <AlertTriangle className="w-3 h-3" />
+                        VIN does not match the verified record
+                      </p>
+                    )}
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-1.5">
+                      <Label className="text-xs text-muted-foreground">Make (optional)</Label>
+                      <Input
+                        value={disputeMake}
+                        onChange={(e) => setDisputeMake(e.target.value)}
+                        placeholder="e.g. BMW"
+                        className="text-sm"
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label className="text-xs text-muted-foreground">Model (optional)</Label>
+                      <Input
+                        value={disputeModel}
+                        onChange={(e) => setDisputeModel(e.target.value)}
+                        placeholder="e.g. 3 Series"
+                        className="text-sm"
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label className="text-xs text-muted-foreground">Vehicle Type <span className="text-destructive">*</span></Label>
+                    <Select value={disputeVehicleType} onValueChange={setDisputeVehicleType}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {VEHICLE_TYPES.map((t) => (
+                          <SelectItem key={t} value={t}>{t}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 pt-1">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="gap-1.5 text-xs border-[hsl(var(--warning)/0.4)] text-[hsl(var(--warning))] hover:bg-[hsl(var(--warning)/0.08)]"
+                    onClick={proceedWithDispute}
+                    disabled={!disputeVehicleType}
+                  >
+                    <PlusCircle className="w-3.5 h-3.5" />
+                    Proceed with New Vehicle Record
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="text-xs"
+                    onClick={() => {
+                      setShowDisputePanel(false);
+                      setDisputeVin("");
+                      setDisputeMake("");
+                      setDisputeModel("");
+                      setDisputeVehicleType("");
+                    }}
+                  >
+                    Cancel — Use Verified Vehicle
+                  </Button>
+                </div>
+              </div>
+            </CollapsibleContent>
+          </Collapsible>
         </CardContent>
       </Card>
     );
@@ -528,6 +670,16 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
         </CardHeader>
         <CardContent className="pt-5 space-y-4">
           {renderStateBadge("new")}
+
+          {disputeCreated && (
+            <div className="rounded-lg border border-[hsl(var(--warning)/0.3)] bg-[hsl(var(--warning)/0.06)] px-3 py-2.5 flex items-start gap-2">
+              <AlertTriangle className="w-4 h-4 text-[hsl(var(--warning))] shrink-0 mt-0.5" />
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                A new record will be created for this plate. The existing verified record will not be affected.
+              </p>
+            </div>
+          )}
+
 
           <div className="grid grid-cols-2 gap-3">
             {renderReadOnlyField("Plate Number", plate)}
