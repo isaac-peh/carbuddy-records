@@ -288,14 +288,12 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
     if (!cfg) return null;
     const Icon = cfg.icon;
     return (
-      <div className="space-y-1">
-        <div className="flex items-center gap-2">
-          <Badge variant="outline" className={cn("gap-1.5 py-1 px-2.5 text-xs font-medium", cfg.className)}>
-            <Icon className="w-3.5 h-3.5" />
-            {cfg.label}
-          </Badge>
+      <div className={cn("w-full flex items-center gap-2.5 rounded-lg border px-3 py-2.5", cfg.className)}>
+        <Icon className="w-4 h-4 shrink-0" />
+        <div className="min-w-0">
+          <p className="text-xs font-semibold leading-tight">{cfg.label}</p>
+          {cfg.sub && <p className="text-[11px] opacity-70 leading-tight mt-0.5">{cfg.sub}</p>}
         </div>
-        {cfg.sub && <p className="text-xs text-muted-foreground">{cfg.sub}</p>}
       </div>
     );
   };
