@@ -268,21 +268,21 @@ export default function CreateInvoice() {
         </div>
 
         <div className="flex flex-wrap gap-2">
-          <Button variant="outline" size="sm" className="gap-1.5" onClick={handleDuplicate}>
-            <Copy className="w-3.5 h-3.5" /> Duplicate
+          <Button variant="outline" size="sm" className="gap-1.5 text-xs sm:text-sm" onClick={handleDuplicate}>
+            <Copy className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Duplicate</span>
           </Button>
           <Separator orientation="vertical" className="h-8 hidden sm:block" />
-          <Button variant="outline" size="sm" className="gap-1.5" onClick={handleSaveDraft}>
-            <Save className="w-3.5 h-3.5" /> Save Draft
+          <Button variant="outline" size="sm" className="gap-1.5 text-xs sm:text-sm" onClick={handleSaveDraft}>
+            <Save className="w-3.5 h-3.5" /> <span className="hidden xs:inline">Save Draft</span>
           </Button>
-          <Button variant="outline" size="sm" className="gap-1.5" onClick={handlePrint}>
-            <Printer className="w-3.5 h-3.5" /> Print
+          <Button variant="outline" size="sm" className="gap-1.5 text-xs sm:text-sm" onClick={handlePrint}>
+            <Printer className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Print</span>
           </Button>
-          <Button variant="outline" size="sm" className="gap-1.5" onClick={handleSend}>
-            <Send className="w-3.5 h-3.5" /> Send
+          <Button variant="outline" size="sm" className="gap-1.5 text-xs sm:text-sm" onClick={handleSend}>
+            <Send className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Send</span>
           </Button>
-          <Button size="sm" className="gap-1.5 bg-accent text-accent-foreground hover:bg-accent/90" onClick={handleIssue}>
-            <FileText className="w-3.5 h-3.5" /> Issue Invoice
+          <Button size="sm" className="gap-1.5 text-xs sm:text-sm bg-accent text-accent-foreground hover:bg-accent/90" onClick={handleIssue}>
+            <FileText className="w-3.5 h-3.5" /> Issue
           </Button>
         </div>
       </div>
