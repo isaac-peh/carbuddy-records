@@ -164,6 +164,7 @@ export default function Services() {
 
   const handleEditService = (updated: Service) => {
     setServices((prev) => prev.map((s) => (s.id === updated.id ? updated : s)));
+    toast.success("Service updated successfully");
   };
 
   const handleDeleteService = () => {
