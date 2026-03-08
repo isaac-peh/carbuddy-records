@@ -515,9 +515,13 @@ export default function CreateInvoice() {
                               min={1}
                               className="h-8 w-20 text-center mx-auto"
                               value={line.quantity}
-                              onChange={(e) =>
-                                updatePartField(line.id, "quantity", Math.max(1, Number(e.target.value)))
-                              }
+                              onChange={(e) => {
+                                const qty = Math.max(1, Number(e.target.value));
+                                if (qty > line.stock) {
+                                  toast.warning(`Only ${line.stock} units of "${line.name}" in stock`);
+                                }
+                                updatePartField(line.id, "quantity", qty);
+                              }}
                             />
                           </TableCell>
                           <TableCell>
