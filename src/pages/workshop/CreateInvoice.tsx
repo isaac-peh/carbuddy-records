@@ -135,7 +135,7 @@ export default function CreateInvoice() {
   );
 
   const labourTotal = useMemo(
-    () => labour.reduce((s, l) => s + l.hours * l.hourlyRate, 0),
+    () => labour.reduce((s, l) => l.pricingMode === "flat" ? s + l.rate : s + l.hours * l.rate, 0),
     [labour],
   );
 
