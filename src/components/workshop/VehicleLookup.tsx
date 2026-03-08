@@ -394,6 +394,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
   if (state === "verified-vin-mismatch" && matchedRecord) {
     return (
       <div className={cn("rounded-xl border overflow-hidden bg-card", statusConfig["verified-vin-mismatch"].accentClass)}>
+        {renderCardHeader()}
         {renderStatusBanner("verified-vin-mismatch")}
         <div className="p-4 space-y-4">
           <div className="flex gap-2">
