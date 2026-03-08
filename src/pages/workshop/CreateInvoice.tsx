@@ -543,7 +543,7 @@ export default function CreateInvoice() {
                       {parts.map((line) => (
                         <TableRow key={line.id} className="hover:bg-secondary/10">
                           <TableCell className="text-sm font-medium">{line.name}</TableCell>
-                          <TableCell className="hidden sm:table-cell text-xs text-muted-foreground font-mono">{line.sku}</TableCell>
+                          <TableCell className="hidden md:table-cell text-xs text-muted-foreground font-mono">{line.sku}</TableCell>
                           <TableCell className="text-center">
                             <Badge
                               variant="outline"
