@@ -30,6 +30,7 @@ import {
 import { cn } from "@/lib/utils";
 import { mockParts, type Part } from "@/data/inventoryParts";
 import { mockServices, type ServiceItem } from "@/data/servicesData";
+import VehicleLookup, { type ResolvedVehicle } from "@/components/workshop/VehicleLookup";
 
 // ── Constants ──────────────────────────────────────────────────────────
 
@@ -100,12 +101,8 @@ export default function CreateInvoice() {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
 
-  // Vehicle
-  const [plateNumber, setPlateNumber] = useState("");
-  const [vin, setVin] = useState("");
-  const [make, setMake] = useState("");
-  const [model, setModel] = useState("");
-  const [vehicleType, setVehicleType] = useState("");
+  // Vehicle (resolved from lookup widget)
+  const [resolvedVehicle, setResolvedVehicle] = useState<ResolvedVehicle | null>(null);
   const [odometer, setOdometer] = useState("");
 
   // Lines
@@ -364,58 +361,27 @@ export default function CreateInvoice() {
               </CardContent>
             </Card>
 
-            <Card className="shadow-soft border-border/50 overflow-hidden">
-              <CardHeader className="py-4 bg-secondary/20">
-                <SectionHeader icon={Car} title="Vehicle" />
-              </CardHeader>
-              <CardContent className="space-y-3 pt-5">
-                <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-4">
+              <VehicleLookup
+                onVehicleResolved={setResolvedVehicle}
+                onVehicleCleared={() => setResolvedVehicle(null)}
+              />
+              {/* Odometer belongs to invoice header, shown here for proximity */}
+              <Card className="shadow-soft border-border/50 overflow-hidden">
+                <CardContent className="p-4">
                   <div className="space-y-1.5">
-                    <Label className="text-xs text-muted-foreground">Plate Number</Label>
-                    <Input value={plateNumber} onChange={(e) => setPlateNumber(e.target.value)} placeholder="SGA 1234A" />
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label className="text-xs text-muted-foreground">VIN</Label>
-                    <Input value={vin} onChange={(e) => setVin(e.target.value)} placeholder="VIN" />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="space-y-1.5">
-                    <Label className="text-xs text-muted-foreground">Make</Label>
-                    <Input value={make} onChange={(e) => setMake(e.target.value)} placeholder="Toyota" />
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label className="text-xs text-muted-foreground">Model</Label>
-                    <Input value={model} onChange={(e) => setModel(e.target.value)} placeholder="Corolla" />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="space-y-1.5">
-                    <Label className="text-xs text-muted-foreground">Vehicle Type</Label>
-                    <Select value={vehicleType} onValueChange={setVehicleType}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Type" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {VEHICLE_TYPES.map((t) => (
-                          <SelectItem key={t} value={t}>{t}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label className="text-xs text-muted-foreground">Odometer (km)</Label>
+                    <Label className="text-xs text-muted-foreground">Odometer at Service (km)</Label>
                     <Input
                       type="number"
                       min={1}
                       value={odometer}
                       onChange={(e) => setOdometer(e.target.value)}
-                      placeholder="0"
+                      placeholder="Current reading"
                     />
                   </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </div>
           </div>
 
           {/* ── Parts ──────────────────────────────────────────────── */}
@@ -830,16 +796,16 @@ export default function CreateInvoice() {
                   <Badge variant="outline" className="text-[10px]">{serviceType}</Badge>
                 </div>
               )}
-              {vehicleType && (
+              {resolvedVehicle?.vehicleType && (
                 <div className="flex justify-between">
                   <span>Vehicle type</span>
-                  <Badge variant="outline" className="text-[10px]">{vehicleType}</Badge>
+                  <Badge variant="outline" className="text-[10px]">{resolvedVehicle.vehicleType}</Badge>
                 </div>
               )}
-              {plateNumber && (
+              {resolvedVehicle?.plateNumber && (
                 <div className="flex justify-between">
                   <span>Plate</span>
-                  <span className="font-mono font-medium text-foreground">{plateNumber}</span>
+                  <span className="font-mono font-medium text-foreground">{resolvedVehicle.plateNumber}</span>
                 </div>
               )}
             </CardContent>
