@@ -693,7 +693,7 @@ export default function CreateInvoice() {
                               </div>
                             </TableCell>
                             <TableCell className="text-center">
-                              <div className="flex h-8 rounded-md border border-input overflow-hidden mx-auto w-fit">
+                              <div className="flex h-7 sm:h-8 rounded-md border border-input overflow-hidden mx-auto w-fit">
                                 <button
                                   className={cn(
                                     "w-14 text-[10px] font-medium transition-colors",
