@@ -457,9 +457,9 @@ export default function PartDetailDialog({
 
 function StatPill({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) {
   return (
-    <div className="flex flex-col items-center px-4 py-2">
+    <div className="flex flex-col items-center px-3 sm:px-4 py-2 flex-1 sm:flex-none">
       <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium">{label}</span>
-      <span className={`text-sm font-semibold tabular-nums ${highlight ? "text-destructive" : "text-foreground"}`}>{value}</span>
+      <span className={`text-xs sm:text-sm font-semibold tabular-nums ${highlight ? "text-destructive" : "text-foreground"}`}>{value}</span>
     </div>
   );
 }
