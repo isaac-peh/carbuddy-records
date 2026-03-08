@@ -282,7 +282,7 @@ export default function PartDetailDialog({
               </div>
 
               {/* Right Column */}
-              <div className="lg:col-span-5 space-y-5">
+              <div className="lg:col-span-4 space-y-5">
                 {/* Stock Status */}
                 <Card>
                   <CardHeader className="pb-3">
