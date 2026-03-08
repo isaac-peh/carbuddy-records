@@ -476,7 +476,7 @@ export default function CreateInvoice() {
                     <Plus className="w-3.5 h-3.5" /> Add Part
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-[420px] p-0" align="end">
+                <PopoverContent className="w-[min(420px,calc(100vw-2rem))] p-0" align="end">
                   <Command>
                     <CommandInput
                       placeholder="Search inventory..."
