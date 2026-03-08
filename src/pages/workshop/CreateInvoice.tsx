@@ -735,7 +735,7 @@ export default function CreateInvoice() {
                                 type="number"
                                 min={0}
                                 step={0.5}
-                                className="h-8 w-24 text-right ml-auto"
+                                className="h-7 sm:h-8 w-24 text-right ml-auto text-xs sm:text-sm"
                                 value={line.rate}
                                 onChange={(e) =>
                                   updateLabourField(line.id, "rate", Number(e.target.value))
