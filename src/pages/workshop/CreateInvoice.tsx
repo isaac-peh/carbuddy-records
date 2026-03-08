@@ -60,8 +60,9 @@ interface LabourLine {
   id: string;
   serviceId: string | null;
   description: string;
+  pricingMode: "hourly" | "flat";
   hours: number;
-  hourlyRate: number;
+  rate: number;
 }
 
 let lineCounter = 0;
@@ -134,7 +135,7 @@ export default function CreateInvoice() {
   );
 
   const labourTotal = useMemo(
-    () => labour.reduce((s, l) => s + l.hours * l.hourlyRate, 0),
+    () => labour.reduce((s, l) => l.pricingMode === "flat" ? s + l.rate : s + l.hours * l.rate, 0),
     [labour],
   );
 
@@ -185,14 +186,16 @@ export default function CreateInvoice() {
     setParts((prev) => prev.filter((p) => p.id !== id));
 
   const addLabourFromService = (svc: ServiceItem) => {
+    const isFlat = svc.flatPrice != null;
     setLabour((prev) => [
       ...prev,
       {
         id: nextId(),
         serviceId: svc.id,
         description: svc.name,
-        hours: svc.flatPrice != null ? 1 : 1,
-        hourlyRate: svc.hourlyRate ?? svc.flatPrice ?? 0,
+        pricingMode: isFlat ? "flat" : "hourly",
+        hours: 1,
+        rate: isFlat ? (svc.flatPrice ?? 0) : (svc.hourlyRate ?? 0),
       },
     ]);
     setServiceSearchOpen(false);
@@ -202,7 +205,7 @@ export default function CreateInvoice() {
   const addLabourManual = () =>
     setLabour((prev) => [
       ...prev,
-      { id: nextId(), serviceId: null, description: "", hours: 1, hourlyRate: 0 },
+      { id: nextId(), serviceId: null, description: "", pricingMode: "hourly" as const, hours: 1, rate: 0 },
     ]);
 
   const updateLabourField = (
@@ -610,69 +613,99 @@ export default function CreateInvoice() {
                     <TableHeader>
                       <TableRow className="bg-secondary/30">
                         <TableHead className="text-xs font-medium">Description</TableHead>
-                        <TableHead className="text-xs font-medium text-center w-20">Hours</TableHead>
-                        <TableHead className="text-xs font-medium text-right w-28">Rate ($/hr)</TableHead>
+                        <TableHead className="text-xs font-medium text-center w-24">Type</TableHead>
+                        <TableHead className="text-xs font-medium text-center w-24">Hours</TableHead>
+                        <TableHead className="text-xs font-medium text-right w-28">Rate</TableHead>
                         <TableHead className="text-xs font-medium text-right w-24">Total</TableHead>
                         <TableHead className="w-10" />
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {labour.map((line) => (
-                        <TableRow key={line.id} className="hover:bg-secondary/10">
-                          <TableCell>
-                            <div className="flex items-center gap-2">
-                              {line.serviceId && (
-                                <Badge variant="secondary" className="text-[10px] shrink-0">Service</Badge>
+                      {labour.map((line) => {
+                        const lineTotal = line.pricingMode === "flat" ? line.rate : line.hours * line.rate;
+                        return (
+                          <TableRow key={line.id} className="hover:bg-secondary/10">
+                            <TableCell>
+                              <div className="flex items-center gap-2">
+                                {line.serviceId && (
+                                  <Badge variant="secondary" className="text-[10px] shrink-0">Service</Badge>
+                                )}
+                                <Input
+                                  className="h-8"
+                                  placeholder="e.g. Oil change labour"
+                                  value={line.description}
+                                  onChange={(e) =>
+                                    updateLabourField(line.id, "description", e.target.value)
+                                  }
+                                />
+                              </div>
+                            </TableCell>
+                            <TableCell className="text-center">
+                              <div className="flex h-8 rounded-md border border-input overflow-hidden mx-auto w-fit">
+                                <button
+                                  className={cn(
+                                    "px-2 text-[10px] font-medium transition-colors",
+                                    line.pricingMode === "hourly" ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:text-foreground"
+                                  )}
+                                  onClick={() => updateLabourField(line.id, "pricingMode", "hourly")}
+                                >
+                                  Hourly
+                                </button>
+                                <button
+                                  className={cn(
+                                    "px-2 text-[10px] font-medium transition-colors border-l border-input",
+                                    line.pricingMode === "flat" ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:text-foreground"
+                                  )}
+                                  onClick={() => updateLabourField(line.id, "pricingMode", "flat")}
+                                >
+                                  Flat
+                                </button>
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              {line.pricingMode === "hourly" ? (
+                                <Input
+                                  type="number"
+                                  min={0.25}
+                                  step={0.25}
+                                  className="h-8 w-20 text-center mx-auto"
+                                  value={line.hours}
+                                  onChange={(e) =>
+                                    updateLabourField(line.id, "hours", Number(e.target.value))
+                                  }
+                                />
+                              ) : (
+                                <span className="block text-center text-xs text-muted-foreground">—</span>
                               )}
+                            </TableCell>
+                            <TableCell>
                               <Input
-                                className="h-8"
-                                placeholder="e.g. Oil change labour"
-                                value={line.description}
+                                type="number"
+                                min={0}
+                                step={0.5}
+                                className="h-8 w-24 text-right ml-auto"
+                                value={line.rate}
                                 onChange={(e) =>
-                                  updateLabourField(line.id, "description", e.target.value)
+                                  updateLabourField(line.id, "rate", Number(e.target.value))
                                 }
                               />
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <Input
-                              type="number"
-                              min={0.25}
-                              step={0.25}
-                              className="h-8 w-16 text-center mx-auto"
-                              value={line.hours}
-                              onChange={(e) =>
-                                updateLabourField(line.id, "hours", Number(e.target.value))
-                              }
-                            />
-                          </TableCell>
-                          <TableCell>
-                            <Input
-                              type="number"
-                              min={0}
-                              step={0.5}
-                              className="h-8 w-24 text-right ml-auto"
-                              value={line.hourlyRate}
-                              onChange={(e) =>
-                                updateLabourField(line.id, "hourlyRate", Number(e.target.value))
-                              }
-                            />
-                          </TableCell>
-                          <TableCell className="text-right text-sm font-semibold">
-                            ${(line.hours * line.hourlyRate).toFixed(2)}
-                          </TableCell>
-                          <TableCell>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="h-7 w-7 text-muted-foreground hover:text-destructive"
-                              onClick={() => removeLabour(line.id)}
-                            >
-                              <Trash2 className="w-3.5 h-3.5" />
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      ))}
+                            </TableCell>
+                            <TableCell className="text-right text-sm font-semibold">
+                              ${lineTotal.toFixed(2)}
+                            </TableCell>
+                            <TableCell>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-7 w-7 text-muted-foreground hover:text-destructive"
+                                onClick={() => removeLabour(line.id)}
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
                     </TableBody>
                   </Table>
                 </div>
@@ -752,8 +785,8 @@ export default function CreateInvoice() {
                     <div className="flex h-8 rounded-md border border-input overflow-hidden shrink-0">
                       <button
                         className={cn(
-                          "px-2 text-xs font-medium transition-colors",
-                          discountMode === "value" ? "bg-secondary text-foreground" : "text-muted-foreground hover:text-foreground"
+                          "w-9 text-xs font-semibold transition-colors",
+                          discountMode === "value" ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:text-foreground"
                         )}
                         onClick={() => setDiscountMode("value")}
                       >
@@ -761,8 +794,8 @@ export default function CreateInvoice() {
                       </button>
                       <button
                         className={cn(
-                          "px-2 text-xs font-medium transition-colors border-l border-input",
-                          discountMode === "percent" ? "bg-secondary text-foreground" : "text-muted-foreground hover:text-foreground"
+                          "w-9 text-xs font-semibold transition-colors border-l border-input",
+                          discountMode === "percent" ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:text-foreground"
                         )}
                         onClick={() => setDiscountMode("percent")}
                       >
