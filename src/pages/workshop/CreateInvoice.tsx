@@ -714,7 +714,7 @@ export default function CreateInvoice() {
                                 </button>
                               </div>
                             </TableCell>
-                            <TableCell className="hidden sm:table-cell">
+                            <TableCell>
                               {line.pricingMode === "hourly" ? (
                                 <Input
                                   type="number"
