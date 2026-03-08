@@ -577,11 +577,11 @@ export default function CreateInvoice() {
                               key={svc.id}
                               value={svc.name}
                               onSelect={() => addLabourFromService(svc)}
-                              className="flex items-center justify-between gap-3"
+                              className="flex items-center justify-between gap-3 data-[selected=true]:text-accent-foreground"
                             >
                               <div className="min-w-0 flex-1">
                                 <p className="text-sm font-medium truncate">{svc.name}</p>
-                                <p className="text-xs text-muted-foreground truncate">{svc.description}</p>
+                                <p className="text-xs opacity-60 truncate">{svc.description}</p>
                               </div>
                               <Badge variant="outline" className="text-[10px] shrink-0">
                                 {svc.flatPrice != null ? `$${svc.flatPrice.toFixed(2)}` : `$${svc.hourlyRate?.toFixed(2)}/hr`}
