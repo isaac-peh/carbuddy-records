@@ -440,11 +440,11 @@ export default function CreateInvoice() {
                             key={p.id}
                             value={p.name}
                             onSelect={() => addPart(p)}
-                            className="flex items-center justify-between gap-3"
+                            className="flex items-center justify-between gap-3 data-[selected=true]:text-accent-foreground"
                           >
                             <div className="min-w-0 flex-1">
                               <p className="text-sm font-medium truncate">{p.name}</p>
-                              <p className="text-xs text-muted-foreground font-mono">{p.sku}</p>
+                              <p className="text-xs opacity-60 font-mono">{p.sku}</p>
                             </div>
                             <div className="flex items-center gap-2 shrink-0">
                               <span className="text-xs font-medium">${p.sellPrice.toFixed(2)}</span>
