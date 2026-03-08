@@ -184,8 +184,8 @@ export default function PartDetailDialog({
 
         {/* ── Tabs ── */}
         <Tabs defaultValue="overview" className="flex-1 flex flex-col min-h-0">
-          <div className="px-6 border-b border-border/60 shrink-0">
-            <TabsList className="bg-transparent h-10 p-0 gap-0 rounded-none">
+          <div className="px-6 border-b border-border/60 shrink-0 overflow-x-auto no-scrollbar">
+            <TabsList className="bg-transparent h-10 p-0 gap-0 rounded-none w-max min-w-full">
               <TabsTrigger value="overview" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none text-xs font-medium px-4">Overview</TabsTrigger>
               <TabsTrigger value="movements" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none text-xs font-medium px-4">Movements</TabsTrigger>
               <TabsTrigger value="purchase-orders" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none text-xs font-medium px-4">Purchase Orders</TabsTrigger>
