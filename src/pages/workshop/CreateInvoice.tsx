@@ -709,7 +709,7 @@ export default function CreateInvoice() {
         {/* ═══ Right column — Summary sidebar ════════════════════════ */}
         <div className="lg:sticky lg:top-6 space-y-6">
           <Card className="shadow-soft border-border/50 overflow-hidden">
-            <CardHeader className="pb-3 bg-accent/5">
+            <CardHeader className="py-3 bg-accent/5">
               <SectionHeader icon={DollarSign} title="Invoice Summary" accent />
             </CardHeader>
             <CardContent className="space-y-4 pt-5">
