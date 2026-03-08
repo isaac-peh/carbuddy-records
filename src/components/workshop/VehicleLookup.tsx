@@ -1,8 +1,9 @@
 import { useState, useCallback } from "react";
 import {
   Search, ShieldCheck, AlertTriangle, Building2, PlusCircle,
-  RotateCcw, Loader2, Car,
+  RotateCcw, Loader2, Car, ChevronDown,
 } from "lucide-react";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
