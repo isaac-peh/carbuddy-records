@@ -527,15 +527,15 @@ export default function CreateInvoice() {
                 </div>
               ) : (
                 <div className="overflow-x-auto">
-                  <Table>
+                  <Table className="min-w-[640px]">
                     <TableHeader>
                       <TableRow className="bg-secondary/30">
                         <TableHead className="text-xs font-medium">Part</TableHead>
-                        <TableHead className="text-xs font-medium hidden md:table-cell">SKU</TableHead>
-                        <TableHead className="text-xs font-medium text-center hidden sm:table-cell">Stock</TableHead>
+                        <TableHead className="text-xs font-medium">SKU</TableHead>
+                        <TableHead className="text-xs font-medium text-center">Stock</TableHead>
                         <TableHead className="text-xs font-medium text-center w-20">Qty</TableHead>
-                        <TableHead className="text-xs font-medium text-right w-28 hidden sm:table-cell">Unit Price</TableHead>
-                        <TableHead className="text-xs font-medium text-right w-20 sm:w-24">Total</TableHead>
+                        <TableHead className="text-xs font-medium text-right w-28">Unit Price</TableHead>
+                        <TableHead className="text-xs font-medium text-right w-24">Total</TableHead>
                         <TableHead className="w-10" />
                       </TableRow>
                     </TableHeader>
@@ -543,8 +543,8 @@ export default function CreateInvoice() {
                       {parts.map((line) => (
                         <TableRow key={line.id} className="hover:bg-secondary/10">
                           <TableCell className="text-sm font-medium">{line.name}</TableCell>
-                          <TableCell className="hidden md:table-cell text-xs text-muted-foreground font-mono">{line.sku}</TableCell>
-                          <TableCell className="text-center hidden sm:table-cell">
+                          <TableCell className="text-xs text-muted-foreground font-mono">{line.sku}</TableCell>
+                          <TableCell className="text-center">
                             <Badge
                               variant="outline"
                               className={cn(
@@ -561,7 +561,7 @@ export default function CreateInvoice() {
                             <Input
                               type="number"
                               min={1}
-                              className="h-8 w-16 sm:w-20 text-center mx-auto"
+                              className="h-8 w-20 text-center mx-auto"
                               value={line.quantity}
                               onChange={(e) => {
                                 const qty = Math.max(1, Number(e.target.value));
@@ -572,7 +572,7 @@ export default function CreateInvoice() {
                               }}
                             />
                           </TableCell>
-                          <TableCell className="hidden sm:table-cell">
+                          <TableCell>
                             <Input
                               type="number"
                               min={0}
@@ -660,13 +660,13 @@ export default function CreateInvoice() {
                   <span>No labour items yet. Add from <strong>Services</strong> or create a <strong>Custom</strong> entry.</span>
                 </div>
               ) : (
-                <div className="overflow-x-auto -mx-px">
-                  <Table>
+                <div className="overflow-x-auto">
+                  <Table className="min-w-[640px]">
                     <TableHeader>
                       <TableRow className="bg-secondary/30">
                         <TableHead className="text-xs font-medium">Description</TableHead>
-                        <TableHead className="text-xs font-medium text-center w-24 hidden sm:table-cell">Type</TableHead>
-                        <TableHead className="text-xs font-medium text-center w-24 hidden sm:table-cell">Hours</TableHead>
+                        <TableHead className="text-xs font-medium text-center w-24">Type</TableHead>
+                        <TableHead className="text-xs font-medium text-center w-24">Hours</TableHead>
                         <TableHead className="text-xs font-medium text-right w-28">Rate</TableHead>
                         <TableHead className="text-xs font-medium text-right w-24">Total</TableHead>
                         <TableHead className="w-10" />
@@ -692,7 +692,7 @@ export default function CreateInvoice() {
                                 />
                               </div>
                             </TableCell>
-                            <TableCell className="text-center hidden sm:table-cell">
+                            <TableCell className="text-center">
                               <div className="flex h-8 rounded-md border border-input overflow-hidden mx-auto w-fit">
                                 <button
                                   className={cn(
@@ -714,7 +714,7 @@ export default function CreateInvoice() {
                                 </button>
                               </div>
                             </TableCell>
-                            <TableCell className="hidden sm:table-cell">
+                            <TableCell>
                               {line.pricingMode === "hourly" ? (
                                 <Input
                                   type="number"
