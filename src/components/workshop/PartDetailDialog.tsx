@@ -203,7 +203,7 @@ export default function PartDetailDialog({
           <TabsContent value="overview" className="flex-1 overflow-y-auto no-scrollbar m-0 p-6">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
               {/* Left Column */}
-              <div className="lg:col-span-7 space-y-5">
+              <div className="lg:col-span-8 space-y-5">
                 {/* Item Details */}
                 <Card>
                   <CardHeader className="pb-3">
