@@ -572,7 +572,7 @@ export default function CreateInvoice() {
                               }}
                             />
                           </TableCell>
-                          <TableCell>
+                          <TableCell className="hidden sm:table-cell">
                             <Input
                               type="number"
                               min={0}
