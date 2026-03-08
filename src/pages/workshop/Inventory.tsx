@@ -408,6 +408,7 @@ export default function Inventory() {
   const [editPart, setEditPart] = useState<Part | null>(null);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [deletePart, setDeletePart] = useState<Part | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [detailPart, setDetailPart] = useState<Part | null>(null);
   const [detailDialogOpen, setDetailDialogOpen] = useState(false);
   const [movements, setMovements] = useState<StockMovement[]>(mockMovements);
@@ -463,7 +464,8 @@ export default function Inventory() {
 
   const handleDeletePart = (id: string) => {
     setParts((prev) => prev.filter((p) => p.id !== id));
-    setDeletePart(null);
+    setDeleteDialogOpen(false);
+    setTimeout(() => setDeletePart(null), 200);
     toast.success("Part deleted successfully");
   };
 
@@ -599,9 +601,12 @@ export default function Inventory() {
         />
 
         <AlertDialog
-          open={!!deletePart}
+          open={deleteDialogOpen}
           onOpenChange={(v) => {
-            if (!v) setDeletePart(null);
+            if (!v) {
+              setDeleteDialogOpen(false);
+              setTimeout(() => setDeletePart(null), 200);
+            }
           }}
         >
           <AlertDialogContent>
@@ -988,7 +993,7 @@ export default function Inventory() {
                               <Pencil className="w-3.5 h-3.5 mr-2" />
                               Edit
                             </DropdownMenuItem>
-                            <DropdownMenuItem className="text-destructive" onClick={() => setDeletePart(part)}>
+                            <DropdownMenuItem className="text-destructive" onClick={() => { setDeletePart(part); setDeleteDialogOpen(true); }}>
                               <Trash2 className="w-3.5 h-3.5 mr-2" />
                               Delete
                             </DropdownMenuItem>

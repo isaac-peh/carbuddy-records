@@ -46,6 +46,7 @@ export default function ManageCategoriesDialog({
   const [editingCategory, setEditingCategory] = useState<string | null>(null);
   const [editValue, setEditValue] = useState("");
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   const handleAdd = () => {
     const trimmed = newCategory.trim();
@@ -97,7 +98,8 @@ export default function ManageCategoriesDialog({
   const confirmDelete = () => {
     if (deleteTarget) {
       onDeleteCategory(deleteTarget);
-      setDeleteTarget(null);
+      setDeleteDialogOpen(false);
+      setTimeout(() => setDeleteTarget(null), 200);
     }
   };
 
@@ -193,7 +195,7 @@ export default function ManageCategoriesDialog({
                           size="icon"
                           variant="ghost"
                           className="h-7 w-7 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
-                          onClick={() => setDeleteTarget(category)}
+                          onClick={() => { setDeleteTarget(category); setDeleteDialogOpen(true); }}
                         >
                           <Trash2 className="w-3 h-3" />
                         </Button>
@@ -209,7 +211,7 @@ export default function ManageCategoriesDialog({
       </Dialog>
 
       {/* Delete confirmation */}
-      <AlertDialog open={!!deleteTarget} onOpenChange={(v) => { if (!v) setDeleteTarget(null); }}>
+      <AlertDialog open={deleteDialogOpen} onOpenChange={(v) => { if (!v) { setDeleteDialogOpen(false); setTimeout(() => setDeleteTarget(null), 200); } }}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Delete "{deleteTarget}"?</AlertDialogTitle>
