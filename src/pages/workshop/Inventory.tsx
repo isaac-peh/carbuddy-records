@@ -464,6 +464,7 @@ export default function Inventory() {
   const handleDeletePart = (id: string) => {
     setParts((prev) => prev.filter((p) => p.id !== id));
     setDeletePart(null);
+    toast.success("Part deleted successfully");
   };
 
   const filtered = useMemo(() => {
