@@ -95,10 +95,10 @@ function normalize(plate: string) {
 
 // ── Section header (matches invoice style) ────────────────────────────
 
-function SectionHeader({ icon: Icon, title }: { icon: React.ElementType; title: string }) {
+function SectionHeader({ icon: Icon, title, iconClassName }: { icon: React.ElementType; title: string; iconClassName?: string }) {
   return (
     <div className="flex items-center gap-2.5">
-      <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 bg-secondary text-muted-foreground">
+      <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center shrink-0", iconClassName || "bg-secondary text-muted-foreground")}>
         <Icon className="w-4 h-4" />
       </div>
       <CardTitle className="text-base">{title}</CardTitle>
@@ -373,7 +373,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
       <Card className="shadow-soft border-border/50 overflow-hidden">
         <CardHeader className="py-4 bg-[hsl(var(--success)/0.05)]">
           <div className="flex items-center justify-between">
-            <SectionHeader icon={Car} title="Vehicle" />
+            <SectionHeader icon={Car} title="Vehicle" iconClassName="bg-[hsl(var(--success)/0.15)] text-[hsl(var(--success))]" />
             {renderChangeLink()}
           </div>
         </CardHeader>
@@ -403,7 +403,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
       <Card className="shadow-soft border-border/50 overflow-hidden">
         <CardHeader className="py-4 bg-[hsl(var(--warning)/0.05)]">
           <div className="flex items-center justify-between">
-            <SectionHeader icon={Car} title="Vehicle" />
+            <SectionHeader icon={Car} title="Vehicle" iconClassName="bg-[hsl(var(--warning)/0.15)] text-[hsl(var(--warning))]" />
             {renderChangeLink()}
           </div>
         </CardHeader>
@@ -451,7 +451,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
       <Card className="shadow-soft border-border/50 overflow-hidden">
         <CardHeader className="py-4 bg-primary/5">
           <div className="flex items-center justify-between">
-            <SectionHeader icon={Car} title="Vehicle" />
+            <SectionHeader icon={Car} title="Vehicle" iconClassName="bg-primary/15 text-primary" />
             {renderChangeLink()}
           </div>
         </CardHeader>
