@@ -205,7 +205,7 @@ export default function CreateInvoice() {
   const addLabourManual = () =>
     setLabour((prev) => [
       ...prev,
-      { id: nextId(), serviceId: null, description: "", hours: 1, hourlyRate: 0 },
+      { id: nextId(), serviceId: null, description: "", pricingMode: "hourly" as const, hours: 1, rate: 0 },
     ]);
 
   const updateLabourField = (
