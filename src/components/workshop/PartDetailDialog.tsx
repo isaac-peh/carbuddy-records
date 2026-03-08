@@ -330,36 +330,29 @@ export default function PartDetailDialog({
 
           {/* ── Movements Tab ── */}
           <TabsContent value="movements" className="flex-1 overflow-y-auto no-scrollbar m-0 p-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+            <div className="flex items-center justify-between gap-3 mb-4">
               <div className="flex items-center gap-2">
                 <h3 className="text-sm font-semibold text-foreground">Stock Movements</h3>
-                <Badge variant="secondary" className="text-[10px] h-5 px-1.5">{partMovements.length}</Badge>
+                <Badge variant="secondary" className="text-[10px] h-5 px-1.5">{filteredMovements.length}</Badge>
+                <Select value={movFilter} onValueChange={(v) => setMovFilter(v as "all" | StockMovement["type"])}>
+                  <SelectTrigger className="h-7 text-[11px] w-[100px] gap-1">
+                    <Filter className="w-3 h-3 text-muted-foreground shrink-0" />
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All</SelectItem>
+                    <SelectItem value="in">Stock In</SelectItem>
+                    <SelectItem value="out">Stock Out</SelectItem>
+                    <SelectItem value="adjustment">Adjustment</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
-              <div className="flex items-center gap-2">
-                {/* Filter by movement type */}
-                <div className="flex items-center gap-1 bg-secondary/50 rounded-lg p-0.5 border border-border/40">
-                  <Filter className="w-3 h-3 text-muted-foreground ml-2" />
-                  {(["all", "in", "out", "adjustment"] as const).map((type) => (
-                    <button
-                      key={type}
-                      onClick={() => setMovFilter(type)}
-                      className={`text-[11px] font-medium px-2.5 py-1 rounded-md transition-colors ${
-                        movFilter === type
-                          ? "bg-primary text-primary-foreground shadow-sm"
-                          : "text-muted-foreground hover:text-foreground"
-                      }`}
-                    >
-                      {type === "all" ? "All" : type === "adjustment" ? "Adj" : type.toUpperCase()}
-                    </button>
-                  ))}
-                </div>
-                {!showForm && (
-                  <Button size="sm" className="gap-1.5 h-7 text-xs" onClick={() => setShowForm(true)}>
-                    <Plus className="w-3 h-3" />
-                    Record Movement
-                  </Button>
-                )}
-              </div>
+              {!showForm && (
+                <Button size="sm" className="gap-1.5 h-7 text-xs" onClick={() => setShowForm(true)}>
+                  <Plus className="w-3 h-3" />
+                  Record Movement
+                </Button>
+              )}
             </div>
 
             {/* Inline Form */}
