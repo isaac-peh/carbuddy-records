@@ -57,6 +57,7 @@ const statusConfig: Record<string, { icon: typeof CheckCircle2; color: string }>
 const tabs = ["All", "Paid", "Pending", "Overdue", "Draft"] as const;
 
 export default function Invoices() {
+  const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [activeTab, setActiveTab] = useState<string>("All");
 
