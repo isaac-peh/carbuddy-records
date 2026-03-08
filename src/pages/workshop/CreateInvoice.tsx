@@ -660,7 +660,7 @@ export default function CreateInvoice() {
                   <span>No labour items yet. Add from <strong>Services</strong> or create a <strong>Custom</strong> entry.</span>
                 </div>
               ) : (
-                <div className="overflow-x-auto">
+                <div className="overflow-x-auto -mx-px">
                   <Table>
                     <TableHeader>
                       <TableRow className="bg-secondary/30">
