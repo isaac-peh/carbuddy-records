@@ -36,6 +36,7 @@ interface AddPartDialogProps {
     sellPrice: number;
     supplier: string;
     uom: string;
+    description: string;
   }) => void;
 }
 
