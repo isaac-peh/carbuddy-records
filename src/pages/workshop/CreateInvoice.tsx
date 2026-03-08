@@ -534,8 +534,8 @@ export default function CreateInvoice() {
                         <TableHead className="text-xs font-medium hidden md:table-cell">SKU</TableHead>
                         <TableHead className="text-xs font-medium text-center hidden sm:table-cell">Stock</TableHead>
                         <TableHead className="text-xs font-medium text-center w-20">Qty</TableHead>
-                        <TableHead className="text-xs font-medium text-right w-28">Unit Price</TableHead>
-                        <TableHead className="text-xs font-medium text-right w-24">Total</TableHead>
+                        <TableHead className="text-xs font-medium text-right w-28 hidden sm:table-cell">Unit Price</TableHead>
+                        <TableHead className="text-xs font-medium text-right w-20 sm:w-24">Total</TableHead>
                         <TableHead className="w-10" />
                       </TableRow>
                     </TableHeader>
