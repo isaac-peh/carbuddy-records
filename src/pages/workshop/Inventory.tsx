@@ -600,9 +600,12 @@ export default function Inventory() {
         />
 
         <AlertDialog
-          open={!!deletePart}
+          open={deleteDialogOpen}
           onOpenChange={(v) => {
-            if (!v) setDeletePart(null);
+            if (!v) {
+              setDeleteDialogOpen(false);
+              setTimeout(() => setDeletePart(null), 200);
+            }
           }}
         >
           <AlertDialogContent>
