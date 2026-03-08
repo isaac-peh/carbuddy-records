@@ -661,7 +661,7 @@ export default function CreateInvoice() {
                 </div>
               ) : (
                 <div className="overflow-x-auto">
-                  <Table className="min-w-[640px]">
+                  <Table className="min-w-[700px]">
                     <TableHeader>
                       <TableRow className="bg-secondary/30">
                         <TableHead className="text-xs font-medium">Description</TableHead>
