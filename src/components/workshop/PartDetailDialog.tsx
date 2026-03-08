@@ -176,8 +176,8 @@ export default function PartDetailDialog({
               </div>
             </div>
 
-            {/* Right: stats strip — equal sizing */}
-            <div className="flex items-center justify-center w-full sm:w-auto bg-secondary/50 rounded-lg border border-border/40 shrink-0">
+            {/* Right: stats strip — equal sizing, centered on mobile */}
+            <div className="flex items-center mx-auto sm:mx-0 bg-secondary/50 rounded-lg border border-border/40 shrink-0">
               <StatPill label="Stock" value={String(part.stock)} highlight={isLowStock} />
               <div className="w-px h-8 bg-border/50" />
               <StatPill label="Cost" value={`$${part.costPrice}`} />
