@@ -107,7 +107,13 @@ export default function CreateInvoice() {
     setInvoiceNumber(suggestedInvoiceNumber);
   }, [suggestedInvoiceNumber]);
   const [serviceDate, setServiceDate] = useState<Date | undefined>(new Date());
-  const [serviceType, setServiceType] = useState("");
+  const [serviceTypes, setServiceTypes] = useState<string[]>([]);
+
+  const toggleServiceType = useCallback((type: string) => {
+    setServiceTypes(prev =>
+      prev.includes(type) ? prev.filter(t => t !== type) : [...prev, type]
+    );
+  }, []);
   const [technician, setTechnician] = useState("");
 
   // Customer
