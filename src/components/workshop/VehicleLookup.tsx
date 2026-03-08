@@ -388,7 +388,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
           </Button>
 
           {/* Grayed-out placeholder for locked fields */}
-          <div className="grid grid-cols-2 gap-3 opacity-30 pointer-events-none select-none">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 opacity-30 pointer-events-none select-none">
             {["Make", "Model", "Type", "Mileage"].map((f) => (
               <div key={f} className="space-y-1.5">
                 <Label className="text-xs text-muted-foreground">{f}</Label>
