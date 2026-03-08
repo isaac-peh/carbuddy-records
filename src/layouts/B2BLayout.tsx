@@ -1,11 +1,14 @@
 import { Outlet } from "react-router-dom";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { B2BSidebar } from "@/components/b2b/B2BSidebar";
-import { Bell, Search, User } from "lucide-react";
+import { Bell, Search, User, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useTheme } from "next-themes";
 
 export default function B2BLayout() {
+  const { theme, setTheme } = useTheme();
+
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full">
@@ -26,6 +29,16 @@ export default function B2BLayout() {
             </div>
 
             <div className="flex items-center gap-1">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8"
+                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              >
+                <Sun className="w-4 h-4 text-muted-foreground rotate-0 scale-100 transition-transform dark:-rotate-90 dark:scale-0" strokeWidth={1.5} />
+                <Moon className="absolute w-4 h-4 text-muted-foreground rotate-90 scale-0 transition-transform dark:rotate-0 dark:scale-100" strokeWidth={1.5} />
+                <span className="sr-only">Toggle theme</span>
+              </Button>
               <Button variant="ghost" size="icon" className="relative h-8 w-8">
                 <Bell className="w-4 h-4 text-muted-foreground" strokeWidth={1.5} />
                 <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-accent rounded-full" />
