@@ -1,12 +1,13 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import { toast } from "sonner";
 import {
   ArrowLeft, CalendarIcon, Plus, Trash2, Save, Send, Printer,
   Copy, FileText, Wrench, Car, UserRound,
-  Package, ClipboardList, StickyNote, Receipt, DollarSign,
+  Package, ClipboardList, StickyNote, Receipt, DollarSign, RefreshCw,
 } from "lucide-react";
+import { TapTooltip } from "@/components/ui/tap-tooltip";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -69,6 +70,14 @@ interface LabourLine {
 let lineCounter = 0;
 const nextId = () => `line-${++lineCounter}`;
 
+let dailyInvoiceCounter = 0;
+
+function generateInvoiceNumber(): string {
+  dailyInvoiceCounter++;
+  const today = format(new Date(), "yyyyMMdd");
+  return `INV-${today}-${String(dailyInvoiceCounter).padStart(3, "0")}`;
+}
+
 // ── Section Header ────────────────────────────────────────────────────
 
 function SectionHeader({ icon: Icon, title, accent }: { icon: React.ElementType; title: string; accent?: boolean }) {
@@ -91,7 +100,12 @@ export default function CreateInvoice() {
   const navigate = useNavigate();
 
   // Header
-  const [invoiceNumber, setInvoiceNumber] = useState("");
+  const [suggestedInvoiceNumber] = useState(() => generateInvoiceNumber());
+  const [invoiceNumber, setInvoiceNumber] = useState(suggestedInvoiceNumber);
+
+  const resetInvoiceNumber = useCallback(() => {
+    setInvoiceNumber(suggestedInvoiceNumber);
+  }, [suggestedInvoiceNumber]);
   const [serviceDate, setServiceDate] = useState<Date | undefined>(new Date());
   const [serviceType, setServiceType] = useState("");
   const [technician, setTechnician] = useState("");
@@ -282,7 +296,24 @@ export default function CreateInvoice() {
                 <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-1.5">
                     <Label className="text-xs text-muted-foreground">Invoice Number</Label>
-                    <Input value={invoiceNumber} onChange={(e) => setInvoiceNumber(e.target.value)} placeholder="INV-0001" />
+                    <div className="relative">
+                      <Input
+                        value={invoiceNumber}
+                        onChange={(e) => setInvoiceNumber(e.target.value)}
+                        placeholder="INV-0001"
+                        className="pr-8"
+                      />
+                      <TapTooltip content="Reset to suggested number">
+                        <button
+                          type="button"
+                          onClick={resetInvoiceNumber}
+                          className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground/60 hover:text-muted-foreground transition-colors"
+                        >
+                          <RefreshCw className="w-3.5 h-3.5" />
+                        </button>
+                      </TapTooltip>
+                    </div>
+                    <p className="text-[11px] text-muted-foreground/60">Auto-generated. Edit to use your own reference.</p>
                   </div>
                   <div className="space-y-1.5">
                     <Label className="text-xs text-muted-foreground">Service Date</Label>
