@@ -660,13 +660,13 @@ export default function CreateInvoice() {
                   <span>No labour items yet. Add from <strong>Services</strong> or create a <strong>Custom</strong> entry.</span>
                 </div>
               ) : (
-                <div className="overflow-x-auto -mx-px">
-                  <Table>
+                <div className="overflow-x-auto">
+                  <Table className="min-w-[640px]">
                     <TableHeader>
                       <TableRow className="bg-secondary/30">
                         <TableHead className="text-xs font-medium">Description</TableHead>
-                        <TableHead className="text-xs font-medium text-center w-24 hidden sm:table-cell">Type</TableHead>
-                        <TableHead className="text-xs font-medium text-center w-24 hidden sm:table-cell">Hours</TableHead>
+                        <TableHead className="text-xs font-medium text-center w-24">Type</TableHead>
+                        <TableHead className="text-xs font-medium text-center w-24">Hours</TableHead>
                         <TableHead className="text-xs font-medium text-right w-28">Rate</TableHead>
                         <TableHead className="text-xs font-medium text-right w-24">Total</TableHead>
                         <TableHead className="w-10" />
