@@ -59,6 +59,7 @@ export default function EditPartDialog({
   const [selectedSupplier, setSelectedSupplier] = useState("");
   const [customSupplier, setCustomSupplier] = useState("");
   const [uom, setUom] = useState("");
+  const [description, setDescription] = useState("");
 
   useEffect(() => {
     if (part && open) {
