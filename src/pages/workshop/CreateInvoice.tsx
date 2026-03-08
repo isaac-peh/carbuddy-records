@@ -362,7 +362,7 @@ export default function CreateInvoice() {
             </Card>
 
             <Card className="shadow-soft border-border/50 overflow-hidden">
-              <CardHeader className="pb-4 bg-secondary/20">
+              <CardHeader className="py-4 bg-secondary/20">
                 <SectionHeader icon={Car} title="Vehicle" />
               </CardHeader>
               <CardContent className="space-y-3 pt-5">
