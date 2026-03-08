@@ -243,69 +243,59 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
     });
   }, [matchedRecord, searchPlate, editVin, editMake, editModel, editVehicleType, onVehicleResolved]);
 
-  // ── State badge config ──────────────────────────────────────────────
-
-  const badgeConfig: Record<string, { icon: React.ElementType; label: string; sub: string; className: string }> = {
-    verified: {
-      icon: ShieldCheck,
-      label: "Verified Vehicle",
-      sub: "This vehicle is verified and shared across Mobilis.",
-      className: "bg-[hsl(var(--success)/0.1)] text-[hsl(var(--success))] border-[hsl(var(--success)/0.3)]",
-    },
-    "verified-vin-mismatch": {
-      icon: AlertTriangle,
-      label: "Verified Vehicle — VIN Mismatch",
-      sub: "",
-      className: "bg-[hsl(var(--warning)/0.1)] text-[hsl(var(--warning))] border-[hsl(var(--warning)/0.3)]",
-    },
-    workshop: {
-      icon: Building2,
-      label: "Known Vehicle",
-      sub: "This vehicle is from your workshop's records.",
-      className: "bg-primary/10 text-primary border-primary/30",
-    },
-    new: {
-      icon: PlusCircle,
-      label: "New Vehicle",
-      sub: "No record found. A new vehicle will be created.",
-      className: "bg-secondary text-muted-foreground border-border",
-    },
-  };
-
   // ── Render helpers ──────────────────────────────────────────────────
 
   const renderChangeLink = () => (
     <button
       onClick={reset}
-      className="text-xs text-primary hover:underline flex items-center gap-1 mt-1"
+      className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
     >
-      <RotateCcw className="w-3 h-3" /> Change Vehicle
+      <RotateCcw className="w-3 h-3" /> Change
     </button>
   );
 
-  const renderStateBadge = (key: string) => {
-    const cfg = badgeConfig[key];
+  const statusConfig: Record<string, { icon: React.ElementType; label: string; dotClass: string; iconClass: string }> = {
+    verified: {
+      icon: ShieldCheck,
+      label: "Verified",
+      dotClass: "bg-[hsl(var(--success))]",
+      iconClass: "text-[hsl(var(--success))]",
+    },
+    "verified-vin-mismatch": {
+      icon: AlertTriangle,
+      label: "VIN Mismatch",
+      dotClass: "bg-[hsl(var(--warning))]",
+      iconClass: "text-[hsl(var(--warning))]",
+    },
+    workshop: {
+      icon: Building2,
+      label: "Workshop Record",
+      dotClass: "bg-[hsl(var(--accent))]",
+      iconClass: "text-[hsl(var(--accent))]",
+    },
+    new: {
+      icon: PlusCircle,
+      label: "New Vehicle",
+      dotClass: "bg-muted-foreground",
+      iconClass: "text-muted-foreground",
+    },
+  };
+
+  const renderStatusLine = (key: string) => {
+    const cfg = statusConfig[key];
     if (!cfg) return null;
-    const Icon = cfg.icon;
     return (
-      <div className="space-y-1">
-        <div className="flex items-center gap-2">
-          <Badge variant="outline" className={cn("gap-1.5 py-1 px-2.5 text-xs font-medium", cfg.className)}>
-            <Icon className="w-3.5 h-3.5" />
-            {cfg.label}
-          </Badge>
-        </div>
-        {cfg.sub && <p className="text-xs text-muted-foreground">{cfg.sub}</p>}
+      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+        <span className={cn("w-1.5 h-1.5 rounded-full shrink-0", cfg.dotClass)} />
+        <span className="font-medium">{cfg.label}</span>
       </div>
     );
   };
 
   const renderReadOnlyField = (label: string, value: string) => (
-    <div className="space-y-1.5">
-      <Label className="text-xs text-muted-foreground">{label}</Label>
-      <div className="h-10 flex items-center px-3 rounded-md bg-secondary/50 border border-border/50 text-sm font-medium">
-        {value || "—"}
-      </div>
+    <div className="space-y-1">
+      <Label className="text-[11px] text-muted-foreground font-normal">{label}</Label>
+      <p className="text-sm font-medium truncate">{value || "—"}</p>
     </div>
   );
 
