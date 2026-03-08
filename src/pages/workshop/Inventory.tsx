@@ -933,7 +933,10 @@ export default function Inventory() {
                       }}
                     >
                       <TableCell className="font-medium text-sm max-w-[200px]">
-                        <TruncatedCell>{part.name}</TruncatedCell>
+                        <span className="block md:hidden text-sm break-words">{part.name}</span>
+                        <span className="hidden md:block">
+                          <TruncatedCell>{part.name}</TruncatedCell>
+                        </span>
                       </TableCell>
                       <TableCell className="max-w-[130px]">
                         <TruncatedCell className="text-xs font-mono text-muted-foreground">{part.sku}</TruncatedCell>
