@@ -100,7 +100,12 @@ export default function CreateInvoice() {
   const navigate = useNavigate();
 
   // Header
-  const [invoiceNumber, setInvoiceNumber] = useState("");
+  const [suggestedInvoiceNumber] = useState(() => generateInvoiceNumber());
+  const [invoiceNumber, setInvoiceNumber] = useState(suggestedInvoiceNumber);
+
+  const resetInvoiceNumber = useCallback(() => {
+    setInvoiceNumber(suggestedInvoiceNumber);
+  }, [suggestedInvoiceNumber]);
   const [serviceDate, setServiceDate] = useState<Date | undefined>(new Date());
   const [serviceType, setServiceType] = useState("");
   const [technician, setTechnician] = useState("");
