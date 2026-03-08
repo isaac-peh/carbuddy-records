@@ -4,7 +4,8 @@ import { format } from "date-fns";
 import { toast } from "sonner";
 import {
   ArrowLeft, CalendarIcon, Plus, Trash2, Save, Send, Printer,
-  Copy, XCircle, FileText, ChevronDown, Search,
+  Copy, XCircle, FileText, Search, Wrench, Car, UserRound,
+  Package, ClipboardList, StickyNote, Receipt, DollarSign,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -28,6 +29,7 @@ import {
 } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
 import { mockParts, type Part } from "@/data/inventoryParts";
+import { mockServices, type ServiceItem } from "@/data/servicesData";
 
 // ── Constants ──────────────────────────────────────────────────────────
 
@@ -56,6 +58,7 @@ interface PartLine {
 
 interface LabourLine {
   id: string;
+  serviceId: string | null;
   description: string;
   hours: number;
   hourlyRate: number;
@@ -63,6 +66,22 @@ interface LabourLine {
 
 let lineCounter = 0;
 const nextId = () => `line-${++lineCounter}`;
+
+// ── Section Header ────────────────────────────────────────────────────
+
+function SectionHeader({ icon: Icon, title, accent }: { icon: React.ElementType; title: string; accent?: boolean }) {
+  return (
+    <div className="flex items-center gap-2.5">
+      <div className={cn(
+        "w-8 h-8 rounded-lg flex items-center justify-center shrink-0",
+        accent ? "bg-accent/10 text-accent" : "bg-secondary text-muted-foreground"
+      )}>
+        <Icon className="w-4 h-4" />
+      </div>
+      <CardTitle className="text-base">{title}</CardTitle>
+    </div>
+  );
+}
 
 // ── Component ──────────────────────────────────────────────────────────
 
@@ -100,9 +119,11 @@ export default function CreateInvoice() {
   // Discount
   const [discount, setDiscount] = useState("0");
 
-  // Parts picker
+  // Pickers
   const [partSearchOpen, setPartSearchOpen] = useState(false);
   const [partSearch, setPartSearch] = useState("");
+  const [serviceSearchOpen, setServiceSearchOpen] = useState(false);
+  const [serviceSearch, setServiceSearch] = useState("");
 
   // ── Derived totals ────────────────────────────────────────────────────
 
@@ -122,7 +143,6 @@ export default function CreateInvoice() {
   // ── Handlers ──────────────────────────────────────────────────────────
 
   const addPart = (part: Part) => {
-    // If already added, bump qty
     const existing = parts.find((p) => p.partId === part.id);
     if (existing) {
       setParts((prev) =>
@@ -161,15 +181,30 @@ export default function CreateInvoice() {
   const removePart = (id: string) =>
     setParts((prev) => prev.filter((p) => p.id !== id));
 
-  const addLabour = () =>
+  const addLabourFromService = (svc: ServiceItem) => {
     setLabour((prev) => [
       ...prev,
-      { id: nextId(), description: "", hours: 1, hourlyRate: 0 },
+      {
+        id: nextId(),
+        serviceId: svc.id,
+        description: svc.name,
+        hours: svc.flatPrice != null ? 1 : 1,
+        hourlyRate: svc.hourlyRate ?? svc.flatPrice ?? 0,
+      },
+    ]);
+    setServiceSearchOpen(false);
+    setServiceSearch("");
+  };
+
+  const addLabourManual = () =>
+    setLabour((prev) => [
+      ...prev,
+      { id: nextId(), serviceId: null, description: "", hours: 1, hourlyRate: 0 },
     ]);
 
   const updateLabourField = (
     id: string,
-    field: keyof Omit<LabourLine, "id">,
+    field: keyof Omit<LabourLine, "id" | "serviceId">,
     value: string | number,
   ) => {
     setLabour((prev) =>
@@ -190,18 +225,25 @@ export default function CreateInvoice() {
   // ── Render ────────────────────────────────────────────────────────────
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pb-8">
       {/* ── Action Bar ─────────────────────────────────────────────── */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <Button
-          variant="ghost"
-          size="sm"
-          className="gap-1.5 self-start text-muted-foreground"
-          onClick={() => navigate("/workshop/invoices")}
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back to Invoices
-        </Button>
+        <div className="flex items-center gap-3">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="gap-1.5 text-muted-foreground"
+            onClick={() => navigate("/workshop/invoices")}
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back
+          </Button>
+          <Separator orientation="vertical" className="h-6 hidden sm:block" />
+          <div>
+            <h1 className="text-xl font-bold text-foreground tracking-tight">New Invoice</h1>
+            <p className="text-xs text-muted-foreground">Create a new service invoice</p>
+          </div>
+        </div>
 
         <div className="flex flex-wrap gap-2">
           <Button variant="outline" size="sm" className="gap-1.5" onClick={handleDuplicate}>
@@ -220,22 +262,22 @@ export default function CreateInvoice() {
           <Button variant="outline" size="sm" className="gap-1.5" onClick={handleSend}>
             <Send className="w-3.5 h-3.5" /> Send
           </Button>
-          <Button size="sm" className="gap-1.5" onClick={handleIssue}>
+          <Button size="sm" className="gap-1.5 bg-accent text-accent-foreground hover:bg-accent/90" onClick={handleIssue}>
             <FileText className="w-3.5 h-3.5" /> Issue Invoice
           </Button>
         </div>
       </div>
 
       {/* ── Two‑column grid ────────────────────────────────────────── */}
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-6 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6 items-start">
         {/* ═══ Left column ═══════════════════════════════════════════ */}
         <div className="space-y-6">
           {/* Invoice Header */}
-          <Card className="shadow-soft border-border/50">
-            <CardHeader className="pb-4">
-              <CardTitle className="text-base">Invoice Details</CardTitle>
+          <Card className="shadow-soft border-border/50 overflow-hidden">
+            <CardHeader className="pb-4 bg-secondary/20">
+              <SectionHeader icon={Receipt} title="Invoice Details" accent />
             </CardHeader>
-            <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-5">
               <div className="space-y-1.5">
                 <Label className="text-xs text-muted-foreground">Invoice Number</Label>
                 <Input
@@ -300,11 +342,11 @@ export default function CreateInvoice() {
 
           {/* Customer & Vehicle */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card className="shadow-soft border-border/50">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-base">Customer</CardTitle>
+            <Card className="shadow-soft border-border/50 overflow-hidden">
+              <CardHeader className="pb-4 bg-secondary/20">
+                <SectionHeader icon={UserRound} title="Customer" />
               </CardHeader>
-              <CardContent className="space-y-3">
+              <CardContent className="space-y-3 pt-5">
                 <div className="space-y-1.5">
                   <Label className="text-xs text-muted-foreground">Name</Label>
                   <Input value={customerName} onChange={(e) => setCustomerName(e.target.value)} placeholder="Customer name" />
@@ -320,11 +362,11 @@ export default function CreateInvoice() {
               </CardContent>
             </Card>
 
-            <Card className="shadow-soft border-border/50">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-base">Vehicle</CardTitle>
+            <Card className="shadow-soft border-border/50 overflow-hidden">
+              <CardHeader className="pb-4 bg-secondary/20">
+                <SectionHeader icon={Car} title="Vehicle" />
               </CardHeader>
-              <CardContent className="space-y-3">
+              <CardContent className="space-y-3 pt-5">
                 <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-1.5">
                     <Label className="text-xs text-muted-foreground">Plate Number</Label>
@@ -375,9 +417,9 @@ export default function CreateInvoice() {
           </div>
 
           {/* ── Parts ──────────────────────────────────────────────── */}
-          <Card className="shadow-soft border-border/50">
-            <CardHeader className="pb-4 flex flex-row items-center justify-between">
-              <CardTitle className="text-base">Parts</CardTitle>
+          <Card className="shadow-soft border-border/50 overflow-hidden">
+            <CardHeader className="pb-4 flex flex-row items-center justify-between bg-secondary/20">
+              <SectionHeader icon={Package} title="Parts" />
               <Popover open={partSearchOpen} onOpenChange={setPartSearchOpen}>
                 <PopoverTrigger asChild>
                   <Button size="sm" variant="outline" className="gap-1.5">
@@ -387,7 +429,7 @@ export default function CreateInvoice() {
                 <PopoverContent className="w-72 p-0" align="end">
                   <Command>
                     <CommandInput
-                      placeholder="Search parts..."
+                      placeholder="Search inventory..."
                       value={partSearch}
                       onValueChange={setPartSearch}
                     />
@@ -418,8 +460,9 @@ export default function CreateInvoice() {
             </CardHeader>
             <CardContent className="p-0">
               {parts.length === 0 ? (
-                <div className="px-6 pb-6 text-sm text-muted-foreground text-center py-8">
-                  No parts added yet. Click "Add Part" to begin.
+                <div className="px-6 pb-6 text-sm text-muted-foreground text-center py-10 flex flex-col items-center gap-2">
+                  <Package className="w-8 h-8 text-muted-foreground/30" />
+                  <span>No parts added yet. Click <strong>"Add Part"</strong> to begin.</span>
                 </div>
               ) : (
                 <div className="overflow-x-auto">
@@ -437,7 +480,7 @@ export default function CreateInvoice() {
                     </TableHeader>
                     <TableBody>
                       {parts.map((line) => (
-                        <TableRow key={line.id}>
+                        <TableRow key={line.id} className="hover:bg-secondary/10">
                           <TableCell className="text-sm font-medium">{line.name}</TableCell>
                           <TableCell className="hidden sm:table-cell text-xs text-muted-foreground font-mono">{line.sku}</TableCell>
                           <TableCell className="text-center">
@@ -447,7 +490,7 @@ export default function CreateInvoice() {
                                 "text-[10px]",
                                 line.stock <= 5
                                   ? "bg-destructive/10 text-destructive border-destructive/20"
-                                  : "bg-success/10 text-success border-success/20",
+                                  : "bg-success/10 text-[hsl(var(--success))] border-[hsl(var(--success)/0.2)]",
                               )}
                             >
                               {line.stock}
@@ -499,17 +542,57 @@ export default function CreateInvoice() {
           </Card>
 
           {/* ── Labour ─────────────────────────────────────────────── */}
-          <Card className="shadow-soft border-border/50">
-            <CardHeader className="pb-4 flex flex-row items-center justify-between">
-              <CardTitle className="text-base">Labour</CardTitle>
-              <Button size="sm" variant="outline" className="gap-1.5" onClick={addLabour}>
-                <Plus className="w-3.5 h-3.5" /> Add Labour
-              </Button>
+          <Card className="shadow-soft border-border/50 overflow-hidden">
+            <CardHeader className="pb-4 flex flex-row items-center justify-between bg-secondary/20">
+              <SectionHeader icon={Wrench} title="Labour" />
+              <div className="flex items-center gap-2">
+                <Popover open={serviceSearchOpen} onOpenChange={setServiceSearchOpen}>
+                  <PopoverTrigger asChild>
+                    <Button size="sm" variant="outline" className="gap-1.5">
+                      <ClipboardList className="w-3.5 h-3.5" /> From Services
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-80 p-0" align="end">
+                    <Command>
+                      <CommandInput
+                        placeholder="Search services..."
+                        value={serviceSearch}
+                        onValueChange={setServiceSearch}
+                      />
+                      <CommandList>
+                        <CommandEmpty>No services found.</CommandEmpty>
+                        <CommandGroup>
+                          {mockServices.map((svc) => (
+                            <CommandItem
+                              key={svc.id}
+                              value={svc.name}
+                              onSelect={() => addLabourFromService(svc)}
+                              className="flex items-center justify-between"
+                            >
+                              <div className="flex flex-col">
+                                <span className="text-sm">{svc.name}</span>
+                                <span className="text-xs text-muted-foreground">{svc.description}</span>
+                              </div>
+                              <Badge variant="outline" className="text-[10px] ml-2 shrink-0">
+                                {svc.flatPrice != null ? `$${svc.flatPrice}` : `$${svc.hourlyRate}/hr`}
+                              </Badge>
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+                <Button size="sm" variant="outline" className="gap-1.5" onClick={addLabourManual}>
+                  <Plus className="w-3.5 h-3.5" /> Custom
+                </Button>
+              </div>
             </CardHeader>
             <CardContent className="p-0">
               {labour.length === 0 ? (
-                <div className="px-6 pb-6 text-sm text-muted-foreground text-center py-8">
-                  No labour items added yet. Click "Add Labour" to begin.
+                <div className="px-6 pb-6 text-sm text-muted-foreground text-center py-10 flex flex-col items-center gap-2">
+                  <Wrench className="w-8 h-8 text-muted-foreground/30" />
+                  <span>No labour items yet. Add from <strong>Services</strong> or create a <strong>Custom</strong> entry.</span>
                 </div>
               ) : (
                 <div className="overflow-x-auto">
@@ -525,16 +608,21 @@ export default function CreateInvoice() {
                     </TableHeader>
                     <TableBody>
                       {labour.map((line) => (
-                        <TableRow key={line.id}>
+                        <TableRow key={line.id} className="hover:bg-secondary/10">
                           <TableCell>
-                            <Input
-                              className="h-8"
-                              placeholder="e.g. Oil change labour"
-                              value={line.description}
-                              onChange={(e) =>
-                                updateLabourField(line.id, "description", e.target.value)
-                              }
-                            />
+                            <div className="flex items-center gap-2">
+                              {line.serviceId && (
+                                <Badge variant="secondary" className="text-[10px] shrink-0">Service</Badge>
+                              )}
+                              <Input
+                                className="h-8"
+                                placeholder="e.g. Oil change labour"
+                                value={line.description}
+                                onChange={(e) =>
+                                  updateLabourField(line.id, "description", e.target.value)
+                                }
+                              />
+                            </div>
                           </TableCell>
                           <TableCell>
                             <Input
@@ -583,11 +671,11 @@ export default function CreateInvoice() {
           </Card>
 
           {/* ── Notes ──────────────────────────────────────────────── */}
-          <Card className="shadow-soft border-border/50">
-            <CardHeader className="pb-4">
-              <CardTitle className="text-base">Notes</CardTitle>
+          <Card className="shadow-soft border-border/50 overflow-hidden">
+            <CardHeader className="pb-4 bg-secondary/20">
+              <SectionHeader icon={StickyNote} title="Notes" />
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-4 pt-5">
               <div className="space-y-1.5">
                 <Label className="text-xs text-muted-foreground">Description</Label>
                 <Textarea
@@ -621,11 +709,11 @@ export default function CreateInvoice() {
 
         {/* ═══ Right column — Summary sidebar ════════════════════════ */}
         <div className="lg:sticky lg:top-6 space-y-6">
-          <Card className="shadow-soft border-border/50">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-base">Invoice Summary</CardTitle>
+          <Card className="shadow-soft border-border/50 overflow-hidden">
+            <CardHeader className="pb-3 bg-accent/5">
+              <SectionHeader icon={DollarSign} title="Invoice Summary" accent />
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-4 pt-5">
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Parts Total</span>
                 <span className="font-medium">${partsTotal.toFixed(2)}</span>
@@ -651,9 +739,9 @@ export default function CreateInvoice() {
                 />
               </div>
               <Separator />
-              <div className="flex justify-between items-baseline">
+              <div className="flex justify-between items-baseline pt-1">
                 <span className="text-sm font-medium text-muted-foreground">Grand Total</span>
-                <span className="text-2xl font-bold text-foreground">
+                <span className="text-3xl font-bold text-foreground tracking-tight">
                   ${grandTotal.toFixed(2)}
                 </span>
               </div>
@@ -662,14 +750,14 @@ export default function CreateInvoice() {
 
           {/* Quick info */}
           <Card className="shadow-soft border-border/50">
-            <CardContent className="p-4 space-y-2 text-xs text-muted-foreground">
+            <CardContent className="p-4 space-y-2.5 text-xs text-muted-foreground">
               <div className="flex justify-between">
                 <span>Parts items</span>
-                <span className="font-medium text-foreground">{parts.length}</span>
+                <Badge variant="secondary" className="text-[10px] h-5">{parts.length}</Badge>
               </div>
               <div className="flex justify-between">
                 <span>Labour items</span>
-                <span className="font-medium text-foreground">{labour.length}</span>
+                <Badge variant="secondary" className="text-[10px] h-5">{labour.length}</Badge>
               </div>
               {serviceType && (
                 <div className="flex justify-between">
@@ -681,6 +769,12 @@ export default function CreateInvoice() {
                 <div className="flex justify-between">
                   <span>Vehicle type</span>
                   <Badge variant="outline" className="text-[10px]">{vehicleType}</Badge>
+                </div>
+              )}
+              {plateNumber && (
+                <div className="flex justify-between">
+                  <span>Plate</span>
+                  <span className="font-mono font-medium text-foreground">{plateNumber}</span>
                 </div>
               )}
             </CardContent>
