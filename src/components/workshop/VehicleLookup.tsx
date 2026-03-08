@@ -291,18 +291,25 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
     const cfg = statusConfig[key];
     const Icon = cfg.icon;
     return (
-      <div className={cn("px-4 py-2.5 flex items-center justify-between", cfg.bannerClass)}>
-        <div className="flex items-center gap-2">
-          <Icon className="w-4 h-4" />
-          <div>
-            <span className="text-sm font-semibold">{cfg.label}</span>
-            <span className="text-[11px] opacity-75 ml-2">{cfg.desc}</span>
-          </div>
-        </div>
-        {renderChangeLink()}
+      <div className={cn("px-4 py-2 flex items-center gap-2", cfg.bannerClass)}>
+        <Icon className="w-3.5 h-3.5" />
+        <span className="text-xs font-semibold">{cfg.label}</span>
+        <span className="text-[11px] opacity-70">· {cfg.desc}</span>
       </div>
     );
   };
+
+  const renderCardHeader = () => (
+    <div className="px-4 py-3 border-b border-border bg-secondary/20 flex items-center justify-between">
+      <SectionHeader icon={Car} title="Vehicle" />
+      <button
+        onClick={reset}
+        className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
+      >
+        <RotateCcw className="w-3 h-3" /> Change
+      </button>
+    </div>
+  );
 
   const renderReadOnlyField = (label: string, value: string) => (
     <div className="space-y-0.5">
@@ -366,6 +373,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
   if (state === "verified" && matchedRecord) {
     return (
       <div className={cn("rounded-xl border overflow-hidden bg-card", statusConfig.verified.accentClass)}>
+        {renderCardHeader()}
         {renderStatusBanner("verified")}
         <div className="p-4">
           <div className="grid grid-cols-3 gap-x-5 gap-y-3">
@@ -386,6 +394,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
   if (state === "verified-vin-mismatch" && matchedRecord) {
     return (
       <div className={cn("rounded-xl border overflow-hidden bg-card", statusConfig["verified-vin-mismatch"].accentClass)}>
+        {renderCardHeader()}
         {renderStatusBanner("verified-vin-mismatch")}
         <div className="p-4 space-y-4">
           <div className="flex gap-2">
@@ -413,6 +422,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
     const plate = matchedRecord?.plateNumber || searchPlate.trim().toUpperCase();
     return (
       <div className={cn("rounded-xl border overflow-hidden bg-card", statusConfig.workshop.accentClass)}>
+        {renderCardHeader()}
         {renderStatusBanner("workshop")}
         <div className="p-4 space-y-3">
           <div className="grid grid-cols-2 gap-3">
@@ -452,6 +462,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
     const plate = searchPlate.trim().toUpperCase();
     return (
       <div className={cn("rounded-xl border overflow-hidden bg-card", statusConfig.new.accentClass)}>
+        {renderCardHeader()}
         {renderStatusBanner("new")}
         <div className="p-4 space-y-3">
           <div className="grid grid-cols-3 gap-3">
