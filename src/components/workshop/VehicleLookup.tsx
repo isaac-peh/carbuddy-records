@@ -504,7 +504,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 pt-1">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 pt-1">
                   <Button
                     size="sm"
                     variant="outline"
