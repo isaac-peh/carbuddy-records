@@ -268,21 +268,21 @@ export default function CreateInvoice() {
         </div>
 
         <div className="flex flex-wrap gap-2">
-          <Button variant="outline" size="sm" className="gap-1.5" onClick={handleDuplicate}>
-            <Copy className="w-3.5 h-3.5" /> Duplicate
+          <Button variant="outline" size="sm" className="gap-1.5 text-xs sm:text-sm" onClick={handleDuplicate}>
+            <Copy className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Duplicate</span>
           </Button>
           <Separator orientation="vertical" className="h-8 hidden sm:block" />
-          <Button variant="outline" size="sm" className="gap-1.5" onClick={handleSaveDraft}>
-            <Save className="w-3.5 h-3.5" /> Save Draft
+          <Button variant="outline" size="sm" className="gap-1.5 text-xs sm:text-sm" onClick={handleSaveDraft}>
+            <Save className="w-3.5 h-3.5" /> <span className="hidden xs:inline">Save Draft</span>
           </Button>
-          <Button variant="outline" size="sm" className="gap-1.5" onClick={handlePrint}>
-            <Printer className="w-3.5 h-3.5" /> Print
+          <Button variant="outline" size="sm" className="gap-1.5 text-xs sm:text-sm" onClick={handlePrint}>
+            <Printer className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Print</span>
           </Button>
-          <Button variant="outline" size="sm" className="gap-1.5" onClick={handleSend}>
-            <Send className="w-3.5 h-3.5" /> Send
+          <Button variant="outline" size="sm" className="gap-1.5 text-xs sm:text-sm" onClick={handleSend}>
+            <Send className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Send</span>
           </Button>
-          <Button size="sm" className="gap-1.5 bg-accent text-accent-foreground hover:bg-accent/90" onClick={handleIssue}>
-            <FileText className="w-3.5 h-3.5" /> Issue Invoice
+          <Button size="sm" className="gap-1.5 text-xs sm:text-sm bg-accent text-accent-foreground hover:bg-accent/90" onClick={handleIssue}>
+            <FileText className="w-3.5 h-3.5" /> Issue
           </Button>
         </div>
       </div>
@@ -299,7 +299,7 @@ export default function CreateInvoice() {
                 <SectionHeader icon={FileText} title="Invoice Details" />
               </CardHeader>
               <CardContent className="space-y-3 pt-5">
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div className="space-y-1.5">
                     <Label className="text-xs text-muted-foreground">Invoice Number</Label>
                     <div className="relative">
@@ -476,7 +476,7 @@ export default function CreateInvoice() {
                     <Plus className="w-3.5 h-3.5" /> Add Part
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-[420px] p-0" align="end">
+                <PopoverContent className="w-[min(420px,calc(100vw-2rem))] p-0" align="end">
                   <Command>
                     <CommandInput
                       placeholder="Search inventory..."
@@ -531,11 +531,11 @@ export default function CreateInvoice() {
                     <TableHeader>
                       <TableRow className="bg-secondary/30">
                         <TableHead className="text-xs font-medium">Part</TableHead>
-                        <TableHead className="text-xs font-medium hidden sm:table-cell">SKU</TableHead>
-                        <TableHead className="text-xs font-medium text-center">Stock</TableHead>
+                        <TableHead className="text-xs font-medium hidden md:table-cell">SKU</TableHead>
+                        <TableHead className="text-xs font-medium text-center hidden sm:table-cell">Stock</TableHead>
                         <TableHead className="text-xs font-medium text-center w-20">Qty</TableHead>
-                        <TableHead className="text-xs font-medium text-right w-28">Unit Price</TableHead>
-                        <TableHead className="text-xs font-medium text-right w-24">Total</TableHead>
+                        <TableHead className="text-xs font-medium text-right w-28 hidden sm:table-cell">Unit Price</TableHead>
+                        <TableHead className="text-xs font-medium text-right w-20 sm:w-24">Total</TableHead>
                         <TableHead className="w-10" />
                       </TableRow>
                     </TableHeader>
@@ -543,8 +543,8 @@ export default function CreateInvoice() {
                       {parts.map((line) => (
                         <TableRow key={line.id} className="hover:bg-secondary/10">
                           <TableCell className="text-sm font-medium">{line.name}</TableCell>
-                          <TableCell className="hidden sm:table-cell text-xs text-muted-foreground font-mono">{line.sku}</TableCell>
-                          <TableCell className="text-center">
+                          <TableCell className="hidden md:table-cell text-xs text-muted-foreground font-mono">{line.sku}</TableCell>
+                          <TableCell className="text-center hidden sm:table-cell">
                             <Badge
                               variant="outline"
                               className={cn(
@@ -561,7 +561,7 @@ export default function CreateInvoice() {
                             <Input
                               type="number"
                               min={1}
-                              className="h-8 w-20 text-center mx-auto"
+                              className="h-8 w-16 sm:w-20 text-center mx-auto"
                               value={line.quantity}
                               onChange={(e) => {
                                 const qty = Math.max(1, Number(e.target.value));
@@ -572,7 +572,7 @@ export default function CreateInvoice() {
                               }}
                             />
                           </TableCell>
-                          <TableCell>
+                          <TableCell className="hidden sm:table-cell">
                             <Input
                               type="number"
                               min={0}
@@ -608,16 +608,16 @@ export default function CreateInvoice() {
 
           {/* ── Labour ─────────────────────────────────────────────── */}
           <Card className="shadow-soft border-border/50 overflow-hidden">
-            <CardHeader className="py-4 flex flex-row items-center justify-between bg-secondary/20">
+            <CardHeader className="py-4 flex flex-row items-center justify-between bg-secondary/20 gap-2">
               <SectionHeader icon={Wrench} title="Labour" />
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
                 <Popover open={serviceSearchOpen} onOpenChange={setServiceSearchOpen}>
                   <PopoverTrigger asChild>
-                    <Button size="sm" variant="outline" className="gap-1.5">
-                      <ClipboardList className="w-3.5 h-3.5" /> From Services
+                    <Button size="sm" variant="outline" className="gap-1 sm:gap-1.5 text-xs sm:text-sm px-2 sm:px-3">
+                      <ClipboardList className="w-3.5 h-3.5" /> <span className="hidden sm:inline">From </span>Services
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-[420px] p-0" align="end">
+                  <PopoverContent className="w-[min(420px,calc(100vw-2rem))] p-0" align="end">
                     <Command>
                       <CommandInput
                         placeholder="Search services..."
@@ -648,7 +648,7 @@ export default function CreateInvoice() {
                     </Command>
                   </PopoverContent>
                 </Popover>
-                <Button size="sm" variant="outline" className="gap-1.5" onClick={addLabourManual}>
+                <Button size="sm" variant="outline" className="gap-1 sm:gap-1.5 text-xs sm:text-sm px-2 sm:px-3" onClick={addLabourManual}>
                   <Plus className="w-3.5 h-3.5" /> Custom
                 </Button>
               </div>
@@ -660,13 +660,13 @@ export default function CreateInvoice() {
                   <span>No labour items yet. Add from <strong>Services</strong> or create a <strong>Custom</strong> entry.</span>
                 </div>
               ) : (
-                <div className="overflow-x-auto">
+                <div className="overflow-x-auto -mx-px">
                   <Table>
                     <TableHeader>
                       <TableRow className="bg-secondary/30">
                         <TableHead className="text-xs font-medium">Description</TableHead>
-                        <TableHead className="text-xs font-medium text-center w-24">Type</TableHead>
-                        <TableHead className="text-xs font-medium text-center w-24">Hours</TableHead>
+                        <TableHead className="text-xs font-medium text-center w-24 hidden sm:table-cell">Type</TableHead>
+                        <TableHead className="text-xs font-medium text-center w-24 hidden sm:table-cell">Hours</TableHead>
                         <TableHead className="text-xs font-medium text-right w-28">Rate</TableHead>
                         <TableHead className="text-xs font-medium text-right w-24">Total</TableHead>
                         <TableHead className="w-10" />
@@ -692,7 +692,7 @@ export default function CreateInvoice() {
                                 />
                               </div>
                             </TableCell>
-                            <TableCell className="text-center">
+                            <TableCell className="text-center hidden sm:table-cell">
                               <div className="flex h-8 rounded-md border border-input overflow-hidden mx-auto w-fit">
                                 <button
                                   className={cn(
@@ -714,7 +714,7 @@ export default function CreateInvoice() {
                                 </button>
                               </div>
                             </TableCell>
-                            <TableCell>
+                            <TableCell className="hidden sm:table-cell">
                               {line.pricingMode === "hourly" ? (
                                 <Input
                                   type="number"
