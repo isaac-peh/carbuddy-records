@@ -303,14 +303,12 @@ export default function CreateInvoice() {
                         placeholder="INV-0001"
                         className="pr-8"
                       />
-                      <button
-                        type="button"
-                        title="Reset to suggested number"
-                        onClick={resetInvoiceNumber}
-                        className="absolute right-2 text-muted-foreground/50 hover:text-muted-foreground transition-colors"
-                      >
-                        <RefreshCw className="w-3.5 h-3.5" />
-                      </button>
+                      <TapTooltip content="Reset to suggested number">
+                        <RefreshCw
+                          className="absolute right-2 w-3.5 h-3.5 text-muted-foreground/50 hover:text-muted-foreground transition-colors cursor-pointer"
+                          onClick={resetInvoiceNumber}
+                        />
+                      </TapTooltip>
                     </div>
                     <p className="text-[11px] text-muted-foreground/60">Auto-generated. Edit to use your own reference.</p>
                   </div>
