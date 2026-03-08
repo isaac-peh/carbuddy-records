@@ -523,3 +523,22 @@ function ComingSoon({ icon: Icon, title, description }: { icon: typeof ShoppingC
     </div>
   );
 }
+
+function ExpandableNotes({ text }: { text: string }) {
+  const [expanded, setExpanded] = useState(false);
+  const isLong = text.length > 50;
+
+  if (!isLong) return <span>{text}</span>;
+
+  return (
+    <div>
+      <span className={expanded ? "" : "line-clamp-1"}>{text}</span>
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="text-[10px] text-primary hover:underline mt-0.5 block"
+      >
+        {expanded ? "Show less" : "Show more"}
+      </button>
+    </div>
+  );
+}
