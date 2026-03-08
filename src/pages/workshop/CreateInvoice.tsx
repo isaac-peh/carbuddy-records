@@ -30,6 +30,7 @@ import {
 import { cn } from "@/lib/utils";
 import { mockParts, type Part } from "@/data/inventoryParts";
 import { mockServices, type ServiceItem } from "@/data/servicesData";
+import VehicleLookup, { type ResolvedVehicle } from "@/components/workshop/VehicleLookup";
 
 // ── Constants ──────────────────────────────────────────────────────────
 
