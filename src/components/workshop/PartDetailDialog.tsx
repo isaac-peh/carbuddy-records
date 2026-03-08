@@ -523,7 +523,7 @@ function PricingRow({ label, value, sub, highlight, bold }: { label: string; val
 
 function ComingSoon({ icon: Icon, title, description }: { icon: typeof ShoppingCart; title: string; description: string }) {
   return (
-    <div className="flex flex-col items-center justify-center h-full py-20">
+    <div className="flex flex-col items-center justify-center h-full py-20 px-6">
       <div className="w-14 h-14 rounded-2xl bg-secondary flex items-center justify-center mb-4">
         <Icon className="w-7 h-7 text-muted-foreground/60" />
       </div>
