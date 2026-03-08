@@ -223,7 +223,6 @@ export default function CreateInvoice() {
   const handleSend = () => toast.success("Invoice sent to customer");
   const handlePrint = () => window.print();
   const handleDuplicate = () => toast.info("Invoice duplicated");
-  const handleVoid = () => toast.warning("Invoice voided");
 
   // ── Render ────────────────────────────────────────────────────────────
 
