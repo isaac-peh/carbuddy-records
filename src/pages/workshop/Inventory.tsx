@@ -526,12 +526,10 @@ export default function Inventory() {
   };
 
   const handleDeleteCategory = (name: string) => {
-    // Move parts with this category to "Others"
     setParts((prev) => prev.map((p) => (p.category === name ? { ...p, category: "Others" } : p)));
-    // Remove from custom categories
     setCustomCategories((prev) => prev.filter((c) => c !== name));
-    // Remove from active filters
     setActiveCategories((prev) => prev.filter((c) => c !== name));
+    toast.success(`Category "${name}" deleted`);
   };
 
   const handleAddCategory = (name: string) => {
