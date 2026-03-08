@@ -159,6 +159,7 @@ export default function Services() {
       ...prev,
       { id: String(Date.now()), ...svc },
     ]);
+    toast.success("Service added successfully");
   };
 
   const handleEditService = (updated: Service) => {
