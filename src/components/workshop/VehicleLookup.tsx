@@ -388,7 +388,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
           </Button>
 
           {/* Grayed-out placeholder for locked fields */}
-          <div className="grid grid-cols-2 gap-3 opacity-30 pointer-events-none select-none">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 opacity-30 pointer-events-none select-none">
             {["Make", "Model", "Type", "Mileage"].map((f) => (
               <div key={f} className="space-y-1.5">
                 <Label className="text-xs text-muted-foreground">{f}</Label>
@@ -415,15 +415,15 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
         <CardContent className="pt-5 space-y-4">
           {renderStateBadge("verified")}
           <div className={cn("space-y-4 transition-opacity duration-200", showDisputePanel && "opacity-50")}>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {renderReadOnlyField("Plate Number", matchedRecord.plateNumber)}
               {renderReadOnlyField("VIN", matchedRecord.vin || "")}
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {renderReadOnlyField("Make", matchedRecord.make || "")}
               {renderReadOnlyField("Model", matchedRecord.model || "")}
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {renderReadOnlyField("Vehicle Type", matchedRecord.vehicleType || "—")}
               {renderReadOnlyField("Current Mileage (km)", matchedRecord.mileage?.toLocaleString() || "—")}
             </div>
@@ -469,7 +469,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
                       </p>
                     )}
                   </div>
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div className="space-y-1.5">
                       <Label className="text-xs text-muted-foreground">Make (optional)</Label>
                       <Input
@@ -572,11 +572,11 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
           </div>
 
           {/* Show verified record for reference */}
-          <div className="grid grid-cols-2 gap-3 opacity-70">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 opacity-70">
             {renderReadOnlyField("Plate Number", matchedRecord.plateNumber)}
             {renderReadOnlyField("VIN (on record)", matchedRecord.vin || "")}
           </div>
-          <div className="grid grid-cols-2 gap-3 opacity-70">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 opacity-70">
             {renderReadOnlyField("Make", matchedRecord.make || "")}
             {renderReadOnlyField("Model", matchedRecord.model || "")}
           </div>
@@ -606,7 +606,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {renderReadOnlyField("Plate Number", plate)}
             <div className="space-y-1.5">
               <Label className="text-xs text-muted-foreground">VIN</Label>
@@ -617,7 +617,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
               />
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="space-y-1.5">
               <Label className="text-xs text-muted-foreground">Make</Label>
               <Input
@@ -635,7 +635,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
               />
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="space-y-1.5">
               <Label className="text-xs text-muted-foreground">Vehicle Type <span className="text-destructive">*</span></Label>
               <Select value={editVehicleType} onValueChange={(v) => syncEditable("vehicleType", v)}>
@@ -681,7 +681,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
           )}
 
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {renderReadOnlyField("Plate Number", plate)}
             <div className="space-y-1.5">
               <Label className="text-xs text-muted-foreground">Vehicle Type <span className="text-destructive">*</span></Label>
@@ -705,7 +705,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
               placeholder="Providing a VIN creates an enriched record"
             />
           </div>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="space-y-1.5">
               <Label className="text-xs text-muted-foreground">Make</Label>
               <Input
