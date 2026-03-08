@@ -992,7 +992,7 @@ export default function Inventory() {
                               <Pencil className="w-3.5 h-3.5 mr-2" />
                               Edit
                             </DropdownMenuItem>
-                            <DropdownMenuItem className="text-destructive" onClick={() => setDeletePart(part)}>
+                            <DropdownMenuItem className="text-destructive" onClick={() => { setDeletePart(part); setDeleteDialogOpen(true); }}>
                               <Trash2 className="w-3.5 h-3.5 mr-2" />
                               Delete
                             </DropdownMenuItem>
