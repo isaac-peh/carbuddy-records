@@ -796,16 +796,16 @@ export default function CreateInvoice() {
                   <Badge variant="outline" className="text-[10px]">{serviceType}</Badge>
                 </div>
               )}
-              {vehicleType && (
+              {resolvedVehicle?.vehicleType && (
                 <div className="flex justify-between">
                   <span>Vehicle type</span>
-                  <Badge variant="outline" className="text-[10px]">{vehicleType}</Badge>
+                  <Badge variant="outline" className="text-[10px]">{resolvedVehicle.vehicleType}</Badge>
                 </div>
               )}
-              {plateNumber && (
+              {resolvedVehicle?.plateNumber && (
                 <div className="flex justify-between">
                   <span>Plate</span>
-                  <span className="font-mono font-medium text-foreground">{plateNumber}</span>
+                  <span className="font-mono font-medium text-foreground">{resolvedVehicle.plateNumber}</span>
                 </div>
               )}
             </CardContent>
