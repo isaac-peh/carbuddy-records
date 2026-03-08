@@ -425,7 +425,7 @@ export default function PartDetailDialog({
                   {filteredMovements.map((m) => {
                     const config = MOVEMENT_TYPE_CONFIG[m.type];
                     return (
-                      <TableRow key={m.id} className="hover:bg-secondary/10">
+                      <TableRow key={m.id} className="hover:bg-secondary/10 group">
                         <TableCell className="text-xs text-muted-foreground py-2">{format(new Date(m.date), "dd MMM yy")}</TableCell>
                         <TableCell className="py-2">
                           <Badge variant="outline" className={`text-[10px] px-1.5 py-0 h-5 ${config.className}`}>{config.label}</Badge>
@@ -435,7 +435,11 @@ export default function PartDetailDialog({
                         </TableCell>
                         <TableCell className="text-xs text-muted-foreground py-2">{REFERENCE_TYPE_LABELS[m.referenceType]}</TableCell>
                         <TableCell className="text-xs font-mono text-muted-foreground py-2">{m.referenceId || "—"}</TableCell>
-                        <TableCell className="text-xs text-muted-foreground py-2 max-w-[180px] truncate">{m.notes || "—"}</TableCell>
+                        <TableCell className="text-xs text-muted-foreground py-2 max-w-[220px]">
+                          {m.notes ? (
+                            <ExpandableNotes text={m.notes} />
+                          ) : "—"}
+                        </TableCell>
                         <TableCell className="text-xs text-right text-muted-foreground py-2">${m.costPriceAtTime}</TableCell>
                         <TableCell className="text-xs text-right font-medium py-2">{m.balanceAfter}</TableCell>
                       </TableRow>
