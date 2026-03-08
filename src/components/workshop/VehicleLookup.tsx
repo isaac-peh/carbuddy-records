@@ -423,7 +423,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
               {renderReadOnlyField("Make", matchedRecord.make || "")}
               {renderReadOnlyField("Model", matchedRecord.model || "")}
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {renderReadOnlyField("Vehicle Type", matchedRecord.vehicleType || "—")}
               {renderReadOnlyField("Current Mileage (km)", matchedRecord.mileage?.toLocaleString() || "—")}
             </div>
