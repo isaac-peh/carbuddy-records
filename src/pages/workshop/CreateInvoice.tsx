@@ -733,15 +733,6 @@ export default function CreateInvoice() {
                 />
               </div>
               <div className="space-y-1.5">
-                <Label className="text-xs text-muted-foreground">Parts Summary</Label>
-                <Textarea
-                  rows={2}
-                  placeholder="Summary of parts used..."
-                  value={partsSummary}
-                  onChange={(e) => setPartsSummary(e.target.value)}
-                />
-              </div>
-              <div className="space-y-1.5">
                 <Label className="text-xs text-muted-foreground">Remarks</Label>
                 <Textarea
                   rows={2}
