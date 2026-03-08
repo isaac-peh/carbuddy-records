@@ -644,7 +644,7 @@ export default function CreateInvoice() {
                               <div className="flex h-8 rounded-md border border-input overflow-hidden mx-auto w-fit">
                                 <button
                                   className={cn(
-                                    "px-2 text-[10px] font-medium transition-colors",
+                                    "w-14 text-[10px] font-medium transition-colors",
                                     line.pricingMode === "hourly" ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:text-foreground"
                                   )}
                                   onClick={() => updateLabourField(line.id, "pricingMode", "hourly")}
@@ -653,7 +653,7 @@ export default function CreateInvoice() {
                                 </button>
                                 <button
                                   className={cn(
-                                    "px-2 text-[10px] font-medium transition-colors border-l border-input",
+                                    "w-14 text-[10px] font-medium transition-colors border-l border-input",
                                     line.pricingMode === "flat" ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:text-foreground"
                                   )}
                                   onClick={() => updateLabourField(line.id, "pricingMode", "flat")}
