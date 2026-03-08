@@ -785,8 +785,8 @@ export default function CreateInvoice() {
                     <div className="flex h-8 rounded-md border border-input overflow-hidden shrink-0">
                       <button
                         className={cn(
-                          "px-2 text-xs font-medium transition-colors",
-                          discountMode === "value" ? "bg-secondary text-foreground" : "text-muted-foreground hover:text-foreground"
+                          "w-9 text-xs font-semibold transition-colors",
+                          discountMode === "value" ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:text-foreground"
                         )}
                         onClick={() => setDiscountMode("value")}
                       >
@@ -794,8 +794,8 @@ export default function CreateInvoice() {
                       </button>
                       <button
                         className={cn(
-                          "px-2 text-xs font-medium transition-colors border-l border-input",
-                          discountMode === "percent" ? "bg-secondary text-foreground" : "text-muted-foreground hover:text-foreground"
+                          "w-9 text-xs font-semibold transition-colors border-l border-input",
+                          discountMode === "percent" ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:text-foreground"
                         )}
                         onClick={() => setDiscountMode("percent")}
                       >
