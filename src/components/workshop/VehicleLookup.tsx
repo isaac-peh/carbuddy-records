@@ -572,7 +572,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
           </div>
 
           {/* Show verified record for reference */}
-          <div className="grid grid-cols-2 gap-3 opacity-70">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 opacity-70">
             {renderReadOnlyField("Plate Number", matchedRecord.plateNumber)}
             {renderReadOnlyField("VIN (on record)", matchedRecord.vin || "")}
           </div>
