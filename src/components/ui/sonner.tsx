@@ -12,26 +12,18 @@ const Toaster = ({ ...props }: ToasterProps) => {
       toastOptions={{
         classNames: {
           toast:
-            "group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border/60 group-[.toaster]:shadow-lg group-[.toaster]:rounded-xl group-[.toaster]:px-4 group-[.toaster]:py-3",
-          title: "group-[.toast]:font-semibold group-[.toast]:text-sm",
+            "group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border group-[.toaster]:border-border/50 group-[.toaster]:shadow-xl group-[.toaster]:shadow-black/5 group-[.toaster]:rounded-xl group-[.toaster]:px-4 group-[.toaster]:py-3.5 group-[.toaster]:gap-3",
+          title: "group-[.toast]:font-semibold group-[.toast]:text-[13px] group-[.toast]:tracking-tight",
           description: "group-[.toast]:text-muted-foreground group-[.toast]:text-xs",
           actionButton: "group-[.toast]:bg-primary group-[.toast]:text-primary-foreground",
           cancelButton: "group-[.toast]:bg-muted group-[.toast]:text-muted-foreground",
-          success:
-            "group-[.toaster]:!border-l-4 group-[.toaster]:!border-l-[hsl(var(--success))]",
-          error:
-            "group-[.toaster]:!border-l-4 group-[.toaster]:!border-l-[hsl(var(--destructive))]",
-          info:
-            "group-[.toaster]:!border-l-4 group-[.toaster]:!border-l-[hsl(var(--accent))]",
-          warning:
-            "group-[.toaster]:!border-l-4 group-[.toaster]:!border-l-[hsl(var(--warning))]",
         },
       }}
       icons={{
-        success: <CheckCircle2 className="h-4 w-4 text-[hsl(var(--success))]" />,
-        error: <AlertCircle className="h-4 w-4 text-destructive" />,
-        info: <Info className="h-4 w-4 text-accent" />,
-        warning: <AlertTriangle className="h-4 w-4 text-[hsl(var(--warning))]" />,
+        success: <CheckCircle2 className="h-[18px] w-[18px] text-[hsl(var(--success))]" />,
+        error: <AlertCircle className="h-[18px] w-[18px] text-destructive" />,
+        info: <Info className="h-[18px] w-[18px] text-accent" />,
+        warning: <AlertTriangle className="h-[18px] w-[18px] text-[hsl(var(--warning))]" />,
       }}
       {...props}
     />
