@@ -1,29 +1,16 @@
 
 
-## Plan: Add Services Page & Refine Inventory
+## Plan: Move Vehicle Lookup to Top of Invoice Form
 
-### What changes
+Currently the `VehicleLookup` component is nested inside a 2-column grid alongside the Customer card (lines 343-385). The user wants it to sit at the **top** of the invoice creation form as the first section, before Invoice Details.
 
-1. **Rename "Inventory" sidebar item to "Parts"** — since we're splitting the concept, "Parts" is more specific. Add a new "Services" item with a `Wrench` or `HandCoins` icon right below it.
+### Changes to `src/pages/workshop/CreateInvoice.tsx`
 
-2. **Rename the current Inventory page to Parts** (`/workshop/parts`) — the existing page already tracks spare parts well. Minor rename of heading from "Inventory" to "Parts". Keep the route and file as-is or rename for clarity.
+1. **Move `VehicleLookup` out of the 2-column Customer/Vehicle grid** and place it as the first card in the left column (before "Invoice Details"), making it a full-width standalone section.
 
-3. **Create a new Services page** (`/workshop/services`) with:
-   - Header: "Services" with an "Add Service" button
-   - Summary cards: Total services count, average price
-   - A simple table with columns: **Service Name**, **Description** (short), **Price** (flat rate for now)
-   - No stock tracking, no supplier, no SKU — these don't apply to labor
-   - Search bar to filter services
-   - Mock data: Oil Change Labor, Tyre Change, Brake Pad Replacement (Labor), Diagnostic Scan, A/C Regas, etc.
-   - Each row has a "more" menu (edit/delete) like the parts table
+2. **Move the Odometer card** to remain near the vehicle section — either inline below the VehicleLookup or merged into the Invoice Details card.
 
-4. **Update sidebar** — reorder main items: Dashboard → Parts → Services → Invoices → Jobs
+3. **Simplify the Customer/Vehicle grid** to just the Customer card (full width or kept in its current card layout).
 
-5. **Update routing** in `App.tsx` — add `/workshop/services` route, optionally rename `/workshop/inventory` to `/workshop/parts` (with redirect from old URL)
-
-### Files to create/modify
-- **Create**: `src/pages/workshop/Services.tsx`
-- **Modify**: `src/components/b2b/B2BSidebar.tsx` (add Services nav item, rename Inventory → Parts)
-- **Modify**: `src/App.tsx` (add Services route, rename inventory route)
-- **Modify**: `src/pages/workshop/Inventory.tsx` (rename heading from "Inventory" to "Parts")
+The component itself (`VehicleLookup.tsx`) requires no changes — it already handles all the stateful lookup logic and transitions. This is purely a layout reorder in `CreateInvoice.tsx`.
 
