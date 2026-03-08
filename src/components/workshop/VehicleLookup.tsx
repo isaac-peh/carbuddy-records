@@ -412,7 +412,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
             {renderChangeLink()}
           </div>
         </CardHeader>
-        <CardContent className="pt-5 space-y-4">
+        <CardContent className="pt-5 pb-4 space-y-4">
           {renderStateBadge("verified")}
           <div className={cn("space-y-4 transition-opacity duration-200", showDisputePanel && "opacity-50")}>
             <div className="grid grid-cols-2 gap-3">
