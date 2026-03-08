@@ -462,6 +462,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
     const plate = searchPlate.trim().toUpperCase();
     return (
       <div className={cn("rounded-xl border overflow-hidden bg-card", statusConfig.new.accentClass)}>
+        {renderCardHeader()}
         {renderStatusBanner("new")}
         <div className="p-4 space-y-3">
           <div className="grid grid-cols-3 gap-3">
