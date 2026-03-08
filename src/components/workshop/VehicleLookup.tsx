@@ -262,7 +262,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
       icon: Building2,
       label: "Known Vehicle",
       sub: "This vehicle is from your workshop's records.",
-      className: "bg-[hsl(var(--trust)/0.1)] text-[hsl(var(--trust))] border-[hsl(var(--trust)/0.3)]",
+      className: "bg-[hsl(217_91%_60%/0.1)] text-[hsl(217_91%_60%)] border-[hsl(217_91%_60%/0.3)]",
     },
     new: {
       icon: PlusCircle,
