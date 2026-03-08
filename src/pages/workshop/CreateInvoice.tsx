@@ -608,13 +608,13 @@ export default function CreateInvoice() {
 
           {/* ── Labour ─────────────────────────────────────────────── */}
           <Card className="shadow-soft border-border/50 overflow-hidden">
-            <CardHeader className="py-4 flex flex-row items-center justify-between bg-secondary/20">
+            <CardHeader className="py-4 flex flex-row items-center justify-between bg-secondary/20 gap-2">
               <SectionHeader icon={Wrench} title="Labour" />
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
                 <Popover open={serviceSearchOpen} onOpenChange={setServiceSearchOpen}>
                   <PopoverTrigger asChild>
-                    <Button size="sm" variant="outline" className="gap-1.5">
-                      <ClipboardList className="w-3.5 h-3.5" /> From Services
+                    <Button size="sm" variant="outline" className="gap-1 sm:gap-1.5 text-xs sm:text-sm px-2 sm:px-3">
+                      <ClipboardList className="w-3.5 h-3.5" /> <span className="hidden sm:inline">From </span>Services
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-[min(420px,calc(100vw-2rem))] p-0" align="end">
@@ -648,7 +648,7 @@ export default function CreateInvoice() {
                     </Command>
                   </PopoverContent>
                 </Popover>
-                <Button size="sm" variant="outline" className="gap-1.5" onClick={addLabourManual}>
+                <Button size="sm" variant="outline" className="gap-1 sm:gap-1.5 text-xs sm:text-sm px-2 sm:px-3" onClick={addLabourManual}>
                   <Plus className="w-3.5 h-3.5" /> Custom
                 </Button>
               </div>
