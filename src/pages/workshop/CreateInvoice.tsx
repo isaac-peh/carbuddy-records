@@ -252,9 +252,6 @@ export default function CreateInvoice() {
           <Button variant="outline" size="sm" className="gap-1.5" onClick={handleDuplicate}>
             <Copy className="w-3.5 h-3.5" /> Duplicate
           </Button>
-          <Button variant="outline" size="sm" className="gap-1.5 text-destructive hover:text-destructive" onClick={handleVoid}>
-            <XCircle className="w-3.5 h-3.5" /> Void
-          </Button>
           <Separator orientation="vertical" className="h-8 hidden sm:block" />
           <Button variant="outline" size="sm" className="gap-1.5" onClick={handleSaveDraft}>
             <Save className="w-3.5 h-3.5" /> Save Draft
