@@ -299,7 +299,7 @@ export default function CreateInvoice() {
                 <SectionHeader icon={FileText} title="Invoice Details" />
               </CardHeader>
               <CardContent className="space-y-3 pt-5">
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div className="space-y-1.5">
                     <Label className="text-xs text-muted-foreground">Invoice Number</Label>
                     <div className="relative">
