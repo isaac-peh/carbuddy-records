@@ -561,7 +561,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
                 This may indicate a plate transfer or data error.
               </p>
             </div>
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <Button size="sm" variant="outline" className="gap-1.5 text-xs" onClick={acceptVerified}>
                 <ShieldCheck className="w-3.5 h-3.5" /> Use Verified Vehicle
               </Button>
