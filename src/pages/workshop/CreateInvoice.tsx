@@ -60,8 +60,9 @@ interface LabourLine {
   id: string;
   serviceId: string | null;
   description: string;
+  pricingMode: "hourly" | "flat";
   hours: number;
-  hourlyRate: number;
+  rate: number;
 }
 
 let lineCounter = 0;
