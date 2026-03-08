@@ -95,10 +95,10 @@ function normalize(plate: string) {
 
 // ── Section header (matches invoice style) ────────────────────────────
 
-function SectionHeader({ icon: Icon, title }: { icon: React.ElementType; title: string }) {
+function SectionHeader({ icon: Icon, title, iconClassName }: { icon: React.ElementType; title: string; iconClassName?: string }) {
   return (
     <div className="flex items-center gap-2.5">
-      <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 bg-secondary text-muted-foreground">
+      <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center shrink-0", iconClassName || "bg-secondary text-muted-foreground")}>
         <Icon className="w-4 h-4" />
       </div>
       <CardTitle className="text-base">{title}</CardTitle>
