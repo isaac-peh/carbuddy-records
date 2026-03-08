@@ -683,7 +683,7 @@ export default function CreateInvoice() {
                                   <Badge variant="secondary" className="text-[10px] shrink-0">Service</Badge>
                                 )}
                                 <Input
-                                  className="h-8"
+                                  className="h-7 sm:h-8 text-xs sm:text-sm"
                                   placeholder="e.g. Oil change labour"
                                   value={line.description}
                                   onChange={(e) =>
