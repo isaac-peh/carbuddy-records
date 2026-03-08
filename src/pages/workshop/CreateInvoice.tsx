@@ -361,13 +361,11 @@ export default function CreateInvoice() {
                   <Label className="text-xs text-muted-foreground">Service Type</Label>
                   <Popover>
                     <PopoverTrigger asChild>
-                      <Button variant="outline" className="w-full justify-start font-normal text-left h-10">
+                      <Button variant="outline" className="w-full justify-start font-normal text-left h-10 group">
                         {serviceTypes.length === 0 ? (
-                          <span className="text-muted-foreground">Select types</span>
-                        ) : serviceTypes.length <= 2 ? (
-                          <span className="truncate">{serviceTypes.join(", ")}</span>
+                          <span className="text-muted-foreground group-hover:text-primary-foreground">Select types</span>
                         ) : (
-                          <span className="truncate">{serviceTypes.length} types selected</span>
+                          <span className="truncate">{serviceTypes.length} type{serviceTypes.length !== 1 ? "s" : ""} selected</span>
                         )}
                       </Button>
                     </PopoverTrigger>
@@ -401,6 +399,21 @@ export default function CreateInvoice() {
                       </div>
                     </PopoverContent>
                   </Popover>
+                  {serviceTypes.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5 pt-1">
+                      {serviceTypes.map(t => (
+                        <Badge
+                          key={t}
+                          variant="secondary"
+                          className="text-[11px] gap-1 pr-1 cursor-pointer hover:bg-destructive/10 hover:text-destructive transition-colors"
+                          onClick={() => toggleServiceType(t)}
+                        >
+                          {t}
+                          <span className="text-[10px] ml-0.5">×</span>
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 <div className="space-y-1.5">
