@@ -101,12 +101,8 @@ export default function CreateInvoice() {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
 
-  // Vehicle
-  const [plateNumber, setPlateNumber] = useState("");
-  const [vin, setVin] = useState("");
-  const [make, setMake] = useState("");
-  const [model, setModel] = useState("");
-  const [vehicleType, setVehicleType] = useState("");
+  // Vehicle (resolved from lookup widget)
+  const [resolvedVehicle, setResolvedVehicle] = useState<ResolvedVehicle | null>(null);
   const [odometer, setOdometer] = useState("");
 
   // Lines
