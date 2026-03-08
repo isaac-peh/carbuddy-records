@@ -671,7 +671,7 @@ export default function CreateInvoice() {
 
           {/* ── Notes ──────────────────────────────────────────────── */}
           <Card className="shadow-soft border-border/50 overflow-hidden">
-            <CardHeader className="pb-4 bg-secondary/20">
+            <CardHeader className="py-4 bg-secondary/20">
               <SectionHeader icon={StickyNote} title="Notes" />
             </CardHeader>
             <CardContent className="space-y-4 pt-5">
