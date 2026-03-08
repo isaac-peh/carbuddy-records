@@ -291,18 +291,25 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
     const cfg = statusConfig[key];
     const Icon = cfg.icon;
     return (
-      <div className={cn("px-4 py-2.5 flex items-center justify-between", cfg.bannerClass)}>
-        <div className="flex items-center gap-2">
-          <Icon className="w-4 h-4" />
-          <div>
-            <span className="text-sm font-semibold">{cfg.label}</span>
-            <span className="text-[11px] opacity-75 ml-2">{cfg.desc}</span>
-          </div>
-        </div>
-        {renderChangeLink()}
+      <div className={cn("px-4 py-2 flex items-center gap-2", cfg.bannerClass)}>
+        <Icon className="w-3.5 h-3.5" />
+        <span className="text-xs font-semibold">{cfg.label}</span>
+        <span className="text-[11px] opacity-70">· {cfg.desc}</span>
       </div>
     );
   };
+
+  const renderCardHeader = () => (
+    <div className="px-4 py-3 border-b border-border bg-secondary/20 flex items-center justify-between">
+      <SectionHeader icon={Car} title="Vehicle" />
+      <button
+        onClick={reset}
+        className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
+      >
+        <RotateCcw className="w-3 h-3" /> Change
+      </button>
+    </div>
+  );
 
   const renderReadOnlyField = (label: string, value: string) => (
     <div className="space-y-0.5">
