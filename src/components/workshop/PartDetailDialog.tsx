@@ -153,7 +153,7 @@ export default function PartDetailDialog({
 
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) resetForm(); onOpenChange(v); }}>
-      <DialogContent className="w-[calc(100%-2rem)] max-w-5xl h-[85vh] flex flex-col gap-0 p-0 overflow-hidden">
+      <DialogContent className="w-[calc(100%-2rem)] max-w-6xl h-[85vh] flex flex-col gap-0 p-0 overflow-hidden">
         {/* ── Header ── */}
         <div className="px-6 pt-6 pb-4 border-b border-border/60 shrink-0 pr-12">
           <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
@@ -192,10 +192,10 @@ export default function PartDetailDialog({
         <Tabs defaultValue="overview" className="flex-1 flex flex-col min-h-0">
           <div className="px-6 border-b border-border/60 shrink-0 overflow-x-auto no-scrollbar">
             <TabsList className="bg-transparent h-11 p-0 gap-1 rounded-none w-max">
-              <TabsTrigger value="overview" className="rounded-md data-[state=active]:bg-secondary data-[state=active]:text-foreground data-[state=active]:shadow-none text-xs font-medium px-3 py-1.5 h-7 my-auto">Overview</TabsTrigger>
-              <TabsTrigger value="movements" className="rounded-md data-[state=active]:bg-secondary data-[state=active]:text-foreground data-[state=active]:shadow-none text-xs font-medium px-3 py-1.5 h-7 my-auto">Movements</TabsTrigger>
-              <TabsTrigger value="purchase-orders" className="rounded-md data-[state=active]:bg-secondary data-[state=active]:text-foreground data-[state=active]:shadow-none text-xs font-medium px-3 py-1.5 h-7 my-auto">Purchase Orders</TabsTrigger>
-              <TabsTrigger value="sales" className="rounded-md data-[state=active]:bg-secondary data-[state=active]:text-foreground data-[state=active]:shadow-none text-xs font-medium px-3 py-1.5 h-7 my-auto">Sales</TabsTrigger>
+              <TabsTrigger value="overview" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm text-xs font-medium px-3 py-1.5 h-7 my-auto transition-colors">Overview</TabsTrigger>
+              <TabsTrigger value="movements" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm text-xs font-medium px-3 py-1.5 h-7 my-auto transition-colors">Movements</TabsTrigger>
+              <TabsTrigger value="purchase-orders" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm text-xs font-medium px-3 py-1.5 h-7 my-auto transition-colors">Purchase Orders</TabsTrigger>
+              <TabsTrigger value="sales" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm text-xs font-medium px-3 py-1.5 h-7 my-auto transition-colors">Sales</TabsTrigger>
             </TabsList>
           </div>
 
@@ -330,36 +330,29 @@ export default function PartDetailDialog({
 
           {/* ── Movements Tab ── */}
           <TabsContent value="movements" className="flex-1 overflow-y-auto no-scrollbar m-0 p-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+            <div className="flex items-center justify-between gap-3 mb-4">
               <div className="flex items-center gap-2">
                 <h3 className="text-sm font-semibold text-foreground">Stock Movements</h3>
-                <Badge variant="secondary" className="text-[10px] h-5 px-1.5">{partMovements.length}</Badge>
+                <Badge variant="secondary" className="text-[10px] h-5 px-1.5">{filteredMovements.length}</Badge>
+                <Select value={movFilter} onValueChange={(v) => setMovFilter(v as "all" | StockMovement["type"])}>
+                  <SelectTrigger className="h-7 text-[11px] w-[100px] gap-1">
+                    <Filter className="w-3 h-3 text-muted-foreground shrink-0" />
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All</SelectItem>
+                    <SelectItem value="in">Stock In</SelectItem>
+                    <SelectItem value="out">Stock Out</SelectItem>
+                    <SelectItem value="adjustment">Adjustment</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
-              <div className="flex items-center gap-2">
-                {/* Filter by movement type */}
-                <div className="flex items-center gap-1 bg-secondary/50 rounded-lg p-0.5 border border-border/40">
-                  <Filter className="w-3 h-3 text-muted-foreground ml-2" />
-                  {(["all", "in", "out", "adjustment"] as const).map((type) => (
-                    <button
-                      key={type}
-                      onClick={() => setMovFilter(type)}
-                      className={`text-[11px] font-medium px-2.5 py-1 rounded-md transition-colors ${
-                        movFilter === type
-                          ? "bg-primary text-primary-foreground shadow-sm"
-                          : "text-muted-foreground hover:text-foreground"
-                      }`}
-                    >
-                      {type === "all" ? "All" : type === "adjustment" ? "Adj" : type.toUpperCase()}
-                    </button>
-                  ))}
-                </div>
-                {!showForm && (
-                  <Button size="sm" className="gap-1.5 h-7 text-xs" onClick={() => setShowForm(true)}>
-                    <Plus className="w-3 h-3" />
-                    Record Movement
-                  </Button>
-                )}
-              </div>
+              {!showForm && (
+                <Button size="sm" className="gap-1.5 h-7 text-xs" onClick={() => setShowForm(true)}>
+                  <Plus className="w-3 h-3" />
+                  Record Movement
+                </Button>
+              )}
             </div>
 
             {/* Inline Form */}
@@ -432,7 +425,7 @@ export default function PartDetailDialog({
                   {filteredMovements.map((m) => {
                     const config = MOVEMENT_TYPE_CONFIG[m.type];
                     return (
-                      <TableRow key={m.id} className="hover:bg-secondary/10">
+                      <TableRow key={m.id} className="hover:bg-secondary/10 group">
                         <TableCell className="text-xs text-muted-foreground py-2">{format(new Date(m.date), "dd MMM yy")}</TableCell>
                         <TableCell className="py-2">
                           <Badge variant="outline" className={`text-[10px] px-1.5 py-0 h-5 ${config.className}`}>{config.label}</Badge>
@@ -442,7 +435,11 @@ export default function PartDetailDialog({
                         </TableCell>
                         <TableCell className="text-xs text-muted-foreground py-2">{REFERENCE_TYPE_LABELS[m.referenceType]}</TableCell>
                         <TableCell className="text-xs font-mono text-muted-foreground py-2">{m.referenceId || "—"}</TableCell>
-                        <TableCell className="text-xs text-muted-foreground py-2 max-w-[180px] truncate">{m.notes || "—"}</TableCell>
+                        <TableCell className="text-xs text-muted-foreground py-2 max-w-[220px]">
+                          {m.notes ? (
+                            <ExpandableNotes text={m.notes} />
+                          ) : "—"}
+                        </TableCell>
                         <TableCell className="text-xs text-right text-muted-foreground py-2">${m.costPriceAtTime}</TableCell>
                         <TableCell className="text-xs text-right font-medium py-2">{m.balanceAfter}</TableCell>
                       </TableRow>
@@ -508,7 +505,7 @@ function PricingRow({ label, value, sub, highlight, bold }: { label: string; val
     <div className="flex items-center justify-between py-2.5">
       <span className="text-sm text-muted-foreground">{label}</span>
       <span className={`text-sm tabular-nums ${bold ? "font-bold" : "font-semibold"} ${highlight ? "text-emerald-600" : "text-foreground"}`}>
-        {value}{sub && <span className="text-sm font-semibold text-foreground ml-1">{sub}</span>}
+        {value}{sub && <span className="text-sm font-normal text-muted-foreground ml-1">{sub}</span>}
       </span>
     </div>
   );
@@ -523,6 +520,25 @@ function ComingSoon({ icon: Icon, title, description }: { icon: typeof ShoppingC
       <h3 className="text-base font-semibold text-foreground mb-1.5">{title}</h3>
       <p className="text-sm text-muted-foreground text-center max-w-sm leading-relaxed">{description}</p>
       <Badge variant="secondary" className="mt-4 text-[11px]">Coming Soon</Badge>
+    </div>
+  );
+}
+
+function ExpandableNotes({ text }: { text: string }) {
+  const [expanded, setExpanded] = useState(false);
+  const isLong = text.length > 50;
+
+  if (!isLong) return <span>{text}</span>;
+
+  return (
+    <div>
+      <span className={expanded ? "" : "line-clamp-1"}>{text}</span>
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="text-[10px] text-primary hover:underline mt-0.5 block"
+      >
+        {expanded ? "Show less" : "Show more"}
+      </button>
     </div>
   );
 }
