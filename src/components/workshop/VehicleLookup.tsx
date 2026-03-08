@@ -606,7 +606,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {renderReadOnlyField("Plate Number", plate)}
             <div className="space-y-1.5">
               <Label className="text-xs text-muted-foreground">VIN</Label>
