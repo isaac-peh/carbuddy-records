@@ -142,6 +142,12 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
     setEditMake("");
     setEditModel("");
     setEditVehicleType("");
+    setShowDisputePanel(false);
+    setDisputeVin("");
+    setDisputeMake("");
+    setDisputeModel("");
+    setDisputeVehicleType("");
+    setDisputeCreated(false);
     onVehicleCleared();
   }, [onVehicleCleared]);
 
