@@ -697,7 +697,7 @@ export default function CreateInvoice() {
                               <Button
                                 variant="ghost"
                                 size="icon"
-                                className="h-7 w-7 text-muted-foreground hover:text-destructive"
+                                className="h-7 w-7 text-muted-foreground hover:!text-destructive hover:bg-destructive/10"
                                 onClick={() => removeLabour(line.id)}
                               >
                                 <Trash2 className="w-3.5 h-3.5" />
