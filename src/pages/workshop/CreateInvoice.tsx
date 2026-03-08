@@ -315,7 +315,7 @@ export default function CreateInvoice() {
                             </button>
                           </TooltipTrigger>
                           <TooltipContent side="top" className="text-xs">
-                            Reset to suggested number
+                            Reset to generated invoice number
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
