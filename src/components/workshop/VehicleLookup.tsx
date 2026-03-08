@@ -373,6 +373,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
   if (state === "verified" && matchedRecord) {
     return (
       <div className={cn("rounded-xl border overflow-hidden bg-card", statusConfig.verified.accentClass)}>
+        {renderCardHeader()}
         {renderStatusBanner("verified")}
         <div className="p-4">
           <div className="grid grid-cols-3 gap-x-5 gap-y-3">
