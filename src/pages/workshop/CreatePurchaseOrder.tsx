@@ -98,6 +98,12 @@ export default function CreatePurchaseOrder() {
 
   const orderTotal = useMemo(() => lines.reduce((s, l) => s + l.lineTotal, 0), [lines]);
 
+  // Redirect if editing non-DRAFT (after all hooks)
+  if (shouldRedirect) {
+    navigate(`/workshop/purchase-orders/${id}`, { replace: true });
+    return null;
+  }
+
   // ── Handlers ──────────────────────────────────────────────────────
   const addItem = (part: Part) => {
     const existing = lines.find(l => l.inventoryItemId === part.id);
