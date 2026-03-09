@@ -394,7 +394,7 @@ export default function Invoices() {
                                 <CheckCircle2 className="w-3.5 h-3.5 mr-2" /> Mark as Paid
                               </DropdownMenuItem>
                             )}
-                            <DropdownMenuItem onClick={() => toast.info("Preparing PDF...")}>
+                            <DropdownMenuItem onClick={() => navigate(`/workshop/invoices/${inv.id}`)}>
                               <Printer className="w-3.5 h-3.5 mr-2" /> Print PDF
                             </DropdownMenuItem>
                             {inv.status !== "Draft" && (
