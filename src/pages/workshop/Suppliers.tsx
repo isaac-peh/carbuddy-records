@@ -4,8 +4,13 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetFooter } from "@/components/ui/sheet";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
 import { mockSuppliers, Supplier } from "@/data/suppliersData";
 
@@ -14,6 +19,21 @@ export default function Suppliers() {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("All");
   const [suppliers, setSuppliers] = useState(mockSuppliers);
+
+  // Sheet state
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const [editingSupplier, setEditingSupplier] = useState<Supplier | null>(null);
+  const [formName, setFormName] = useState("");
+  const [formContact, setFormContact] = useState("");
+  const [formPhone, setFormPhone] = useState("");
+  const [formEmail, setFormEmail] = useState("");
+  const [formAddress, setFormAddress] = useState("");
+  const [formNotes, setFormNotes] = useState("");
+  const [formActive, setFormActive] = useState(true);
+  const [nameError, setNameError] = useState(false);
+
+  // Delete state
+  const [deleteSupplierIdOpen, setDeleteSupplierIdOpen] = useState<string | null>(null);
 
   const activeCount = suppliers.filter(s => s.isActive).length;
   const inactiveCount = suppliers.length - activeCount;
@@ -25,7 +45,6 @@ export default function Suppliers() {
                           s.email.toLowerCase().includes(search.toLowerCase()) ||
                           s.phone.includes(search);
     if (!matchesSearch) return false;
-
     if (filter === "Active") return s.isActive;
     if (filter === "Inactive") return !s.isActive;
     return true;
@@ -42,6 +61,76 @@ export default function Suppliers() {
     }));
   };
 
+  const openAddSheet = () => {
+    setEditingSupplier(null);
+    setFormName("");
+    setFormContact("");
+    setFormPhone("");
+    setFormEmail("");
+    setFormAddress("");
+    setFormNotes("");
+    setFormActive(true);
+    setNameError(false);
+    setSheetOpen(true);
+  };
+
+  const openEditSheet = (supplier: Supplier) => {
+    setEditingSupplier(supplier);
+    setFormName(supplier.name);
+    setFormContact(supplier.contactPerson);
+    setFormPhone(supplier.phone);
+    setFormEmail(supplier.email);
+    setFormAddress(supplier.address);
+    setFormNotes(supplier.notes);
+    setFormActive(supplier.isActive);
+    setNameError(false);
+    setSheetOpen(true);
+  };
+
+  const handleSave = () => {
+    if (!formName.trim()) {
+      setNameError(true);
+      return;
+    }
+    if (editingSupplier) {
+      setSuppliers(prev => prev.map(s => s.id === editingSupplier.id ? {
+        ...s,
+        name: formName.trim(),
+        contactPerson: formContact.trim(),
+        phone: formPhone.trim(),
+        email: formEmail.trim(),
+        address: formAddress.trim(),
+        notes: formNotes.trim(),
+        isActive: formActive,
+      } : s));
+      toast({ title: "Supplier updated", description: `${formName.trim()} has been updated.` });
+    } else {
+      const newSupplier: Supplier = {
+        id: `sup-${Date.now()}`,
+        name: formName.trim(),
+        contactPerson: formContact.trim(),
+        phone: formPhone.trim(),
+        email: formEmail.trim(),
+        address: formAddress.trim(),
+        notes: formNotes.trim(),
+        isActive: formActive,
+        linkedItemsCount: 0,
+        totalPurchased: 0,
+      };
+      setSuppliers(prev => [newSupplier, ...prev]);
+      toast({ title: "Supplier added", description: `${formName.trim()} has been added.` });
+    }
+    setSheetOpen(false);
+  };
+
+  const handleDelete = () => {
+    if (!deleteSupplierIdOpen) return;
+    const s = suppliers.find(s => s.id === deleteSupplierIdOpen);
+    setSuppliers(prev => prev.filter(s => s.id !== deleteSupplierIdOpen));
+    toast({ title: "Supplier deleted", description: `${s?.name || "Supplier"} has been removed.` });
+    setDeleteSupplierIdOpen(null);
+  };
+
   return (
     <div className="space-y-6 pb-8">
       {/* Header */}
@@ -50,7 +139,7 @@ export default function Suppliers() {
           <h1 className="text-2xl font-bold tracking-tight">Suppliers</h1>
           <p className="text-sm text-muted-foreground mt-1">Manage vendor relationships and procurement tracking</p>
         </div>
-        <Button>
+        <Button onClick={openAddSheet}>
           <Plus className="w-4 h-4 mr-2" />
           Add Supplier
         </Button>
@@ -73,9 +162,7 @@ export default function Suppliers() {
         <Card className="shadow-soft">
           <CardContent className="p-5">
             <p className="text-xs font-medium text-muted-foreground mb-1">Total Procurement Value</p>
-            <p className="text-2xl font-bold text-accent">
-              ${totalPurchased.toLocaleString()}
-            </p>
+            <p className="text-2xl font-bold text-accent">${totalPurchased.toLocaleString()}</p>
           </CardContent>
         </Card>
       </div>
@@ -118,7 +205,7 @@ export default function Suppliers() {
               <p className="text-sm text-muted-foreground mt-1 max-w-sm">
                 Add suppliers to track procurement and link them to your inventory items.
               </p>
-              <Button className="mt-4" variant="outline">
+              <Button className="mt-4" variant="outline" onClick={openAddSheet}>
                 <Plus className="w-4 h-4 mr-2" />
                 Add Supplier
               </Button>
@@ -177,7 +264,7 @@ export default function Suppliers() {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => openEditSheet(s)}>
                               <Edit className="w-4 h-4 mr-2" /> Edit Details
                             </DropdownMenuItem>
                             <DropdownMenuItem onClick={() => toggleStatus(s.id)}>
@@ -187,7 +274,7 @@ export default function Suppliers() {
                                 <><Power className="w-4 h-4 mr-2" /> Mark Active</>
                               )}
                             </DropdownMenuItem>
-                            <DropdownMenuItem className="text-destructive focus:bg-destructive/10 focus:text-destructive">
+                            <DropdownMenuItem className="text-destructive focus:bg-destructive/10 focus:text-destructive" onClick={() => setDeleteSupplierIdOpen(s.id)}>
                               <Trash2 className="w-4 h-4 mr-2" /> Delete
                             </DropdownMenuItem>
                           </DropdownMenuContent>
@@ -201,6 +288,71 @@ export default function Suppliers() {
           )}
         </CardContent>
       </Card>
+
+      {/* Add/Edit Supplier Sheet */}
+      <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
+        <SheetContent side="right" className="sm:max-w-lg">
+          <SheetHeader>
+            <SheetTitle>{editingSupplier ? "Edit Supplier" : "Add Supplier"}</SheetTitle>
+          </SheetHeader>
+          <div className="space-y-4 py-6">
+            <div>
+              <Label htmlFor="sup-name">Supplier Name <span className="text-destructive">*</span></Label>
+              <Input id="sup-name" value={formName} onChange={e => { setFormName(e.target.value); setNameError(false); }} placeholder="Company name" className="mt-1.5" />
+              {nameError && <p className="text-destructive text-xs mt-1">Supplier name is required</p>}
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <Label htmlFor="sup-contact">Contact Person</Label>
+                <Input id="sup-contact" value={formContact} onChange={e => setFormContact(e.target.value)} placeholder="Full name" className="mt-1.5" />
+              </div>
+              <div>
+                <Label htmlFor="sup-phone">Phone</Label>
+                <Input id="sup-phone" value={formPhone} onChange={e => setFormPhone(e.target.value)} placeholder="+60 12-345 6789" className="mt-1.5" />
+              </div>
+            </div>
+            <div>
+              <Label htmlFor="sup-email">Email</Label>
+              <Input id="sup-email" type="email" value={formEmail} onChange={e => setFormEmail(e.target.value)} placeholder="email@company.com" className="mt-1.5" />
+            </div>
+            <div>
+              <Label htmlFor="sup-address">Address</Label>
+              <Textarea id="sup-address" value={formAddress} onChange={e => setFormAddress(e.target.value)} placeholder="Full address" rows={2} className="mt-1.5 resize-none" />
+            </div>
+            <div>
+              <Label htmlFor="sup-notes">Notes</Label>
+              <Textarea id="sup-notes" value={formNotes} onChange={e => setFormNotes(e.target.value)} placeholder="Payment terms, lead times, delivery notes..." rows={2} className="mt-1.5 resize-none" />
+            </div>
+            <div className="flex items-center justify-between pt-2">
+              <div>
+                <Label htmlFor="sup-active">Active</Label>
+                <p className="text-xs text-muted-foreground mt-0.5">Inactive suppliers are hidden from purchase order selection.</p>
+              </div>
+              <Switch id="sup-active" checked={formActive} onCheckedChange={setFormActive} />
+            </div>
+          </div>
+          <SheetFooter className="flex flex-row gap-2 sm:justify-end">
+            <Button variant="ghost" onClick={() => setSheetOpen(false)}>Cancel</Button>
+            <Button onClick={handleSave}>Save</Button>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
+
+      {/* Delete Supplier AlertDialog */}
+      <AlertDialog open={deleteSupplierIdOpen !== null} onOpenChange={open => { if (!open) setDeleteSupplierIdOpen(null); }}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Supplier</AlertDialogTitle>
+            <AlertDialogDescription>
+              Deleting this supplier won't affect existing purchase history or linked inventory items.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction className="bg-destructive text-destructive-foreground hover:bg-destructive/90" onClick={handleDelete}>Delete</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
