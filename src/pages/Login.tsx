@@ -1,33 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AlertCircle, Car, Eye, EyeOff, Lock, Mail } from "lucide-react";
+import { Car, Eye, EyeOff, Lock, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-
-// ── Spinner ────────────────────────────────────────────────────────────────
-
-const Spinner = () => (
-  <svg
-    className="animate-spin w-4 h-4"
-    viewBox="0 0 24 24"
-    fill="none"
-    aria-hidden="true"
-  >
-    <circle
-      className="opacity-25"
-      cx="12" cy="12" r="10"
-      stroke="currentColor"
-      strokeWidth="4"
-    />
-    <path
-      className="opacity-75"
-      fill="currentColor"
-      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-    />
-  </svg>
-);
 
 // ── Stats data ─────────────────────────────────────────────────────────────
 
@@ -46,22 +23,9 @@ const Login = () => {
   const [password, setPassword]       = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember]       = useState(false);
-  const [isLoading, setIsLoading]     = useState(false);
-  const [formError, setFormError]     = useState<string | null>(null);
-
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    setFormError(null);
-    setIsLoading(true);
-    try {
-      // Simulate auth — replace with real call
-      await new Promise((res) => setTimeout(res, 1000));
-      navigate("/workshop");
-    } catch {
-      setFormError("Invalid email or password. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
+    navigate("/workshop");
   };
 
   return (
@@ -194,14 +158,6 @@ const Login = () => {
             </p>
           </div>
 
-          {/* Error banner */}
-          {formError && (
-            <div className="flex items-start gap-3 p-3.5 mb-6 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive text-sm">
-              <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
-              <span>{formError}</span>
-            </div>
-          )}
-
           {/* Form */}
           <form onSubmit={handleLogin} className="space-y-5" noValidate>
 
@@ -221,7 +177,6 @@ const Login = () => {
                   className="pl-9 h-11"
                   required
                   autoComplete="email"
-                  disabled={isLoading}
                 />
               </div>
             </div>
@@ -251,7 +206,6 @@ const Login = () => {
                   className="pl-9 pr-10 h-11"
                   required
                   autoComplete="current-password"
-                  disabled={isLoading}
                 />
                 <button
                   type="button"
@@ -273,7 +227,6 @@ const Login = () => {
                 id="remember"
                 checked={remember}
                 onCheckedChange={(v) => setRemember(v as boolean)}
-                disabled={isLoading}
               />
               <Label
                 htmlFor="remember"
@@ -286,17 +239,9 @@ const Login = () => {
             {/* Submit */}
             <Button
               type="submit"
-              className="w-full h-11 text-sm font-semibold gap-2"
-              disabled={isLoading}
+              className="w-full h-11 text-sm font-semibold"
             >
-              {isLoading ? (
-                <>
-                  <Spinner />
-                  Signing in…
-                </>
-              ) : (
-                "Sign in"
-              )}
+              Sign in
             </Button>
 
           </form>
