@@ -246,9 +246,16 @@ export default function PrintableInvoice({
       )}
 
       {/* Footer */}
-      <div className="flex justify-between items-center pt-4" style={{ borderTop: "2px solid #111827" }}>
-        <p className="font-semibold text-[11px] text-[#111827]">Thank you for your business</p>
-        <p className="text-[10px] text-[#9CA3AF]">This is a computer-generated invoice.</p>
+      <div style={{ borderTop: "2px solid #111827" }} className="pt-4">
+        {/* Row 1 — sign-off */}
+        <div className="flex justify-between items-center">
+          <p className="font-semibold text-[11px] text-[#111827]">Thank you for your business.</p>
+          <p className="text-[10px] text-[#9CA3AF]">This is a computer-generated invoice.</p>
+        </div>
+        {/* Row 2 — Powered by Mobilis */}
+        <div className="mt-3 pt-3 text-center" style={{ borderTop: "1px solid #E5E7EB" }}>
+          <p className="text-[9px] text-[#D1D5DB]">Powered by Mobilis · mobilis.com</p>
+        </div>
       </div>
     </div>
   );
