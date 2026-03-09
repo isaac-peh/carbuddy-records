@@ -34,6 +34,7 @@ const statusConfig: Record<string, { icon: typeof CheckCircle2; color: string }>
   Pending: { icon: Clock, color: "bg-accent/10 text-accent border-accent/20" },
   Overdue: { icon: XCircle, color: "bg-destructive/10 text-destructive border-destructive/20" },
   Draft: { icon: FileText, color: "bg-muted text-muted-foreground border-muted" },
+  Voided: { icon: Ban, color: "bg-muted text-muted-foreground/60 border-muted line-through" },
 };
 
 const tabs = ["All", "Paid", "Pending", "Overdue", "Draft"] as const;
