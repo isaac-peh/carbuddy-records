@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import {
   FileText, Search, Plus, DollarSign, Clock,
   CheckCircle2, XCircle, MoreHorizontal, Eye, Send,
-  Printer, Pencil, Trash2, CalendarIcon, X, FileSearch,
+  Printer, Pencil, Trash2, CalendarIcon, X, FileSearch, Ban,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
