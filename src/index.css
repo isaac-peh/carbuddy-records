@@ -155,19 +155,27 @@
 /* ── Print styles ──────────────────────────────────────────────── */
 @media print {
   /* Hide everything except the printable invoice */
-  body * {
-    visibility: hidden;
+  body > *:not(.print-invoice) {
+    display: none !important;
   }
-  .print-invoice,
-  .print-invoice * {
-    visibility: visible !important;
+  
+  /* Target common app wrappers */
+  #root > *:not(.print-invoice) {
+    display: none !important;
   }
+  
+  /* Show only the printable invoice */
   .print-invoice {
+    display: block !important;
     position: absolute;
     left: 0;
     top: 0;
     width: 100%;
-    display: block !important;
+    visibility: visible !important;
+  }
+  
+  .print-invoice * {
+    visibility: visible !important;
   }
 
   @page {
@@ -175,7 +183,9 @@
     margin: 0;
   }
 
-  body {
+  html, body {
+    height: auto !important;
+    overflow: visible !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
