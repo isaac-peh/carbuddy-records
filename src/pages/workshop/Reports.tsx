@@ -415,9 +415,9 @@ export default function Reports() {
                 <tr key={c.id} className="hover:bg-secondary/20 transition-colors">
                   <td className="px-6 py-4">
                     <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
-                      i === 0 ? "bg-yellow-500/20 text-yellow-700" :
-                      i === 1 ? "bg-slate-300/40 text-slate-700" :
-                      i === 2 ? "bg-amber-700/20 text-amber-800" : "bg-secondary text-muted-foreground"
+                      i === 0 ? "bg-warning/20 text-warning" :
+                      i === 1 ? "bg-muted text-muted-foreground" :
+                      i === 2 ? "bg-accent/20 text-accent" : "bg-secondary text-muted-foreground"
                     }`}>
                       {i + 1}
                     </div>
