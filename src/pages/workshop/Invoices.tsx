@@ -326,7 +326,8 @@ export default function Invoices() {
                   <TableHead className="text-xs font-medium">Invoice</TableHead>
                   <TableHead className="text-xs font-medium">Customer</TableHead>
                   <TableHead className="text-xs font-medium hidden md:table-cell">Vehicle</TableHead>
-                  <TableHead className="text-xs font-medium hidden lg:table-cell">Services</TableHead>
+                  <TableHead className="text-xs font-medium hidden lg:table-cell">Plate</TableHead>
+                  <TableHead className="text-xs font-medium hidden xl:table-cell">VIN</TableHead>
                   <TableHead className="text-xs font-medium text-right">Amount</TableHead>
                   <TableHead className="text-xs font-medium">Status</TableHead>
                   <TableHead className="text-xs font-medium hidden sm:table-cell">Date</TableHead>
