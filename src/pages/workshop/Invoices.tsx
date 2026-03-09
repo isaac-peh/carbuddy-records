@@ -255,6 +255,7 @@ export default function Invoices() {
             </div>
           </PopoverContent>
         </Popover>
+        </div>
 
         <div className="flex gap-1.5 flex-wrap">
           {tabs.map((tab) => (
