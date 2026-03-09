@@ -357,7 +357,8 @@ export default function Invoices() {
                       <TableCell className="font-mono text-xs font-medium text-accent">{inv.number}</TableCell>
                       <TableCell className="text-sm font-medium">{inv.customer}</TableCell>
                       <TableCell className="hidden md:table-cell text-sm text-muted-foreground">{inv.vehicle}</TableCell>
-                      <TableCell className="hidden lg:table-cell text-xs text-muted-foreground max-w-[200px] truncate">{inv.services}</TableCell>
+                      <TableCell className="hidden lg:table-cell text-xs font-mono text-muted-foreground">{inv.plateNumber}</TableCell>
+                      <TableCell className="hidden xl:table-cell text-xs font-mono text-muted-foreground max-w-[180px] truncate">{inv.vin}</TableCell>
                       <TableCell className="text-right text-sm font-semibold">${inv.amount}</TableCell>
                       <TableCell>
                         <Badge variant="outline" className={`text-[11px] ${config.color}`}>

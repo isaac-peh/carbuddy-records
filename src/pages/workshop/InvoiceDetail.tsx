@@ -170,47 +170,50 @@ export default function InvoiceDetail() {
       <div className="grid grid-cols-1 xl:grid-cols-[1fr_360px] gap-6 items-start min-w-0">
         {/* Left column */}
         <div className="space-y-6">
-          {/* Invoice Details */}
-          <Card className="shadow-soft border-border/50 overflow-hidden">
-            <CardHeader className="py-4 bg-secondary/20">
-              <SectionHeader icon={FileText} title="Invoice Details" />
-            </CardHeader>
-            <CardContent className="pt-5 space-y-1">
-              <InfoRow label="Invoice Number" value={<span className="font-mono">{invoice.number}</span>} />
-              <InfoRow label="Service Date" value={invoice.date} />
-              {invoice.serviceTypes.length > 0 && (
-                <div className="flex justify-between py-1.5">
-                  <span className="text-xs text-muted-foreground">Service Type</span>
-                  <div className="flex flex-wrap gap-1 justify-end">
-                    {invoice.serviceTypes.map((t) => (
-                      <Badge key={t} variant="secondary" className="text-[10px]">{t}</Badge>
-                    ))}
+          {/* Invoice Details + Vehicle side by side on desktop */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Invoice Details */}
+            <Card className="shadow-soft border-border/50 overflow-hidden">
+              <CardHeader className="py-4 bg-secondary/20">
+                <SectionHeader icon={FileText} title="Invoice Details" />
+              </CardHeader>
+              <CardContent className="pt-5 space-y-1">
+                <InfoRow label="Invoice Number" value={<span className="font-mono">{invoice.number}</span>} />
+                <InfoRow label="Service Date" value={invoice.date} />
+                {invoice.serviceTypes.length > 0 && (
+                  <div className="flex justify-between py-1.5">
+                    <span className="text-xs text-muted-foreground">Service Type</span>
+                    <div className="flex flex-wrap gap-1 justify-end">
+                      {invoice.serviceTypes.map((t) => (
+                        <Badge key={t} variant="secondary" className="text-[10px]">{t}</Badge>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
-              <InfoRow label="Technician" value={invoice.technician} />
-              <InfoRow label="Odometer" value={invoice.odometer ? `${Number(invoice.odometer).toLocaleString()} km` : undefined} />
-            </CardContent>
-          </Card>
+                )}
+                <InfoRow label="Technician" value={invoice.technician} />
+                <InfoRow label="Odometer" value={invoice.odometer ? `${Number(invoice.odometer).toLocaleString()} km` : undefined} />
+              </CardContent>
+            </Card>
 
-          {/* Vehicle */}
-          <Card className="shadow-soft border-border/50 overflow-hidden">
-            <CardHeader className="py-4 bg-secondary/20">
-              <SectionHeader icon={Car} title="Vehicle" />
-            </CardHeader>
-            <CardContent className="pt-5 space-y-1">
-              <InfoRow label="Plate Number" value={<span className="font-mono">{invoice.plateNumber}</span>} />
-              <InfoRow label="Vehicle Type" value={invoice.vehicleType} />
-              <InfoRow label="Make / Model" value={invoice.vehicle} />
-              {invoice.vin && <InfoRow label="VIN" value={<span className="font-mono text-xs">{invoice.vin}</span>} />}
-              {invoice.mileageStatus !== "VALID" && (
-                <div className="flex items-center gap-2 mt-2 px-2 py-1.5 rounded-md bg-warning/10 border border-warning/20">
-                  <AlertTriangle className="w-3.5 h-3.5 text-warning shrink-0" />
-                  <span className="text-xs text-warning font-medium">Mileage flag</span>
-                </div>
-              )}
-            </CardContent>
-          </Card>
+            {/* Vehicle */}
+            <Card className="shadow-soft border-border/50 overflow-hidden">
+              <CardHeader className="py-4 bg-secondary/20">
+                <SectionHeader icon={Car} title="Vehicle" />
+              </CardHeader>
+              <CardContent className="pt-5 space-y-1">
+                <InfoRow label="Plate Number" value={<span className="font-mono">{invoice.plateNumber}</span>} />
+                <InfoRow label="Vehicle Type" value={invoice.vehicleType} />
+                <InfoRow label="Make / Model" value={invoice.vehicle} />
+                {invoice.vin && <InfoRow label="VIN" value={<span className="font-mono text-xs">{invoice.vin}</span>} />}
+                {invoice.mileageStatus !== "VALID" && (
+                  <div className="flex items-center gap-2 mt-2 px-2 py-1.5 rounded-md bg-warning/10 border border-warning/20">
+                    <AlertTriangle className="w-3.5 h-3.5 text-warning shrink-0" />
+                    <span className="text-xs text-warning font-medium">Mileage flag</span>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
 
           {/* Customer */}
           {(invoice.customer || invoice.phone || invoice.email) && (
