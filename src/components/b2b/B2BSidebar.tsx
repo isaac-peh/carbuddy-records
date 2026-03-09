@@ -18,6 +18,7 @@ import {
 const mainItems = [
   { title: "Dashboard", url: "/workshop", icon: LayoutDashboard },
   { title: "Parts", url: "/workshop/inventory", icon: Package },
+  { title: "Purchase Orders", url: "/workshop/purchase-orders", icon: ShoppingCart },
   { title: "Services", url: "/workshop/services", icon: Wrench },
   { title: "Invoices", url: "/workshop/invoices", icon: FileText },
 ];

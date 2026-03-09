@@ -69,12 +69,7 @@ export default function CreatePurchaseOrder() {
 
   // Load existing PO if editing
   const existingPO = isEdit ? mockPurchaseOrders.find(po => po.id === id) : null;
-
-  // Redirect if editing non-DRAFT
-  if (isEdit && existingPO && existingPO.status !== "DRAFT") {
-    navigate(`/workshop/purchase-orders/${id}`, { replace: true });
-    return null;
-  }
+  const shouldRedirect = isEdit && existingPO && existingPO.status !== "DRAFT";
 
   const [suggestedPONumber] = useState(() => existingPO?.poNumber || generatePONumber());
   const [poNumber, setPONumber] = useState(suggestedPONumber);
