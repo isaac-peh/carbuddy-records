@@ -69,7 +69,7 @@ const Login = () => {
 
       {/* ── Left: brand panel ─────────────────────────────────────────── */}
       <div
-        className="hidden lg:flex lg:w-[45%] xl:w-1/2 relative overflow-hidden flex-shrink-0"
+        className="hidden lg:flex lg:w-[45%] xl:w-1/2 relative overflow-hidden flex-shrink-0 flex-col justify-between p-12 xl:p-16"
         style={{
           background:
             "linear-gradient(160deg, hsl(222,47%,8%) 0%, hsl(222,47%,13%) 55%, hsl(218,47%,11%) 100%)",
@@ -99,11 +99,8 @@ const Login = () => {
         {/* Right-edge separator */}
         <div className="absolute right-0 inset-y-0 w-px bg-white/[0.06]" />
 
-        {/* Content — constrained width, centered in panel */}
-        <div className="relative z-10 flex flex-col justify-between w-full max-w-[440px] mx-auto py-12 xl:py-16 px-10 xl:px-12">
-
           {/* Logo */}
-          <div className="flex items-center gap-3">
+          <div className="relative z-10 flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-white/[0.07] border border-white/[0.08] flex items-center justify-center flex-shrink-0">
               <Car className="w-5 h-5 text-white" />
             </div>
@@ -118,7 +115,7 @@ const Login = () => {
           </div>
 
           {/* Headline + features */}
-          <div className="space-y-8">
+          <div className="relative z-10 space-y-8">
             <div className="space-y-4">
               <div className="w-8 h-px bg-accent/60" />
               <h1 className="text-4xl xl:text-[2.75rem] font-bold text-white leading-[1.1] tracking-tight">
@@ -165,11 +162,10 @@ const Login = () => {
           </div>
 
           {/* Copyright */}
-          <p className="text-white/20 text-xs">
+          <p className="relative z-10 text-white/20 text-xs">
             © {new Date().getFullYear()} Mobilis Suite. All rights reserved.
           </p>
 
-        </div>
       </div>
 
       {/* ── Right: form panel ─────────────────────────────────────────── */}
