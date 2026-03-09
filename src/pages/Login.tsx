@@ -123,10 +123,6 @@ const Login = () => {
                 workshop needs,<br />
                 <span className="text-accent">in one place.</span>
               </h1>
-              <p className="text-white/50 text-[0.9375rem] leading-relaxed">
-                Inventory, invoicing, service records and vehicle history —
-                built for modern automotive workshops.
-              </p>
             </div>
 
             {/* Feature list */}
