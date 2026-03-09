@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { cn } from "@/lib/utils";
 import { mockInvoices, type Invoice } from "@/data/invoicesData";
+import PrintableInvoice from "@/components/workshop/PrintableInvoice";
 
 const statusConfig: Record<string, { icon: typeof CheckCircle2; color: string }> = {
   Paid: { icon: CheckCircle2, color: "bg-success/10 text-success border-success/20" },
@@ -450,6 +451,35 @@ export default function InvoiceDetail() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Printable invoice (hidden on screen, visible on print) */}
+      <PrintableInvoice
+        invoiceNumber={invoice.number}
+        serviceDate={new Date(invoice.date)}
+        serviceTypes={invoice.serviceTypes}
+        technician={invoice.technician}
+        customerName={invoice.customer}
+        phone={invoice.phone}
+        email={invoice.email}
+        vehicle={{
+          plateNumber: invoice.plateNumber,
+          vin: invoice.vin,
+          make: invoice.vehicle.split(" ").slice(0, -1).join(" "),
+          model: "",
+          vehicleType: invoice.vehicleType,
+        }}
+        odometer={invoice.odometer}
+        parts={invoice.parts}
+        labour={invoice.labour}
+        partsTotal={invoice.partsTotal}
+        labourTotal={invoice.labourTotal}
+        subtotal={invoice.subtotal}
+        discountValue={invoice.discountMode === "percent" ? invoice.subtotal * (invoice.discount / 100) : invoice.discount}
+        grandTotal={invoice.grandTotal}
+        discountMode={invoice.discountMode}
+        discountRaw={invoice.discount}
+        remarks={invoice.remarks}
+      />
     </div>
   );
 }
