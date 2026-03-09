@@ -95,6 +95,11 @@ export default function Invoices() {
     toast.success("Invoice marked as paid");
   };
 
+  const voidInvoice = (id: string) => {
+    setInvoices((prev) => prev.map((inv) => inv.id === id ? { ...inv, status: "Voided" as const } : inv));
+    toast.success("Invoice voided");
+  };
+
   const bulkMarkAsPaid = () => {
     setInvoices((prev) => prev.map((inv) => selected.has(inv.id) ? { ...inv, status: "Paid" as const } : inv));
     toast.success(`${selected.size} invoice(s) marked as paid`);
