@@ -14,6 +14,10 @@ import Invoices from "./pages/workshop/Invoices";
 import CreateInvoice from "./pages/workshop/CreateInvoice";
 import InvoiceDetail from "./pages/workshop/InvoiceDetail";
 import Services from "./pages/workshop/Services";
+import Reports from "./pages/workshop/Reports";
+import Customers from "./pages/workshop/Customers";
+import CustomerDetail from "./pages/workshop/CustomerDetail";
+import Suppliers from "./pages/workshop/Suppliers";
 import { Navigate } from "react-router-dom";
 
 const queryClient = new QueryClient();
@@ -38,6 +42,10 @@ const App = () => (
               <Route path="invoices/new" element={<CreateInvoice />} />
               <Route path="invoices/:id" element={<InvoiceDetail />} />
               <Route path="invoices/:id/edit" element={<CreateInvoice />} />
+              <Route path="reports" element={<Reports />} />
+              <Route path="customers" element={<Customers />} />
+              <Route path="customers/:id" element={<CustomerDetail />} />
+              <Route path="suppliers" element={<Suppliers />} />
             </Route>
 
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
