@@ -13,7 +13,7 @@ export interface Invoice {
   technician: string;
   odometer: string;
   amount: number;
-  status: "Paid" | "Pending" | "Overdue" | "Draft";
+  status: "Paid" | "Pending" | "Overdue" | "Draft" | "Voided";
   date: string;
   dueDate: string;
   parts: {

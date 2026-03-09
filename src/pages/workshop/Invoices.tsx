@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import {
   FileText, Search, Plus, DollarSign, Clock,
   CheckCircle2, XCircle, MoreHorizontal, Eye, Send,
-  Printer, Pencil, Trash2, CalendarIcon, X, FileSearch,
+  Printer, Pencil, Trash2, CalendarIcon, X, FileSearch, Ban,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -34,6 +34,7 @@ const statusConfig: Record<string, { icon: typeof CheckCircle2; color: string }>
   Pending: { icon: Clock, color: "bg-accent/10 text-accent border-accent/20" },
   Overdue: { icon: XCircle, color: "bg-destructive/10 text-destructive border-destructive/20" },
   Draft: { icon: FileText, color: "bg-muted text-muted-foreground border-muted" },
+  Voided: { icon: Ban, color: "bg-muted text-muted-foreground/60 border-muted line-through" },
 };
 
 const tabs = ["All", "Paid", "Pending", "Overdue", "Draft"] as const;
@@ -92,6 +93,11 @@ export default function Invoices() {
   const markAsPaid = (id: string) => {
     setInvoices((prev) => prev.map((inv) => inv.id === id ? { ...inv, status: "Paid" as const } : inv));
     toast.success("Invoice marked as paid");
+  };
+
+  const voidInvoice = (id: string) => {
+    setInvoices((prev) => prev.map((inv) => inv.id === id ? { ...inv, status: "Voided" as const } : inv));
+    toast.success("Invoice voided");
   };
 
   const bulkMarkAsPaid = () => {
@@ -176,83 +182,79 @@ export default function Invoices() {
       </div>
 
       {/* Filters */}
-      <div className="space-y-3">
-        {/* Row 1: Search + Date Range */}
-        <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-          <div className="relative flex-1 max-w-sm">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
-            <Input
-              placeholder="Search invoices..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="pl-9 bg-secondary/60 border-0 shadow-soft h-8"
-            />
-          </div>
-
-          {/* Date Range — single popover */}
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                size="sm"
-                className={cn(
-                  "text-xs h-8 gap-1.5 shrink-0 w-full sm:w-auto justify-start sm:justify-center",
-                  hasDateFilter && "text-accent border-accent/30"
-                )}
-              >
-                <CalendarIcon className="w-3 h-3" />
-                {dateFrom && dateTo
-                  ? `${format(dateFrom, "dd MMM")} – ${format(dateTo, "dd MMM")}`
-                  : dateFrom
-                    ? `From ${format(dateFrom, "dd MMM")}`
-                    : dateTo
-                      ? `Until ${format(dateTo, "dd MMM")}`
-                      : "Date Range"}
-                {hasDateFilter && (
-                  <span
-                    role="button"
-                    className="ml-auto sm:ml-1 rounded-full hover:bg-accent/20 p-0.5 -mr-1"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setDateFrom(undefined);
-                      setDateTo(undefined);
-                    }}
-                  >
-                    <X className="w-3 h-3" />
-                  </span>
-                )}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
-              <div className="flex flex-col sm:flex-row">
-                <div className="p-3 border-b sm:border-b-0 sm:border-r border-border">
-                  <p className="text-[10px] font-medium text-muted-foreground mb-1 px-1">From</p>
-                  <Calendar
-                    mode="single"
-                    selected={dateFrom}
-                    onSelect={setDateFrom}
-                    disabled={(d) => dateTo ? isAfter(startOfDay(d), startOfDay(dateTo)) : false}
-                    initialFocus
-                    className="p-0 pointer-events-auto"
-                  />
-                </div>
-                <div className="p-3">
-                  <p className="text-[10px] font-medium text-muted-foreground mb-1 px-1">To</p>
-                  <Calendar
-                    mode="single"
-                    selected={dateTo}
-                    onSelect={setDateTo}
-                    disabled={(d) => dateFrom ? isBefore(startOfDay(d), startOfDay(dateFrom)) : false}
-                    initialFocus
-                    className="p-0 pointer-events-auto"
-                  />
-                </div>
-              </div>
-            </PopoverContent>
-          </Popover>
+      <div className="flex flex-col lg:flex-row lg:items-center gap-3">
+        <div className="relative flex-1 max-w-sm">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
+          <Input
+            placeholder="Search invoices..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="pl-9 bg-secondary/60 border-0 shadow-soft h-8"
+          />
         </div>
 
-        {/* Row 2: Status tabs */}
+        {/* Date Range — single popover */}
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              size="sm"
+              className={cn(
+                "text-xs h-8 gap-1.5 shrink-0 w-full sm:w-auto justify-start sm:justify-center",
+                hasDateFilter && "text-accent border-accent/30"
+              )}
+            >
+              <CalendarIcon className="w-3 h-3" />
+              {dateFrom && dateTo
+                ? `${format(dateFrom, "dd MMM")} – ${format(dateTo, "dd MMM")}`
+                : dateFrom
+                  ? `From ${format(dateFrom, "dd MMM")}`
+                  : dateTo
+                    ? `Until ${format(dateTo, "dd MMM")}`
+                    : "Date Range"}
+              {hasDateFilter && (
+                <span
+                  role="button"
+                  className="ml-auto sm:ml-1 rounded-full hover:bg-accent/20 p-0.5 -mr-1"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setDateFrom(undefined);
+                    setDateTo(undefined);
+                  }}
+                >
+                  <X className="w-3 h-3" />
+                </span>
+              )}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0" align="start">
+            <div className="flex flex-col sm:flex-row">
+              <div className="p-3 border-b sm:border-b-0 sm:border-r border-border">
+                <p className="text-[10px] font-medium text-muted-foreground mb-1 px-1">From</p>
+                <Calendar
+                  mode="single"
+                  selected={dateFrom}
+                  onSelect={setDateFrom}
+                  disabled={(d) => dateTo ? isAfter(startOfDay(d), startOfDay(dateTo)) : false}
+                  initialFocus
+                  className="p-0 pointer-events-auto"
+                />
+              </div>
+              <div className="p-3">
+                <p className="text-[10px] font-medium text-muted-foreground mb-1 px-1">To</p>
+                <Calendar
+                  mode="single"
+                  selected={dateTo}
+                  onSelect={setDateTo}
+                  disabled={(d) => dateFrom ? isBefore(startOfDay(d), startOfDay(dateFrom)) : false}
+                  initialFocus
+                  className="p-0 pointer-events-auto"
+                />
+              </div>
+            </div>
+          </PopoverContent>
+        </Popover>
+
         <div className="flex gap-1.5 flex-wrap">
           {tabs.map((tab) => (
             <Button
@@ -327,7 +329,7 @@ export default function Invoices() {
                   <TableHead className="text-xs font-medium">Customer</TableHead>
                   <TableHead className="text-xs font-medium hidden md:table-cell">Vehicle</TableHead>
                   <TableHead className="text-xs font-medium hidden lg:table-cell">Plate</TableHead>
-                  <TableHead className="text-xs font-medium hidden xl:table-cell">VIN</TableHead>
+                  <TableHead className="text-xs font-medium hidden lg:table-cell">VIN</TableHead>
                   <TableHead className="text-xs font-medium text-right">Amount</TableHead>
                   <TableHead className="text-xs font-medium">Status</TableHead>
                   <TableHead className="text-xs font-medium hidden sm:table-cell">Date</TableHead>
@@ -358,7 +360,7 @@ export default function Invoices() {
                       <TableCell className="text-sm font-medium">{inv.customer}</TableCell>
                       <TableCell className="hidden md:table-cell text-sm text-muted-foreground">{inv.vehicle}</TableCell>
                       <TableCell className="hidden lg:table-cell text-xs font-mono text-muted-foreground">{inv.plateNumber}</TableCell>
-                      <TableCell className="hidden xl:table-cell text-xs font-mono text-muted-foreground max-w-[180px] truncate">{inv.vin}</TableCell>
+                      <TableCell className="hidden lg:table-cell text-xs font-mono text-muted-foreground max-w-[180px] truncate">{inv.vin}</TableCell>
                       <TableCell className="text-right text-sm font-semibold">${inv.amount}</TableCell>
                       <TableCell>
                         <Badge variant="outline" className={`text-[11px] ${config.color}`}>
@@ -397,6 +399,17 @@ export default function Invoices() {
                               <DropdownMenuItem onClick={() => toast.success("Invoice sent")}>
                                 <Send className="w-3.5 h-3.5 mr-2" /> Send to Customer
                               </DropdownMenuItem>
+                            )}
+                            {inv.status === "Pending" && (
+                              <>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem
+                                  className="text-destructive focus:text-destructive"
+                                  onClick={() => voidInvoice(inv.id)}
+                                >
+                                  <Ban className="w-3.5 h-3.5 mr-2" /> Void Invoice
+                                </DropdownMenuItem>
+                              </>
                             )}
                             {inv.status === "Draft" && (
                               <>
