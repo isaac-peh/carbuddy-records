@@ -504,21 +504,21 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
                   </div>
                 </div>
 
-                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 pt-1">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
                   <Button
                     size="sm"
                     variant="outline"
-                    className="gap-1.5 text-xs"
+                    className="gap-1.5 text-xs w-full"
                     onClick={proceedWithDispute}
                     disabled={!disputeVehicleType}
                   >
-                    <PlusCircle className="w-3.5 h-3.5" />
-                    Proceed with New Vehicle Record
+                    <PlusCircle className="w-3.5 h-3.5 shrink-0" />
+                    Proceed with New Record
                   </Button>
                   <Button
                     size="sm"
                     variant="ghost"
-                    className="text-xs whitespace-normal text-left"
+                    className="text-xs w-full"
                     onClick={() => {
                       setShowDisputePanel(false);
                       setDisputeVin("");
