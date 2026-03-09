@@ -24,6 +24,7 @@ const mainItems = [
 
 const secondaryItems = [
   { title: "Customers", url: "/workshop/customers", icon: Users },
+  { title: "Suppliers", url: "/workshop/suppliers", icon: Truck },
   { title: "Reports", url: "/workshop/reports", icon: BarChart3 },
   { title: "Settings", url: "/workshop/settings", icon: Settings },
 ];

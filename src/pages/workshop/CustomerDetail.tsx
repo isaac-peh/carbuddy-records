@@ -29,17 +29,9 @@ export default function CustomerDetail() {
   const [activeVehicle, setActiveVehicle] = useState<string | null>(null);
   const [notes, setNotes] = useState(customer?.notes || "");
 
-  if (!customer) {
-    return (
-      <div className="flex flex-col items-center justify-center py-20">
-        <h2 className="text-xl font-bold mb-2">Customer Not Found</h2>
-        <Button onClick={() => navigate('/workshop/customers')} variant="outline">Back to Customers</Button>
-      </div>
-    );
-  }
-
   // Get customer's invoices and sort newest first
   const customerInvoices = useMemo(() => {
+    if (!customer) return [];
     let invoices = mockInvoices
       .filter(i => customer.invoiceHistory.includes(i.id))
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
@@ -52,6 +44,7 @@ export default function CustomerDetail() {
 
   // Extract top services
   const topServices = useMemo(() => {
+    if (!customer) return [];
     const serviceCounts: Record<string, number> = {};
     mockInvoices.filter(i => customer.invoiceHistory.includes(i.id)).forEach(inv => {
       inv.serviceTypes.forEach(t => {
@@ -62,6 +55,15 @@ export default function CustomerDetail() {
       .sort((a, b) => b[1] - a[1])
       .slice(0, 3);
   }, [customer]);
+
+  if (!customer) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20">
+        <h2 className="text-xl font-bold mb-2">Customer Not Found</h2>
+        <Button onClick={() => navigate('/workshop/customers')} variant="outline">Back to Customers</Button>
+      </div>
+    );
+  }
 
   const handleSaveNotes = () => {
     toast({ title: "Note saved", description: "Customer notes have been updated." });
