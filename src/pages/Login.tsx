@@ -123,14 +123,18 @@ const Login = () => {
                 workshop needs,<br />
                 <span className="text-accent">in one place.</span>
               </h1>
+              <p className="text-white/50 text-[0.9375rem] leading-relaxed">
+                Inventory, invoicing, service records and vehicle history —
+                built for modern automotive workshops.
+              </p>
             </div>
 
             {/* Feature list */}
             <ul className="space-y-2.5">
               {[
-                "Inventory & parts management",
-                "Invoicing & service records",
-                "Vehicle history reporting",
+                "Reduce paperwork and manual errors",
+                "Keep every vehicle's history in one place",
+                "Build trust and transparency with customers",
               ].map((f) => (
                 <li key={f} className="flex items-center gap-3 text-sm text-white/55">
                   <span className="w-1 h-1 rounded-full bg-accent/70 flex-shrink-0" />
