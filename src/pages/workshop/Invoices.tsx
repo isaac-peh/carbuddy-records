@@ -400,6 +400,17 @@ export default function Invoices() {
                                 <Send className="w-3.5 h-3.5 mr-2" /> Send to Customer
                               </DropdownMenuItem>
                             )}
+                            {inv.status === "Pending" && (
+                              <>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem
+                                  className="text-destructive focus:text-destructive"
+                                  onClick={() => voidInvoice(inv.id)}
+                                >
+                                  <Ban className="w-3.5 h-3.5 mr-2" /> Void Invoice
+                                </DropdownMenuItem>
+                              </>
+                            )}
                             {inv.status === "Draft" && (
                               <>
                                 <DropdownMenuSeparator />
