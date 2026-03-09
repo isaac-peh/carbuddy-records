@@ -19,7 +19,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { LineChart, Line, BarChart, Bar, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
+import { LineChart, Line, BarChart, Bar, ResponsiveContainer, PieChart, Pie, Cell, XAxis } from "recharts";
 import { mockInvoices } from "@/data/invoicesData";
 import { mockParts } from "@/data/inventoryParts";
 

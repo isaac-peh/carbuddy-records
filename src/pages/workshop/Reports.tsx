@@ -268,7 +268,7 @@ export default function Reports() {
                     contentStyle={{ borderRadius: '8px', border: '1px solid hsl(var(--border))' }}
                     formatter={(value: number) => [`$${value}`, "Revenue"]}
                   />
-                  <Bar dataKey="revenue" fill="hsl(var(--primary))" radius={[0, 4, 4, 0]} barSize={24} />
+                  <Bar dataKey="revenue" fill="hsl(var(--accent))" radius={[0, 4, 4, 0]} barSize={24} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
