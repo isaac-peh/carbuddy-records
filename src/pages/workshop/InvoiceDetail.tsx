@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { cn } from "@/lib/utils";
 import { mockInvoices, type Invoice } from "@/data/invoicesData";
+import PrintableInvoice from "@/components/workshop/PrintableInvoice";
 
 const statusConfig: Record<string, { icon: typeof CheckCircle2; color: string }> = {
   Paid: { icon: CheckCircle2, color: "bg-success/10 text-success border-success/20" },
