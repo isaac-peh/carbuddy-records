@@ -517,7 +517,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
                   </Button>
                   <Button
                     size="sm"
-                    variant="outline"
+                    variant="destructive"
                     className="text-xs w-full"
                     onClick={() => {
                       setShowDisputePanel(false);
