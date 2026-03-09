@@ -336,7 +336,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
   const renderReadOnlyField = (label: string, value: string) => (
     <div className="space-y-1.5">
       <Label className="text-xs text-muted-foreground">{label}</Label>
-      <div className="h-10 flex items-center px-3 rounded-md bg-secondary/50 border border-border/50 text-sm font-medium">
+      <div className="h-10 flex items-center px-3 rounded-md bg-secondary/50 border border-border/50 text-sm font-medium min-w-0 overflow-hidden text-ellipsis">
         {value || "—"}
       </div>
     </div>
