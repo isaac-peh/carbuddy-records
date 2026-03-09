@@ -323,7 +323,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
     if (!cfg) return null;
     const Icon = cfg.icon;
     return (
-      <div className={cn("w-full flex items-center gap-3 rounded-lg border px-4 py-3", cfg.className)}>
+      <div className={cn("w-full flex items-center gap-3 rounded-lg border px-4 py-3 min-w-0", cfg.className)}>
         <Icon className="w-5 h-5 shrink-0" />
         <div className="min-w-0">
           <p className="text-sm font-bold leading-tight">{cfg.label}</p>
@@ -336,8 +336,8 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
   const renderReadOnlyField = (label: string, value: string) => (
     <div className="space-y-1.5">
       <Label className="text-xs text-muted-foreground">{label}</Label>
-      <div className="h-10 flex items-center px-3 rounded-md bg-secondary/50 border border-border/50 text-sm font-medium">
-        {value || "—"}
+      <div className="h-10 flex items-center px-3 rounded-md bg-secondary/50 border border-border/50 text-sm font-medium min-w-0 overflow-hidden text-ellipsis">
+        <span className="truncate">{value || "—"}</span>
       </div>
     </div>
   );
@@ -518,7 +518,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
                   <Button
                     size="sm"
                     variant="ghost"
-                    className="text-xs"
+                    className="text-xs whitespace-normal text-left"
                     onClick={() => {
                       setShowDisputePanel(false);
                       setDisputeVin("");
@@ -527,7 +527,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
                       setDisputeVehicleType("");
                     }}
                   >
-                    Cancel — Use Verified Vehicle
+                    Cancel — Use Verified
                   </Button>
                 </div>
               </div>
