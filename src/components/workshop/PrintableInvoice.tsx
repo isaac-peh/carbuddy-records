@@ -68,7 +68,7 @@ export default function PrintableInvoice({
   const hasDiscount = discountValue > 0;
   let rowIndex = 0;
 
-  return (
+  return createPortal(
     <div
       className="print-invoice hidden print:block w-full max-w-[210mm] mx-auto bg-white text-black text-[11px] leading-relaxed p-[15mm]"
       style={{ fontFamily: "'system-ui', sans-serif" }}
@@ -187,7 +187,7 @@ export default function PrintableInvoice({
                     Labour &amp; Services
                   </td>
                 </tr>
-                {labour.filter(l => l.description).map((l, i) => {
+                {labour.filter((l) => l.description).map((l, i) => {
                   const total = l.pricingMode === "flat" ? l.rate : l.hours * l.rate;
                   const qtyLabel = l.pricingMode === "flat" ? "1" : `${l.hours}h`;
                   const rateLabel = l.pricingMode === "flat" ? `$${l.rate.toFixed(2)}` : `$${l.rate.toFixed(2)}/hr`;
@@ -258,6 +258,7 @@ export default function PrintableInvoice({
           <p className="text-[9px] text-[#D1D5DB]">Powered by Mobilis · mobilis.com</p>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
