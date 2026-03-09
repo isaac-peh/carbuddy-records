@@ -69,7 +69,7 @@ const Login = () => {
 
       {/* ── Left: brand panel ─────────────────────────────────────────── */}
       <div
-        className="hidden lg:flex lg:w-[45%] xl:w-1/2 relative overflow-hidden flex-col justify-between p-12 xl:p-16 flex-shrink-0"
+        className="hidden lg:flex lg:w-[45%] xl:w-1/2 relative overflow-hidden flex-shrink-0"
         style={{
           background:
             "linear-gradient(160deg, hsl(222,47%,8%) 0%, hsl(222,47%,13%) 55%, hsl(218,47%,11%) 100%)",
@@ -99,8 +99,10 @@ const Login = () => {
         {/* Right-edge separator */}
         <div className="absolute right-0 inset-y-0 w-px bg-white/[0.06]" />
 
-        {/* Logo */}
-        <div className="relative z-10">
+        {/* Content — constrained width, centered in panel */}
+        <div className="relative z-10 flex flex-col justify-between w-full max-w-[440px] mx-auto py-12 xl:py-16 px-10 xl:px-12">
+
+          {/* Logo */}
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-white/[0.07] border border-white/[0.08] flex items-center justify-center flex-shrink-0">
               <Car className="w-5 h-5 text-white" />
@@ -114,54 +116,60 @@ const Login = () => {
               </span>
             </div>
           </div>
-        </div>
 
-        {/* Headline + body */}
-        <div className="relative z-10 space-y-7">
-          {/* Product pill */}
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20">
-            <span className="w-1.5 h-1.5 rounded-full bg-accent flex-shrink-0" />
-            <span className="text-xs text-accent font-medium tracking-wide">
-              Workshop Operating System
-            </span>
-          </div>
+          {/* Headline + features */}
+          <div className="space-y-8">
+            <div className="space-y-4">
+              <div className="w-8 h-px bg-accent/60" />
+              <h1 className="text-4xl xl:text-[2.75rem] font-bold text-white leading-[1.1] tracking-tight">
+                Everything your<br />
+                workshop needs,<br />
+                <span className="text-accent">in one place.</span>
+              </h1>
+              <p className="text-white/50 text-[0.9375rem] leading-relaxed">
+                Inventory, invoicing, service records and vehicle history —
+                built for modern automotive workshops.
+              </p>
+            </div>
 
-          <div className="space-y-4">
-            <h1 className="text-4xl xl:text-[2.75rem] font-bold text-white leading-[1.1] tracking-tight">
-              Everything your<br />
-              workshop needs,<br />
-              <span className="text-accent">in one place.</span>
-            </h1>
-            <p className="text-white/50 text-[0.9375rem] leading-relaxed max-w-[22rem]">
-              Inventory, invoicing, service records and vehicle history —
-              built for modern automotive workshops.
-            </p>
-          </div>
+            {/* Feature list */}
+            <ul className="space-y-2.5">
+              {[
+                "Inventory & parts management",
+                "Invoicing & service records",
+                "Vehicle history reporting",
+              ].map((f) => (
+                <li key={f} className="flex items-center gap-3 text-sm text-white/55">
+                  <span className="w-1 h-1 rounded-full bg-accent/70 flex-shrink-0" />
+                  {f}
+                </li>
+              ))}
+            </ul>
 
-          {/* Stats */}
-          <div className="flex items-center gap-0 pt-1">
-            {STATS.map((stat, i) => (
-              <div
-                key={stat.label}
-                className={`flex-1 ${
-                  i < STATS.length - 1
-                    ? "border-r border-white/10 pr-5 mr-5"
-                    : ""
-                }`}
-              >
-                <div className="text-2xl font-bold text-white leading-none">
-                  {stat.value}
+            {/* Stats */}
+            <div className="flex items-center border-t border-white/[0.08] pt-6">
+              {STATS.map((stat, i) => (
+                <div
+                  key={stat.label}
+                  className={`flex-1 ${
+                    i < STATS.length - 1 ? "border-r border-white/10 pr-5 mr-5" : ""
+                  }`}
+                >
+                  <div className="text-2xl font-bold text-white leading-none">
+                    {stat.value}
+                  </div>
+                  <div className="text-xs text-white/35 mt-1">{stat.label}</div>
                 </div>
-                <div className="text-xs text-white/35 mt-1">{stat.label}</div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
 
-        {/* Copyright */}
-        <p className="relative z-10 text-white/20 text-xs">
-          © {new Date().getFullYear()} Mobilis Suite. All rights reserved.
-        </p>
+          {/* Copyright */}
+          <p className="text-white/20 text-xs">
+            © {new Date().getFullYear()} Mobilis Suite. All rights reserved.
+          </p>
+
+        </div>
       </div>
 
       {/* ── Right: form panel ─────────────────────────────────────────── */}
