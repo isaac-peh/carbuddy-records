@@ -899,6 +899,29 @@ export default function CreateInvoice() {
           </Card>
         </div>
       </div>
+
+      {/* Printable invoice (hidden on screen, visible on print) */}
+      <PrintableInvoice
+        invoiceNumber={invoiceNumber}
+        serviceDate={serviceDate}
+        serviceTypes={serviceTypes}
+        technician={technician}
+        customerName={customerName}
+        phone={phone}
+        email={email}
+        vehicle={resolvedVehicle}
+        odometer={odometer}
+        parts={parts}
+        labour={labour}
+        partsTotal={partsTotal}
+        labourTotal={labourTotal}
+        subtotal={subtotal}
+        discountValue={discountValue}
+        grandTotal={grandTotal}
+        discountMode={discountMode}
+        discountRaw={discountRaw}
+        remarks={remarks}
+      />
     </div>
   );
 }
