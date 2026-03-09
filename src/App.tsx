@@ -36,6 +36,8 @@ const App = () => (
               <Route path="services" element={<Services />} />
               <Route path="invoices" element={<Invoices />} />
               <Route path="invoices/new" element={<CreateInvoice />} />
+              <Route path="invoices/:id" element={<InvoiceDetail />} />
+              <Route path="invoices/:id/edit" element={<CreateInvoice />} />
             </Route>
 
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
