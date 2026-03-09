@@ -18,6 +18,9 @@ import Reports from "./pages/workshop/Reports";
 import Customers from "./pages/workshop/Customers";
 import CustomerDetail from "./pages/workshop/CustomerDetail";
 import Suppliers from "./pages/workshop/Suppliers";
+import PurchaseOrders from "./pages/workshop/PurchaseOrders";
+import CreatePurchaseOrder from "./pages/workshop/CreatePurchaseOrder";
+import PurchaseOrderDetail from "./pages/workshop/PurchaseOrderDetail";
 import { Navigate } from "react-router-dom";
 
 const queryClient = new QueryClient();
