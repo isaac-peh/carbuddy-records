@@ -171,7 +171,7 @@ const Login = () => {
       {/* ── Right: form panel ─────────────────────────────────────────── */}
       <div className="flex-1 flex items-center justify-center p-6 sm:p-10 lg:p-14 min-w-0">
         <div
-          className="w-full max-w-[360px] animate-fade-in"
+          className="w-full max-w-[420px] animate-fade-in"
           style={{ animationFillMode: "both" }}
         >
           {/* Mobile logo */}
