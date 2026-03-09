@@ -4,9 +4,13 @@ import { ArrowLeft, Edit, Plus, Trash2, Car, Calendar, DollarSign, FileText, Wre
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetFooter } from "@/components/ui/sheet";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
-import { mockCustomers } from "@/data/customersData";
+import { mockCustomers, Customer } from "@/data/customersData";
 import { mockInvoices } from "@/data/invoicesData";
 
 const statusColor: Record<string, string> = {
@@ -25,24 +29,32 @@ export default function CustomerDetail() {
   const navigate = useNavigate();
   const { toast } = useToast();
   
-  const customer = mockCustomers.find(c => c.id === id);
+  const [customer, setCustomer] = useState<Customer | undefined>(() => mockCustomers.find(c => c.id === id));
   const [activeVehicle, setActiveVehicle] = useState<string | null>(null);
   const [notes, setNotes] = useState(customer?.notes || "");
 
-  // Get customer's invoices and sort newest first
+  // Sheet state
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const [formName, setFormName] = useState("");
+  const [formPhone, setFormPhone] = useState("");
+  const [formEmail, setFormEmail] = useState("");
+  const [formNotes, setFormNotes] = useState("");
+  const [nameError, setNameError] = useState(false);
+
+  // Delete state
+  const [deleteOpen, setDeleteOpen] = useState(false);
+
   const customerInvoices = useMemo(() => {
     if (!customer) return [];
     let invoices = mockInvoices
       .filter(i => customer.invoiceHistory.includes(i.id))
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-    
     if (activeVehicle) {
       invoices = invoices.filter(i => i.plateNumber === activeVehicle);
     }
     return invoices;
   }, [customer, activeVehicle]);
 
-  // Extract top services
   const topServices = useMemo(() => {
     if (!customer) return [];
     const serviceCounts: Record<string, number> = {};
@@ -51,9 +63,7 @@ export default function CustomerDetail() {
         serviceCounts[t] = (serviceCounts[t] || 0) + 1;
       });
     });
-    return Object.entries(serviceCounts)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 3);
+    return Object.entries(serviceCounts).sort((a, b) => b[1] - a[1]).slice(0, 3);
   }, [customer]);
 
   if (!customer) {
@@ -64,6 +74,31 @@ export default function CustomerDetail() {
       </div>
     );
   }
+
+  const openEditSheet = () => {
+    setFormName(customer.name);
+    setFormPhone(customer.phone);
+    setFormEmail(customer.email);
+    setFormNotes(customer.notes || "");
+    setNameError(false);
+    setSheetOpen(true);
+  };
+
+  const handleSave = () => {
+    if (!formName.trim()) {
+      setNameError(true);
+      return;
+    }
+    setCustomer(prev => prev ? { ...prev, name: formName.trim(), phone: formPhone.trim(), email: formEmail.trim(), notes: formNotes.trim() || undefined } : prev);
+    toast({ title: "Customer updated", description: `${formName.trim()} has been updated.` });
+    setSheetOpen(false);
+  };
+
+  const handleDelete = () => {
+    toast({ title: "Customer deleted", description: `${customer.name} has been removed.` });
+    setDeleteOpen(false);
+    setTimeout(() => navigate('/workshop/customers'), 200);
+  };
 
   const handleSaveNotes = () => {
     toast({ title: "Note saved", description: "Customer notes have been updated." });
@@ -95,7 +130,7 @@ export default function CustomerDetail() {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="outline">
+            <Button variant="outline" onClick={openEditSheet}>
               <Edit className="w-4 h-4 mr-2" />
               Edit
             </Button>
@@ -103,7 +138,7 @@ export default function CustomerDetail() {
               <Plus className="w-4 h-4 mr-2" />
               New Invoice
             </Button>
-            <Button variant="outline" className="text-destructive hover:bg-destructive/10">
+            <Button variant="outline" className="text-destructive hover:bg-destructive/10" onClick={() => setDeleteOpen(true)}>
               <Trash2 className="w-4 h-4" />
             </Button>
           </div>
@@ -111,9 +146,8 @@ export default function CustomerDetail() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left Column (Main) */}
+        {/* Left Column */}
         <div className="lg:col-span-2 space-y-6">
-          
           {/* Vehicles Seen */}
           <Card className="shadow-soft border-border/50">
             <CardHeader className="pb-3">
@@ -163,23 +197,18 @@ export default function CustomerDetail() {
             </CardHeader>
             <CardContent>
               <div className="relative pl-6 space-y-8 border-l-2 border-border/50 py-2">
-                {customerInvoices.map((invoice, i) => (
+                {customerInvoices.map((invoice) => (
                   <div key={invoice.id} className="relative">
-                    {/* Timeline dot */}
                     <div className={`absolute -left-[33px] w-4 h-4 rounded-full border-4 border-background ${
                       invoice.status === 'Paid' ? 'bg-success' : 
                       invoice.status === 'Pending' ? 'bg-accent' : 
                       invoice.status === 'Overdue' ? 'bg-destructive' : 'bg-muted'
                     }`} />
-                    
                     <div className="bg-secondary/20 p-4 rounded-lg border border-border/50">
                       <div className="flex justify-between items-start mb-3">
                         <div>
                           <div className="flex items-center gap-2">
-                            <span 
-                              className="font-mono text-sm font-medium hover:text-accent cursor-pointer transition-colors"
-                              onClick={() => navigate(`/workshop/invoices/${invoice.id}`)}
-                            >
+                            <span className="font-mono text-sm font-medium hover:text-accent cursor-pointer transition-colors" onClick={() => navigate(`/workshop/invoices/${invoice.id}`)}>
                               {invoice.number}
                             </span>
                             <span className="text-xs text-muted-foreground">{invoice.date}</span>
@@ -196,7 +225,6 @@ export default function CustomerDetail() {
                           </Badge>
                         </div>
                       </div>
-                      
                       <div className="mb-3">
                         <p className="text-sm font-medium mb-1">{invoice.services}</p>
                         <div className="flex gap-1 flex-wrap">
@@ -205,7 +233,6 @@ export default function CustomerDetail() {
                           ))}
                         </div>
                       </div>
-
                       <div className="flex items-center justify-between pt-3 border-t border-border/50">
                         <div className="flex gap-1.5 flex-wrap flex-1">
                           {invoice.parts.slice(0, 2).map(p => (
@@ -235,10 +262,8 @@ export default function CustomerDetail() {
           </Card>
         </div>
 
-        {/* Right Sidebar (Sticky) */}
+        {/* Right Sidebar */}
         <div className="space-y-6 lg:sticky lg:top-24 h-fit">
-          
-          {/* Summary Card */}
           <Card className="shadow-soft border-border/50">
             <CardHeader className="pb-3">
               <CardTitle className="text-base font-semibold">Summary</CardTitle>
@@ -273,7 +298,6 @@ export default function CustomerDetail() {
             </CardContent>
           </Card>
 
-          {/* Top Services */}
           {topServices.length > 0 && (
             <Card className="shadow-soft border-border/50">
               <CardHeader className="pb-3">
@@ -291,7 +315,6 @@ export default function CustomerDetail() {
             </Card>
           )}
 
-          {/* Notes */}
           <Card className="shadow-soft border-border/50 bg-secondary/30">
             <CardHeader className="pb-3">
               <CardTitle className="text-base font-semibold">Internal Notes</CardTitle>
@@ -308,9 +331,56 @@ export default function CustomerDetail() {
               </Button>
             </CardContent>
           </Card>
-
         </div>
       </div>
+
+      {/* Edit Customer Sheet */}
+      <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
+        <SheetContent side="right" className="sm:max-w-md">
+          <SheetHeader>
+            <SheetTitle>Edit Customer</SheetTitle>
+          </SheetHeader>
+          <div className="space-y-4 py-6">
+            <div>
+              <Label htmlFor="detail-name">Full Name <span className="text-destructive">*</span></Label>
+              <Input id="detail-name" value={formName} onChange={e => { setFormName(e.target.value); setNameError(false); }} placeholder="Full name" className="mt-1.5" />
+              {nameError && <p className="text-destructive text-xs mt-1">Name is required</p>}
+            </div>
+            <div>
+              <Label htmlFor="detail-phone">Phone</Label>
+              <Input id="detail-phone" value={formPhone} onChange={e => setFormPhone(e.target.value)} placeholder="+60 12-345 6789" className="mt-1.5" />
+            </div>
+            <div>
+              <Label htmlFor="detail-email">Email</Label>
+              <Input id="detail-email" type="email" value={formEmail} onChange={e => setFormEmail(e.target.value)} placeholder="email@example.com" className="mt-1.5" />
+            </div>
+            <div>
+              <Label htmlFor="detail-notes">Notes</Label>
+              <Textarea id="detail-notes" value={formNotes} onChange={e => setFormNotes(e.target.value)} placeholder="Internal notes about this customer..." rows={3} className="mt-1.5 resize-none" />
+            </div>
+          </div>
+          <SheetFooter className="flex flex-row gap-2 sm:justify-end">
+            <Button variant="ghost" onClick={() => setSheetOpen(false)}>Cancel</Button>
+            <Button onClick={handleSave}>Save</Button>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
+
+      {/* Delete Customer AlertDialog */}
+      <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Customer</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will remove the customer from your directory. Their invoice history will not be deleted.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction className="bg-destructive text-destructive-foreground hover:bg-destructive/90" onClick={handleDelete}>Delete</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
