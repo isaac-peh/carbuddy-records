@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetFooter } from "@/components/ui/sheet";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
 import { mockCustomers, Customer } from "@/data/customersData";
@@ -334,13 +334,13 @@ export default function CustomerDetail() {
         </div>
       </div>
 
-      {/* Edit Customer Sheet */}
-      <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
-        <SheetContent side="right" className="sm:max-w-md">
-          <SheetHeader>
-            <SheetTitle>Edit Customer</SheetTitle>
-          </SheetHeader>
-          <div className="space-y-4 py-6">
+      {/* Edit Customer Dialog */}
+      <Dialog open={sheetOpen} onOpenChange={setSheetOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Edit Customer</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
             <div>
               <Label htmlFor="detail-name">Full Name <span className="text-destructive">*</span></Label>
               <Input id="detail-name" value={formName} onChange={e => { setFormName(e.target.value); setNameError(false); }} placeholder="Full name" className="mt-1.5" />
@@ -359,12 +359,12 @@ export default function CustomerDetail() {
               <Textarea id="detail-notes" value={formNotes} onChange={e => setFormNotes(e.target.value)} placeholder="Internal notes about this customer..." rows={3} className="mt-1.5 resize-none" />
             </div>
           </div>
-          <SheetFooter className="flex flex-row gap-2 sm:justify-end">
+          <DialogFooter className="flex flex-row gap-2 sm:justify-end">
             <Button variant="ghost" onClick={() => setSheetOpen(false)}>Cancel</Button>
             <Button onClick={handleSave}>Save</Button>
-          </SheetFooter>
-        </SheetContent>
-      </Sheet>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Delete Customer AlertDialog */}
       <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>

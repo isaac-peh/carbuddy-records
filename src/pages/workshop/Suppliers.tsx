@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetFooter } from "@/components/ui/sheet";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
 import { mockSuppliers, Supplier } from "@/data/suppliersData";
@@ -289,13 +289,13 @@ export default function Suppliers() {
         </CardContent>
       </Card>
 
-      {/* Add/Edit Supplier Sheet */}
-      <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
-        <SheetContent side="right" className="sm:max-w-lg">
-          <SheetHeader>
-            <SheetTitle>{editingSupplier ? "Edit Supplier" : "Add Supplier"}</SheetTitle>
-          </SheetHeader>
-          <div className="space-y-4 py-6">
+      {/* Add/Edit Supplier Dialog */}
+      <Dialog open={sheetOpen} onOpenChange={setSheetOpen}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>{editingSupplier ? "Edit Supplier" : "Add Supplier"}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
             <div>
               <Label htmlFor="sup-name">Supplier Name <span className="text-destructive">*</span></Label>
               <Input id="sup-name" value={formName} onChange={e => { setFormName(e.target.value); setNameError(false); }} placeholder="Company name" className="mt-1.5" />
@@ -331,12 +331,12 @@ export default function Suppliers() {
               <Switch id="sup-active" checked={formActive} onCheckedChange={setFormActive} />
             </div>
           </div>
-          <SheetFooter className="flex flex-row gap-2 sm:justify-end">
+          <DialogFooter className="flex flex-row gap-2 sm:justify-end">
             <Button variant="ghost" onClick={() => setSheetOpen(false)}>Cancel</Button>
             <Button onClick={handleSave}>Save</Button>
-          </SheetFooter>
-        </SheetContent>
-      </Sheet>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Delete Supplier AlertDialog */}
       <AlertDialog open={deleteSupplierIdOpen !== null} onOpenChange={open => { if (!open) setDeleteSupplierIdOpen(null); }}>
