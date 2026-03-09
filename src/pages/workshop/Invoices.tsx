@@ -201,7 +201,7 @@ export default function Invoices() {
               variant="outline"
               size="sm"
               className={cn(
-                "text-xs h-8 gap-1.5 shrink-0 w-full sm:w-auto justify-start sm:justify-center",
+                "text-xs h-8 gap-1.5 shrink-0",
                 hasDateFilter && "text-accent border-accent/30"
               )}
             >
