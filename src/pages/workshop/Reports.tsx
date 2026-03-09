@@ -430,7 +430,7 @@ export default function Reports() {
                       <div>
                         <div className="font-medium text-foreground flex items-center gap-2">
                           {c.name}
-                          {c.loyaltyStatus === 'VIP' && <Badge variant="secondary" className="text-[10px] h-4 px-1 bg-yellow-500/20 text-yellow-700 hover:bg-yellow-500/20">VIP</Badge>}
+                          {c.loyaltyStatus === 'VIP' && <Badge variant="secondary" className="text-[10px] h-4 px-1 bg-warning/20 text-warning hover:bg-warning/20">VIP</Badge>}
                           {c.loyaltyStatus === 'Regular' && <Badge variant="secondary" className="text-[10px] h-4 px-1">Regular</Badge>}
                         </div>
                         <div className="text-xs text-muted-foreground">{c.totalVisits} visits</div>
