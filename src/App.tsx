@@ -18,6 +18,9 @@ import Reports from "./pages/workshop/Reports";
 import Customers from "./pages/workshop/Customers";
 import CustomerDetail from "./pages/workshop/CustomerDetail";
 import Suppliers from "./pages/workshop/Suppliers";
+import PurchaseOrders from "./pages/workshop/PurchaseOrders";
+import CreatePurchaseOrder from "./pages/workshop/CreatePurchaseOrder";
+import PurchaseOrderDetail from "./pages/workshop/PurchaseOrderDetail";
 import { Navigate } from "react-router-dom";
 
 const queryClient = new QueryClient();
@@ -38,6 +41,10 @@ const App = () => (
               <Route index element={<Dashboard />} />
               <Route path="inventory" element={<Inventory />} />
               <Route path="services" element={<Services />} />
+              <Route path="purchase-orders" element={<PurchaseOrders />} />
+              <Route path="purchase-orders/new" element={<CreatePurchaseOrder />} />
+              <Route path="purchase-orders/:id" element={<PurchaseOrderDetail />} />
+              <Route path="purchase-orders/:id/edit" element={<CreatePurchaseOrder />} />
               <Route path="invoices" element={<Invoices />} />
               <Route path="invoices/new" element={<CreateInvoice />} />
               <Route path="invoices/:id" element={<InvoiceDetail />} />
