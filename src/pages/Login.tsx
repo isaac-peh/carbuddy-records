@@ -1,43 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./login.css";
-
-// ── Icons ──────────────────────────────────────────────────────────────────
-
-const CarIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M19 17H5a2 2 0 0 1-2-2V9a2 2 0 0 1 .38-1.22L6 4h12l2.62 3.78A2 2 0 0 1 21 9v6a2 2 0 0 1-2 2z"/>
-    <path d="M17 17v2a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-2"/>
-    <path d="M7 17v2a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-2"/>
-    <circle cx="7.5" cy="13.5" r="1.5"/>
-    <circle cx="16.5" cy="13.5" r="1.5"/>
-  </svg>
-);
-
-const EyeIcon = () => (
-  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
-    <circle cx="12" cy="12" r="3"/>
-  </svg>
-);
-
-const EyeOffIcon = () => (
-  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/>
-    <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/>
-    <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/>
-    <line x1="2" x2="22" y1="2" y2="22"/>
-  </svg>
-);
-
-const ArrowRightIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M5 12h14"/>
-    <path d="m12 5 7 7-7 7"/>
-  </svg>
-);
-
-// ── Component ──────────────────────────────────────────────────────────────
+import { Car, Eye, EyeOff, Lock, Mail } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -45,7 +12,6 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember] = useState(false);
-  const [focused, setFocused] = useState<string | null>(null);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,132 +19,134 @@ const Login = () => {
   };
 
   return (
-    <div className="login-root">
-      {/* Background atmosphere */}
-      <div className="login-bg-glow" />
-      <div className="login-bg-grid" />
-      <div className="login-grain" />
-
-      <div className="login-content">
-
-        {/* Brand mark */}
-        <div className="login-block" style={{ animationDelay: "0ms" }}>
-          <div className="login-brand">
-            <div className="login-logo-icon">
-              <CarIcon />
+    <div className="min-h-screen flex">
+      {/* Left panel - branding */}
+      <div className="hidden lg:flex lg:w-1/2 bg-primary relative overflow-hidden flex-col justify-between p-12">
+        <div className="absolute inset-0 opacity-[0.03]" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+        }} />
+        
+        <div className="relative z-10">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-10 h-10 rounded-lg bg-primary-foreground/10 flex items-center justify-center">
+              <Car className="w-6 h-6 text-primary-foreground" />
             </div>
-            <div>
-              <div className="login-brand-name">MOBILIS</div>
-              <div className="login-brand-sub">Workshop Suite</div>
-            </div>
+            <span className="text-2xl font-bold text-primary-foreground tracking-tight">Mobilis</span>
+          </div>
+          <p className="text-primary-foreground/50 text-sm ml-[52px]">Workshop Suite</p>
+        </div>
+
+        <div className="relative z-10 space-y-8">
+          <h1 className="text-4xl xl:text-5xl font-bold text-primary-foreground leading-tight">
+            Run your workshop<br />
+            <span className="text-accent">smarter.</span>
+          </h1>
+          <p className="text-primary-foreground/60 text-lg max-w-md leading-relaxed">
+            Inventory, services, invoicing & more — all in one place. Built for modern automotive workshops.
+          </p>
+          <div className="flex gap-8 pt-4">
+            {[
+              { value: "500+", label: "Workshops" },
+              { value: "99.9%", label: "Uptime" },
+              { value: "24/7", label: "Support" },
+            ].map((stat) => (
+              <div key={stat.label}>
+                <div className="text-2xl font-bold text-primary-foreground">{stat.value}</div>
+                <div className="text-sm text-primary-foreground/40">{stat.label}</div>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Divider */}
-        <div className="login-block" style={{ animationDelay: "80ms" }}>
-          <div className="login-divider-line" />
-        </div>
+        <p className="relative z-10 text-primary-foreground/30 text-xs">
+          © {new Date().getFullYear()} Mobilis Suite. All rights reserved.
+        </p>
+      </div>
 
-        {/* Headline */}
-        <div className="login-block" style={{ animationDelay: "160ms" }}>
-          <div className="login-headline">
-            <h1>
-              Welcome<br />back.
-            </h1>
-            <p>Sign in to your workshop account</p>
-          </div>
-        </div>
-
-        {/* Form */}
-        <form onSubmit={handleLogin}>
-
-          {/* Email */}
-          <div className="login-block login-field" style={{ animationDelay: "240ms" }}>
-            <label className="login-label" htmlFor="email">
-              Email address
-            </label>
-            <div className="login-input-wrap">
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@workshop.com"
-                required
-                className={`login-input${focused === "email" ? " focused" : ""}`}
-                onFocus={() => setFocused("email")}
-                onBlur={() => setFocused(null)}
-              />
+      {/* Right panel - login form */}
+      <div className="flex-1 flex items-center justify-center p-6 sm:p-12 bg-background">
+        <div className="w-full max-w-sm space-y-8">
+          {/* Mobile logo */}
+          <div className="lg:hidden flex items-center gap-3 justify-center mb-4">
+            <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center">
+              <Car className="w-5 h-5 text-primary-foreground" />
             </div>
+            <span className="text-xl font-bold text-foreground tracking-tight">Mobilis Suite</span>
           </div>
 
-          {/* Password */}
-          <div className="login-block login-field" style={{ animationDelay: "300ms" }}>
-            <div className="login-label-row">
-              <label className="login-label" htmlFor="password">
-                Password
-              </label>
-              <button type="button" className="login-forgot">
-                Forgot?
-              </button>
-            </div>
-            <div className="login-input-wrap">
-              <input
-                id="password"
-                type={showPassword ? "text" : "password"}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                required
-                className={`login-input has-toggle${focused === "password" ? " focused" : ""}`}
-                onFocus={() => setFocused("password")}
-                onBlur={() => setFocused(null)}
-              />
-              <button
-                type="button"
-                className="login-eye-btn"
-                onClick={() => setShowPassword((v) => !v)}
-                tabIndex={-1}
-                aria-label="Toggle password visibility"
-              >
-                {showPassword ? <EyeOffIcon /> : <EyeIcon />}
-              </button>
-            </div>
+          <div className="space-y-2">
+            <h2 className="text-2xl font-bold text-foreground tracking-tight">Welcome back</h2>
+            <p className="text-muted-foreground text-sm">Sign in to your workshop account</p>
           </div>
 
-          {/* Remember me */}
-          <div className="login-block" style={{ animationDelay: "360ms" }}>
-            <div className="login-remember-row">
-              <input
-                type="checkbox"
+          <form onSubmit={handleLogin} className="space-y-5">
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="you@workshop.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="pl-10"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="password">Password</Label>
+                <button type="button" className="text-xs text-accent hover:underline">
+                  Forgot password?
+                </button>
+              </div>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="pl-10 pr-10"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Checkbox
                 id="remember"
                 checked={remember}
-                onChange={(e) => setRemember(e.target.checked)}
+                onCheckedChange={(v) => setRemember(v as boolean)}
               />
-              <label htmlFor="remember" className="login-remember-label">
-                Keep me signed in
-              </label>
+              <Label htmlFor="remember" className="text-sm font-normal text-muted-foreground cursor-pointer">
+                Remember me for 30 days
+              </Label>
             </div>
-          </div>
 
-          {/* Submit */}
-          <div className="login-block" style={{ animationDelay: "420ms" }}>
-            <button type="submit" className="login-submit">
-              <span>Sign in</span>
-              <ArrowRightIcon />
+            <Button type="submit" className="w-full h-11 text-sm font-semibold">
+              Sign in
+            </Button>
+          </form>
+
+          <p className="text-center text-xs text-muted-foreground">
+            Don't have an account?{" "}
+            <button type="button" className="text-accent hover:underline font-medium">
+              Contact sales
             </button>
-          </div>
-
-        </form>
-
-        {/* Footer */}
-        <div className="login-block login-footer" style={{ animationDelay: "480ms" }}>
-          Need access?{" "}
-          <button type="button" className="login-contact">
-            Contact sales
-          </button>
+          </p>
         </div>
-
       </div>
     </div>
   );
