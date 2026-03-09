@@ -518,7 +518,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
                   <Button
                     size="sm"
                     variant="ghost"
-                    className="text-xs"
+                    className="text-xs whitespace-normal text-left"
                     onClick={() => {
                       setShowDisputePanel(false);
                       setDisputeVin("");
@@ -527,7 +527,7 @@ export default function VehicleLookup({ onVehicleResolved, onVehicleCleared }: V
                       setDisputeVehicleType("");
                     }}
                   >
-                    Cancel — Use Verified Vehicle
+                    Cancel — Use Verified
                   </Button>
                 </div>
               </div>
