@@ -269,13 +269,13 @@ export default function Customers() {
         </CardContent>
       </Card>
 
-      {/* Add/Edit Customer Sheet */}
-      <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
-        <SheetContent side="right" className="sm:max-w-md">
-          <SheetHeader>
-            <SheetTitle>{editingCustomer ? "Edit Customer" : "Add Customer"}</SheetTitle>
-          </SheetHeader>
-          <div className="space-y-4 py-6">
+      {/* Add/Edit Customer Dialog */}
+      <Dialog open={sheetOpen} onOpenChange={setSheetOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>{editingCustomer ? "Edit Customer" : "Add Customer"}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
             <div>
               <Label htmlFor="cust-name">Full Name <span className="text-destructive">*</span></Label>
               <Input id="cust-name" value={formName} onChange={e => { setFormName(e.target.value); setNameError(false); }} placeholder="Full name" className="mt-1.5" />
@@ -294,12 +294,12 @@ export default function Customers() {
               <Textarea id="cust-notes" value={formNotes} onChange={e => setFormNotes(e.target.value)} placeholder="Internal notes about this customer..." rows={3} className="mt-1.5 resize-none" />
             </div>
           </div>
-          <SheetFooter className="flex flex-row gap-2 sm:justify-end">
+          <DialogFooter className="flex flex-row gap-2 sm:justify-end">
             <Button variant="ghost" onClick={() => setSheetOpen(false)}>Cancel</Button>
             <Button onClick={handleSave}>Save</Button>
-          </SheetFooter>
-        </SheetContent>
-      </Sheet>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Delete Customer AlertDialog */}
       <AlertDialog open={deleteCustomerId !== null} onOpenChange={open => { if (!open) setDeleteCustomerId(null); }}>
