@@ -12,6 +12,7 @@ import Dashboard from "./pages/workshop/Dashboard";
 import Inventory from "./pages/workshop/Inventory";
 import Invoices from "./pages/workshop/Invoices";
 import CreateInvoice from "./pages/workshop/CreateInvoice";
+import InvoiceDetail from "./pages/workshop/InvoiceDetail";
 import Services from "./pages/workshop/Services";
 import { Navigate } from "react-router-dom";
 
