@@ -268,20 +268,20 @@ export default function Services() {
         {/* Table */}
         <Card className="shadow-soft border-border/50 overflow-hidden">
           <div className="overflow-x-auto">
-            <Table className="table-fixed">
+            <Table>
               <TableHeader>
                 <TableRow className="bg-secondary/30">
-                  <SortableHead label="Service Name" sortKey="name" currentSort={sortKey} currentDir={sortDir} onSort={handleSort} className="w-[240px]" />
+                  <SortableHead label="Service Name" sortKey="name" currentSort={sortKey} currentDir={sortDir} onSort={handleSort} />
                   <SortableHead label="Description" sortKey="description" currentSort={sortKey} currentDir={sortDir} onSort={handleSort} className="hidden sm:table-cell" />
-                  <SortableHead label="Flat Price" sortKey="flatPrice" currentSort={sortKey} currentDir={sortDir} onSort={handleSort} className="w-[110px] text-right" />
-                  <SortableHead label="Hourly Rate" sortKey="hourlyRate" currentSort={sortKey} currentDir={sortDir} onSort={handleSort} className="w-[110px] text-right" />
-                  <TableHead className="w-[60px]" />
+                  <SortableHead label="Flat Price" sortKey="flatPrice" currentSort={sortKey} currentDir={sortDir} onSort={handleSort} className="text-right whitespace-nowrap" />
+                  <SortableHead label="Hourly Rate" sortKey="hourlyRate" currentSort={sortKey} currentDir={sortDir} onSort={handleSort} className="text-right whitespace-nowrap" />
+                  <TableHead className="w-px" />
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {paginatedServices.map((service) => (
                   <TableRow key={service.id} className="hover:bg-secondary/20">
-                    <TableCell className="font-medium text-sm max-w-[240px]">
+                    <TableCell className="font-medium text-sm">
                       <TruncatedCell>{service.name}</TruncatedCell>
                     </TableCell>
                     <TableCell className="hidden sm:table-cell">
@@ -289,7 +289,7 @@ export default function Services() {
                     </TableCell>
                     <TableCell className="text-right text-sm font-medium">{service.flatPrice != null ? `$${service.flatPrice.toFixed(2)}` : <span className="text-muted-foreground">N/A</span>}</TableCell>
                     <TableCell className="text-right text-sm font-medium">{service.hourlyRate != null ? `$${service.hourlyRate.toFixed(2)}/hr` : <span className="text-muted-foreground">N/A</span>}</TableCell>
-                    <TableCell className="text-center">
+                    <TableCell className="whitespace-nowrap">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button variant="ghost" size="icon" className="h-7 w-7">

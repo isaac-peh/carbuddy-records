@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import {
   Package,
@@ -19,8 +20,9 @@ import {
 } from "lucide-react";
 import AddPartDialog from "@/components/workshop/AddPartDialog";
 import EditPartDialog from "@/components/workshop/EditPartDialog";
-import PartDetailDialog, { type StockMovement } from "@/components/workshop/PartDetailDialog";
+import { type StockMovement } from "@/components/workshop/PartDetailDialog";
 import ManageCategoriesDialog from "@/components/workshop/ManageCategoriesDialog";
+import { mockParts as initialMockParts, mockMovements as initialMockMovements, type Part } from "@/data/inventoryParts";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -54,153 +56,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-interface Part {
-  id: string;
-  name: string;
-  sku: string;
-  category: string;
-  stock: number;
-  minStock: number;
-  costPrice: number;
-  sellPrice: number;
-  supplier: string;
-  uom: string;
-  description: string;
-}
-
-const mockParts: Part[] = [
-  {
-    id: "1",
-    name: "Brake Pads (Front)",
-    sku: "BP-FRT-001",
-    category: "Brakes",
-    stock: 2,
-    minStock: 10,
-    costPrice: 35,
-    sellPrice: 65,
-    supplier: "AutoParts SG",
-    uom: "set",
-    description: "Front brake pad set for passenger vehicles. Semi-metallic compound with wear indicators.",
-  },
-  {
-    id: "2",
-    name: "Engine Oil 5W-30 (5L)",
-    sku: "OIL-5W30-5L",
-    category: "Lubricants",
-    stock: 3,
-    minStock: 8,
-    costPrice: 28,
-    sellPrice: 55,
-    supplier: "Shell SG",
-    uom: "bottle",
-    description: "Fully synthetic 5W-30 engine oil. 5-litre bottle. Suitable for most modern petrol engines.",
-  },
-  {
-    id: "3",
-    name: "Oil Filter (Universal)",
-    sku: "FLT-OIL-UNI",
-    category: "Filters",
-    stock: 4,
-    minStock: 15,
-    costPrice: 5,
-    sellPrice: 15,
-    supplier: "AutoParts SG",
-    uom: "pc",
-    description: "Universal spin-on oil filter. Fits most Japanese & Korean vehicles.",
-  },
-  {
-    id: "4",
-    name: "Spark Plug (Iridium)",
-    sku: "SP-IRD-001",
-    category: "Ignition",
-    stock: 24,
-    minStock: 10,
-    costPrice: 12,
-    sellPrice: 28,
-    supplier: "NGK Dist.",
-    uom: "pc",
-    description: "Iridium-tipped spark plug for improved ignition and fuel efficiency.",
-  },
-  {
-    id: "5",
-    name: "Air Filter",
-    sku: "FLT-AIR-001",
-    category: "Filters",
-    stock: 18,
-    minStock: 10,
-    costPrice: 8,
-    sellPrice: 22,
-    supplier: "AutoParts SG",
-    uom: "pc",
-    description: "Panel-type air filter element. Washable and reusable up to 3 times.",
-  },
-  {
-    id: "6",
-    name: "Brake Disc (Front)",
-    sku: "BD-FRT-001",
-    category: "Brakes",
-    stock: 6,
-    minStock: 4,
-    costPrice: 65,
-    sellPrice: 120,
-    supplier: "Brembo SG",
-    uom: "pc",
-    description: "Ventilated front brake disc rotor. Direct OEM replacement.",
-  },
-  {
-    id: "7",
-    name: "Coolant (1L)",
-    sku: "CLT-001",
-    category: "Lubricants",
-    stock: 12,
-    minStock: 6,
-    costPrice: 8,
-    sellPrice: 18,
-    supplier: "Shell SG",
-    uom: "bottle",
-    description: "Pre-mixed long-life coolant. Compatible with aluminium radiators.",
-  },
-  {
-    id: "8",
-    name: "Wiper Blade (Pair)",
-    sku: "WB-UNI-001",
-    category: "Accessories",
-    stock: 30,
-    minStock: 10,
-    costPrice: 10,
-    sellPrice: 25,
-    supplier: "Bosch SG",
-    uom: "pair",
-    description: "Flat-blade frameless wiper set. Universal J-hook adapter included.",
-  },
-  {
-    id: "9",
-    name: "Battery (12V 60Ah)",
-    sku: "BAT-12V-60",
-    category: "Electrical",
-    stock: 5,
-    minStock: 3,
-    costPrice: 85,
-    sellPrice: 160,
-    supplier: "Amaron SG",
-    uom: "pc",
-    description: "Maintenance-free calcium battery. 24-month warranty.",
-  },
-  {
-    id: "10",
-    name: "Transmission Fluid (1L)",
-    sku: "TF-ATF-001",
-    category: "Lubricants",
-    stock: 7,
-    minStock: 5,
-    costPrice: 15,
-    sellPrice: 32,
-    supplier: "Shell SG",
-    uom: "bottle",
-    description: "Multi-vehicle ATF suitable for most 4- and 6-speed automatic transmissions.",
-  },
-];
-
 const defaultCategories = [
   "Brakes",
   "Lubricants",
@@ -213,128 +68,6 @@ const defaultCategories = [
   "Others",
 ];
 
-const mockMovements: StockMovement[] = [
-  {
-    id: "m1",
-    partId: "1",
-    date: "2026-03-01T10:00:00Z",
-    type: "in",
-    quantity: 20,
-    referenceType: "purchase_order",
-    referenceId: "PO-0012",
-    costPriceAtTime: 35,
-    notes: "Initial stock order",
-    balanceAfter: 20,
-  },
-  {
-    id: "m2",
-    partId: "1",
-    date: "2026-03-02T14:30:00Z",
-    type: "out",
-    quantity: -4,
-    referenceType: "service_job",
-    referenceId: "SJ-0045",
-    costPriceAtTime: 35,
-    notes: "Brake job - Toyota Camry",
-    balanceAfter: 16,
-  },
-  {
-    id: "m3",
-    partId: "1",
-    date: "2026-03-02T16:00:00Z",
-    type: "out",
-    quantity: -14,
-    referenceType: "service_job",
-    referenceId: "SJ-0046",
-    costPriceAtTime: 35,
-    notes: "Fleet service",
-    balanceAfter: 2,
-  },
-  {
-    id: "m4",
-    partId: "2",
-    date: "2026-02-28T09:00:00Z",
-    type: "in",
-    quantity: 10,
-    referenceType: "purchase_order",
-    referenceId: "PO-0010",
-    costPriceAtTime: 28,
-    notes: "",
-    balanceAfter: 10,
-  },
-  {
-    id: "m5",
-    partId: "2",
-    date: "2026-03-01T11:00:00Z",
-    type: "out",
-    quantity: -5,
-    referenceType: "service_job",
-    referenceId: "SJ-0040",
-    costPriceAtTime: 28,
-    notes: "Oil change batch",
-    balanceAfter: 5,
-  },
-  {
-    id: "m6",
-    partId: "2",
-    date: "2026-03-02T08:00:00Z",
-    type: "out",
-    quantity: -2,
-    referenceType: "manual",
-    referenceId: "",
-    costPriceAtTime: 28,
-    notes: "Damaged stock write-off",
-    balanceAfter: 3,
-  },
-  {
-    id: "m7",
-    partId: "4",
-    date: "2026-02-25T10:00:00Z",
-    type: "in",
-    quantity: 30,
-    referenceType: "purchase_order",
-    referenceId: "PO-0008",
-    costPriceAtTime: 12,
-    notes: "",
-    balanceAfter: 30,
-  },
-  {
-    id: "m8",
-    partId: "4",
-    date: "2026-03-01T15:00:00Z",
-    type: "out",
-    quantity: -6,
-    referenceType: "service_job",
-    referenceId: "SJ-0042",
-    costPriceAtTime: 12,
-    notes: "Spark plug replacement x6",
-    balanceAfter: 24,
-  },
-  {
-    id: "m9",
-    partId: "3",
-    date: "2026-03-01T09:00:00Z",
-    type: "in",
-    quantity: 10,
-    referenceType: "purchase_order",
-    referenceId: "PO-0011",
-    costPriceAtTime: 5,
-    notes: "",
-    balanceAfter: 10,
-  },
-  {
-    id: "m10",
-    partId: "3",
-    date: "2026-03-02T12:00:00Z",
-    type: "out",
-    quantity: -6,
-    referenceType: "service_job",
-    referenceId: "SJ-0044",
-    costPriceAtTime: 5,
-    notes: "Oil change bundle",
-    balanceAfter: 4,
-  },
-];
 
 type SortKey = "name" | "sku" | "category" | "stock" | "costPrice" | "sellPrice" | "supplier" | "uom";
 type SortDir = "asc" | "desc";
@@ -392,7 +125,8 @@ function SortableHead({
 }
 
 export default function Inventory() {
-  const [parts, setParts] = useState<Part[]>(mockParts);
+  const navigate = useNavigate();
+  const [parts, setParts] = useState<Part[]>(initialMockParts);
   const [customCategories, setCustomCategories] = useState<string[]>([]);
   const [customSuppliers, setCustomSuppliers] = useState<string[]>([]);
   const [addDialogOpen, setAddDialogOpen] = useState(false);
@@ -409,27 +143,10 @@ export default function Inventory() {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [deletePart, setDeletePart] = useState<Part | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [detailPart, setDetailPart] = useState<Part | null>(null);
-  const [detailDialogOpen, setDetailDialogOpen] = useState(false);
-  const [movements, setMovements] = useState<StockMovement[]>(mockMovements);
+  const [movements] = useState<StockMovement[]>(initialMockMovements);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [manageCategoriesOpen, setManageCategoriesOpen] = useState(false);
-
-  const handleRecordMovement = (movData: Omit<StockMovement, "id" | "balanceAfter">) => {
-    const currentPart = parts.find((p) => p.id === movData.partId);
-    if (!currentPart) return;
-    const newBalance = currentPart.stock + movData.quantity;
-    const newMovement: StockMovement = {
-      ...movData,
-      id: String(Date.now()),
-      balanceAfter: newBalance,
-    };
-    setMovements((prev) => [...prev, newMovement]);
-    setParts((prev) => prev.map((p) => (p.id === movData.partId ? { ...p, stock: newBalance } : p)));
-    setDetailPart((prev) => (prev && prev.id === movData.partId ? { ...prev, stock: newBalance } : prev));
-    toast.success("Stock movement recorded");
-  };
 
   const allCategories = useMemo(() => {
     const merged = new Set([...defaultCategories, ...customCategories]);
@@ -592,14 +309,6 @@ export default function Inventory() {
           onSave={handleEditPart}
         />
 
-        <PartDetailDialog
-          open={detailDialogOpen}
-          onOpenChange={setDetailDialogOpen}
-          part={detailPart}
-          movements={movements}
-          onRecordMovement={handleRecordMovement}
-        />
-
         <AlertDialog
           open={deleteDialogOpen}
           onOpenChange={(v) => {
@@ -636,7 +345,7 @@ export default function Inventory() {
                 <Package className="w-4 h-4 text-muted-foreground" />
               </div>
               <div>
-                <p className="text-xl font-bold text-foreground">{mockParts.length}</p>
+                <p className="text-xl font-bold text-foreground">{initialMockParts.length}</p>
                 <p className="text-xs text-muted-foreground">Total SKUs</p>
               </div>
             </CardContent>
@@ -855,7 +564,7 @@ export default function Inventory() {
         {/* Table */}
         <Card className="shadow-soft border-border/50 overflow-hidden">
           <div className="overflow-x-auto">
-            <Table className="table-fixed">
+            <Table>
               <TableHeader>
                 <TableRow className="bg-secondary/30">
                   <SortableHead
@@ -864,7 +573,6 @@ export default function Inventory() {
                     currentSort={sortKey}
                     currentDir={sortDir}
                     onSort={handleSort}
-                    className="w-[200px]"
                   />
                   <SortableHead
                     label="SKU"
@@ -872,7 +580,7 @@ export default function Inventory() {
                     currentSort={sortKey}
                     currentDir={sortDir}
                     onSort={handleSort}
-                    className="w-[130px]"
+                    className="whitespace-nowrap"
                   />
                   <SortableHead
                     label="Category"
@@ -880,7 +588,7 @@ export default function Inventory() {
                     currentSort={sortKey}
                     currentDir={sortDir}
                     onSort={handleSort}
-                    className="w-[110px] hidden md:table-cell"
+                    className="hidden md:table-cell whitespace-nowrap"
                   />
                   <SortableHead
                     label="UOM"
@@ -888,7 +596,7 @@ export default function Inventory() {
                     currentSort={sortKey}
                     currentDir={sortDir}
                     onSort={handleSort}
-                    className="w-[80px] hidden md:table-cell"
+                    className="hidden md:table-cell whitespace-nowrap"
                   />
                   <SortableHead
                     label="Stock"
@@ -896,7 +604,7 @@ export default function Inventory() {
                     currentSort={sortKey}
                     currentDir={sortDir}
                     onSort={handleSort}
-                    className="w-[90px] text-center"
+                    className="text-center whitespace-nowrap"
                   />
                   <SortableHead
                     label="Cost"
@@ -904,7 +612,7 @@ export default function Inventory() {
                     currentSort={sortKey}
                     currentDir={sortDir}
                     onSort={handleSort}
-                    className="w-[90px] hidden sm:table-cell text-right"
+                    className="hidden sm:table-cell text-right whitespace-nowrap"
                   />
                   <SortableHead
                     label="Sell Price"
@@ -912,7 +620,7 @@ export default function Inventory() {
                     currentSort={sortKey}
                     currentDir={sortDir}
                     onSort={handleSort}
-                    className="w-[100px] text-right"
+                    className="text-right whitespace-nowrap"
                   />
                   <SortableHead
                     label="Supplier"
@@ -920,9 +628,9 @@ export default function Inventory() {
                     currentSort={sortKey}
                     currentDir={sortDir}
                     onSort={handleSort}
-                    className="w-[130px] hidden lg:table-cell"
+                    className="hidden lg:table-cell whitespace-nowrap"
                   />
-                  <TableHead className="w-[60px]" />
+                  <TableHead className="w-px" />
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -932,21 +640,18 @@ export default function Inventory() {
                     <TableRow
                       key={part.id}
                       className="hover:bg-secondary/20 cursor-pointer"
-                      onClick={() => {
-                        setDetailPart(part);
-                        setDetailDialogOpen(true);
-                      }}
+                      onClick={() => navigate(`/workshop/inventory/${part.id}`, { state: { part, movements: movements.filter((m) => m.partId === part.id) } })}
                     >
-                      <TableCell className="font-medium text-sm max-w-[200px]">
+                      <TableCell className="font-medium text-sm">
                         <span className="block md:hidden text-sm break-words">{part.name}</span>
                         <span className="hidden md:block">
                           <TruncatedCell>{part.name}</TruncatedCell>
                         </span>
                       </TableCell>
-                      <TableCell className="max-w-[130px]">
+                      <TableCell>
                         <TruncatedCell className="text-xs font-mono text-muted-foreground">{part.sku}</TruncatedCell>
                       </TableCell>
-                      <TableCell className="hidden md:table-cell max-w-[110px]">
+                      <TableCell className="hidden md:table-cell">
                         <Badge variant="secondary" className="text-[11px]">
                           {part.category}
                         </Badge>
@@ -964,10 +669,10 @@ export default function Inventory() {
                         ${part.costPrice}
                       </TableCell>
                       <TableCell className="text-right text-sm font-medium">${part.sellPrice}</TableCell>
-                      <TableCell className="hidden lg:table-cell max-w-[130px]">
+                      <TableCell className="hidden lg:table-cell">
                         <TruncatedCell className="text-xs text-muted-foreground">{part.supplier}</TruncatedCell>
                       </TableCell>
-                      <TableCell className="text-center" onClick={(e) => e.stopPropagation()}>
+                      <TableCell className="whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
                             <Button variant="ghost" size="icon" className="h-7 w-7">
@@ -976,10 +681,7 @@ export default function Inventory() {
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
                             <DropdownMenuItem
-                              onClick={() => {
-                                setDetailPart(part);
-                                setDetailDialogOpen(true);
-                              }}
+                              onClick={() => navigate(`/workshop/inventory/${part.id}`, { state: { part, movements: movements.filter((m) => m.partId === part.id) } })}
                             >
                               <Package className="w-3.5 h-3.5 mr-2" />
                               View

@@ -19,6 +19,7 @@ import Customers from "./pages/workshop/Customers";
 import CustomerDetail from "./pages/workshop/CustomerDetail";
 import Suppliers from "./pages/workshop/Suppliers";
 import PurchaseOrders from "./pages/workshop/PurchaseOrders";
+import ItemDetail from "./pages/workshop/ItemDetail";
 import CreatePurchaseOrder from "./pages/workshop/CreatePurchaseOrder";
 import PurchaseOrderDetail from "./pages/workshop/PurchaseOrderDetail";
 import { Navigate } from "react-router-dom";
@@ -40,6 +41,7 @@ const App = () => (
             <Route path="/workshop" element={<B2BLayout />}>
               <Route index element={<Dashboard />} />
               <Route path="inventory" element={<Inventory />} />
+              <Route path="inventory/:id" element={<ItemDetail />} />
               <Route path="services" element={<Services />} />
               <Route path="purchase-orders" element={<PurchaseOrders />} />
               <Route path="purchase-orders/new" element={<CreatePurchaseOrder />} />
