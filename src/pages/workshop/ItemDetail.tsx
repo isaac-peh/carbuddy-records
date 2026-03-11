@@ -61,7 +61,7 @@ const MOVEMENT_TYPE_CONFIG: Record<
     label: "OUT",
     className: "bg-destructive/15 text-destructive border-destructive/20",
     icon: ArrowUpCircle,
-    borderColor: "var(--destructive)",
+    borderColor: "hsl(var(--destructive))",
   },
   adjustment: {
     label: "ADJ",
