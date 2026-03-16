@@ -3,7 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import {
   ShoppingCart, Search, MoreHorizontal, Plus, AlertTriangle,
-  Package, Truck, Eye, Pencil, Send, PackageCheck, XCircle, Trash2,
+  Truck, Eye, Send, PackageCheck, XCircle, Trash2,
+  ArrowUpDown, ArrowUp, ArrowDown, ChevronLeft, ChevronRight,
+  X, DollarSign,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -22,6 +24,9 @@ import {
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { mockPurchaseOrders, type PurchaseOrder, type POStatus } from "@/data/purchaseOrdersData";
 
@@ -42,6 +47,35 @@ const STATUS_TABS: { value: string; label: string; filter: (po: PurchaseOrder) =
   { value: "CANCELLED", label: "Cancelled", filter: po => po.status === "CANCELLED" },
 ];
 
+type SortKey = "poNumber" | "supplierName" | "totalAmount" | "status" | "orderDate" | "expectedDeliveryDate";
+type SortDir = "asc" | "desc";
+
+const PAGE_SIZE_OPTIONS = [10, 20, 50];
+
+function SortableHead({ label, sortKey, currentSort, currentDir, onSort, className }: {
+  label: string;
+  sortKey: SortKey;
+  currentSort: SortKey | null;
+  currentDir: SortDir;
+  onSort: (key: SortKey) => void;
+  className?: string;
+}) {
+  const active = currentSort === sortKey;
+  return (
+    <TableHead className={`text-xs font-medium ${className ?? ""}`}>
+      <button
+        className="inline-flex items-center gap-1 hover:text-foreground transition-colors"
+        onClick={() => onSort(sortKey)}
+      >
+        {label}
+        {active
+          ? (currentDir === "asc" ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />)
+          : <ArrowUpDown className="w-3 h-3 opacity-40" />}
+      </button>
+    </TableHead>
+  );
+}
+
 function isOverdue(po: PurchaseOrder) {
   if (po.status !== "ORDERED" && po.status !== "PARTIALLY_RECEIVED") return false;
   if (!po.expectedDeliveryDate) return false;
@@ -53,6 +87,10 @@ export default function PurchaseOrders() {
   const [purchaseOrders, setPurchaseOrders] = useState(mockPurchaseOrders);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
+  const [sortKey, setSortKey] = useState<SortKey | null>(null);
+  const [sortDir, setSortDir] = useState<SortDir>("asc");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(20);
 
   // Dialog states
   const [submitPOId, setSubmitPOId] = useState<string | null>(null);
@@ -61,11 +99,13 @@ export default function PurchaseOrders() {
   const [receivePO, setReceivePO] = useState<PurchaseOrder | null>(null);
   const [receiveQtys, setReceiveQtys] = useState<Record<string, number>>({});
 
-  // KPIs
-  const nonCancelled = purchaseOrders.filter(po => po.status !== "CANCELLED");
-  const pendingDelivery = purchaseOrders.filter(po => po.status === "ORDERED" || po.status === "PARTIALLY_RECEIVED");
+  // KPIs (derived from full list, not filtered view)
+  const nonCancelledCount = purchaseOrders.filter(po => po.status !== "CANCELLED").length;
+  const pendingDeliveryCount = purchaseOrders.filter(po => po.status === "ORDERED" || po.status === "PARTIALLY_RECEIVED").length;
   const overdueCount = purchaseOrders.filter(isOverdue).length;
-  const openValue = pendingDelivery.reduce((s, po) => s + po.totalAmount, 0);
+  const openValue = purchaseOrders
+    .filter(po => po.status === "ORDERED" || po.status === "PARTIALLY_RECEIVED")
+    .reduce((s, po) => s + po.totalAmount, 0);
 
   const statusCounts = useMemo(() => {
     const counts: Record<string, number> = {};
@@ -84,6 +124,28 @@ export default function PurchaseOrders() {
         po.lines.some(l => l.name.toLowerCase().includes(q));
     });
   }, [purchaseOrders, search, statusFilter]);
+
+  const handleSort = (key: SortKey) => {
+    if (sortKey === key) setSortDir((d) => (d === "asc" ? "desc" : "asc"));
+    else { setSortKey(key); setSortDir("asc"); }
+  };
+
+  const sorted = useMemo(() => {
+    if (!sortKey) return filtered;
+    return [...filtered].sort((a, b) => {
+      const aVal = a[sortKey];
+      const bVal = b[sortKey];
+      if (typeof aVal === "number" && typeof bVal === "number")
+        return sortDir === "asc" ? aVal - bVal : bVal - aVal;
+      const aStr = aVal == null ? "" : String(aVal);
+      const bStr = bVal == null ? "" : String(bVal);
+      return sortDir === "asc" ? aStr.localeCompare(bStr) : bStr.localeCompare(aStr);
+    });
+  }, [filtered, sortKey, sortDir]);
+
+  const totalCount = filtered.length;
+  const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
+  const paginatedPOs = sorted.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   const handleSubmitOrder = () => {
     if (!submitPOId) return;
@@ -162,82 +224,131 @@ export default function PurchaseOrders() {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <Card className="shadow-soft"><CardContent className="p-5">
-          <p className="text-xs font-medium text-muted-foreground mb-1">Total POs</p>
-          <p className="text-2xl font-bold">{nonCancelled.length}</p>
-        </CardContent></Card>
-        <Card className="shadow-soft"><CardContent className="p-5">
-          <p className="text-xs font-medium text-muted-foreground mb-1">Pending Delivery</p>
-          <p className={cn("text-2xl font-bold", pendingDelivery.length > 0 && "text-warning")}>{pendingDelivery.length}</p>
-        </CardContent></Card>
-        <Card className="shadow-soft"><CardContent className="p-5">
-          <p className="text-xs font-medium text-muted-foreground mb-1">Overdue</p>
-          <div className="flex items-center gap-2">
-            <p className={cn("text-2xl font-bold", overdueCount > 0 && "text-destructive")}>{overdueCount}</p>
-            {overdueCount > 0 && <AlertTriangle className="w-4 h-4 text-destructive" />}
-          </div>
-        </CardContent></Card>
-        <Card className="shadow-soft"><CardContent className="p-5">
-          <p className="text-xs font-medium text-muted-foreground mb-1">Total Value (Open)</p>
-          <p className="text-2xl font-bold text-accent">${openValue.toLocaleString()}</p>
-        </CardContent></Card>
+        <Card className="shadow-soft border-border/50">
+          <CardContent className="p-4 flex items-center gap-3">
+            <div className="w-9 h-9 rounded-lg bg-secondary flex items-center justify-center shrink-0">
+              <ShoppingCart className="w-4 h-4 text-muted-foreground" />
+            </div>
+            <div>
+              <p className="text-xl font-bold text-foreground">{nonCancelledCount}</p>
+              <p className="text-xs text-muted-foreground">Total POs</p>
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="shadow-soft border-border/50">
+          <CardContent className="p-4 flex items-center gap-3">
+            <div className={cn("w-9 h-9 rounded-lg flex items-center justify-center shrink-0", pendingDeliveryCount > 0 ? "bg-warning/10" : "bg-secondary")}>
+              <Truck className={cn("w-4 h-4", pendingDeliveryCount > 0 ? "text-warning" : "text-muted-foreground")} />
+            </div>
+            <div>
+              <p className={cn("text-xl font-bold", pendingDeliveryCount > 0 ? "text-warning" : "text-foreground")}>{pendingDeliveryCount}</p>
+              <p className="text-xs text-muted-foreground">Pending Delivery</p>
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="shadow-soft border-border/50">
+          <CardContent className="p-4 flex items-center gap-3">
+            <div className={cn("w-9 h-9 rounded-lg flex items-center justify-center shrink-0", overdueCount > 0 ? "bg-destructive/10" : "bg-secondary")}>
+              <AlertTriangle className={cn("w-4 h-4", overdueCount > 0 ? "text-destructive" : "text-muted-foreground")} />
+            </div>
+            <div>
+              <p className={cn("text-xl font-bold", overdueCount > 0 ? "text-destructive" : "text-foreground")}>{overdueCount}</p>
+              <p className="text-xs text-muted-foreground">Overdue</p>
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="shadow-soft border-border/50">
+          <CardContent className="p-4 flex items-center gap-3">
+            <div className="w-9 h-9 rounded-lg bg-secondary flex items-center justify-center shrink-0">
+              <DollarSign className="w-4 h-4 text-muted-foreground" />
+            </div>
+            <div>
+              <p className="text-xl font-bold text-accent">${openValue.toLocaleString()}</p>
+              <p className="text-xs text-muted-foreground">Open Value</p>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Filters */}
-      <div className="flex flex-col gap-3">
-        <div className="flex flex-col sm:flex-row gap-3">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <Input placeholder="Search PO number, supplier, item..." className="pl-9 bg-background" value={search} onChange={e => setSearch(e.target.value)} />
-          </div>
+      <div className="flex flex-wrap items-center gap-3">
+        <div className="relative w-full sm:max-w-sm flex-1 min-w-[200px]">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
+          <Input
+            placeholder="Search PO number, supplier, item..."
+            value={search}
+            onChange={e => { setSearch(e.target.value); setCurrentPage(1); }}
+            className={`pl-9 bg-secondary/60 border-0 shadow-soft ${search ? "pr-8" : ""}`}
+          />
+          {search && (
+            <button
+              onClick={() => { setSearch(""); setCurrentPage(1); }}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          )}
         </div>
         <div className="flex flex-wrap gap-1.5">
           {STATUS_TABS.map(tab => (
             <Button
               key={tab.value}
-              variant={statusFilter === tab.value ? "default" : "outline"}
+              variant="outline"
               size="sm"
-              className={cn("text-xs gap-1.5", statusFilter === tab.value && "bg-accent text-accent-foreground hover:bg-accent/90")}
-              onClick={() => setStatusFilter(tab.value)}
+              className={cn(
+                "text-sm gap-1.5 px-4",
+                statusFilter === tab.value
+                  ? "bg-accent text-accent-foreground border-accent hover:bg-accent/90 hover:text-accent-foreground"
+                  : "hover:bg-secondary hover:text-foreground"
+              )}
+              onClick={() => { setStatusFilter(tab.value); setCurrentPage(1); }}
             >
               {tab.label}
-              <Badge variant="secondary" className="ml-1 text-[10px] h-4 px-1.5">{statusCounts[tab.value]}</Badge>
+              <Badge variant="secondary" className="ml-1 text-[10px] h-5 px-1.5">{statusCounts[tab.value]}</Badge>
             </Button>
           ))}
         </div>
       </div>
 
       {/* Table */}
-      <Card className="shadow-soft border-border/50">
-        <CardContent className="p-0">
-          {filtered.length === 0 ? (
-            <div className="py-12 flex flex-col items-center justify-center text-center">
-              <div className="w-12 h-12 rounded-full bg-secondary flex items-center justify-center mb-4">
-                <ShoppingCart className="w-6 h-6 text-muted-foreground" />
-              </div>
-              <h3 className="text-lg font-medium">No purchase orders found</h3>
-              <p className="text-sm text-muted-foreground mt-1 max-w-sm">Create a PO to start tracking procurement.</p>
+      <Card className="shadow-soft border-border/50 overflow-hidden">
+        {sorted.length === 0 ? (
+          <div className="py-12 flex flex-col items-center justify-center text-center">
+            <div className="w-12 h-12 rounded-full bg-secondary flex items-center justify-center mb-4">
+              <ShoppingCart className="w-6 h-6 text-muted-foreground" />
+            </div>
+            <h3 className="text-lg font-medium">
+              {search ? "No purchase orders found" : "No purchase orders yet"}
+            </h3>
+            <p className="text-sm text-muted-foreground mt-1 max-w-sm">
+              {search
+                ? `No results for "${search}". Try a different search.`
+                : "Create a PO to start tracking procurement."}
+            </p>
+            {!search && (
               <Button className="mt-4" onClick={() => navigate("/workshop/purchase-orders/new")}>
                 <Plus className="w-4 h-4 mr-2" /> New Purchase Order
               </Button>
-            </div>
-          ) : (
+            )}
+          </div>
+        ) : (
+          <>
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
-                  <TableRow className="bg-secondary/50">
-                    <TableHead className="text-xs font-medium">PO Number</TableHead>
-                    <TableHead className="text-xs font-medium">Supplier</TableHead>
-                    <TableHead className="text-xs font-medium text-center">Items</TableHead>
-                    <TableHead className="text-xs font-medium text-right">Total</TableHead>
-                    <TableHead className="text-xs font-medium">Status</TableHead>
-                    <TableHead className="text-xs font-medium">Order Date</TableHead>
-                    <TableHead className="text-xs font-medium">Expected Delivery</TableHead>
-                    <TableHead className="text-xs font-medium text-right">Actions</TableHead>
+                  <TableRow className="bg-secondary/30">
+                    <SortableHead label="PO Number" sortKey="poNumber" currentSort={sortKey} currentDir={sortDir} onSort={handleSort} />
+                    <SortableHead label="Supplier" sortKey="supplierName" currentSort={sortKey} currentDir={sortDir} onSort={handleSort} />
+                    <TableHead className="text-xs font-medium text-center whitespace-nowrap">Items</TableHead>
+                    <SortableHead label="Total" sortKey="totalAmount" currentSort={sortKey} currentDir={sortDir} onSort={handleSort} className="text-right whitespace-nowrap" />
+                    <SortableHead label="Status" sortKey="status" currentSort={sortKey} currentDir={sortDir} onSort={handleSort} />
+                    <SortableHead label="Order Date" sortKey="orderDate" currentSort={sortKey} currentDir={sortDir} onSort={handleSort} className="whitespace-nowrap" />
+                    <SortableHead label="Expected Delivery" sortKey="expectedDeliveryDate" currentSort={sortKey} currentDir={sortDir} onSort={handleSort} className="whitespace-nowrap" />
+                    <TableHead className="w-px" />
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {filtered.map(po => {
+                  {paginatedPOs.map(po => {
                     const cfg = STATUS_CONFIG[po.status];
                     const overdue = isOverdue(po);
                     return (
@@ -268,7 +379,7 @@ export default function PurchaseOrders() {
                             {overdue && <Badge variant="outline" className="text-[10px] bg-destructive/10 text-destructive border-destructive/20">Overdue</Badge>}
                           </div>
                         </TableCell>
-                        <TableCell className="text-right" onClick={e => e.stopPropagation()}>
+                        <TableCell className="whitespace-nowrap" onClick={e => e.stopPropagation()}>
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                               <Button variant="ghost" className="h-8 w-8 p-0"><MoreHorizontal className="w-4 h-4" /></Button>
@@ -277,11 +388,6 @@ export default function PurchaseOrders() {
                               <DropdownMenuItem onClick={() => navigate(`/workshop/purchase-orders/${po.id}`)}>
                                 <Eye className="w-4 h-4 mr-2" /> View
                               </DropdownMenuItem>
-                              {po.status === "DRAFT" && (
-                                <DropdownMenuItem onClick={() => navigate(`/workshop/purchase-orders/${po.id}/edit`)}>
-                                  <Pencil className="w-4 h-4 mr-2" /> Edit
-                                </DropdownMenuItem>
-                              )}
                               {po.status === "DRAFT" && (
                                 <DropdownMenuItem onClick={() => setSubmitPOId(po.id)}>
                                   <Send className="w-4 h-4 mr-2" /> Submit Order
@@ -292,7 +398,7 @@ export default function PurchaseOrders() {
                                   <PackageCheck className="w-4 h-4 mr-2" /> Receive Goods
                                 </DropdownMenuItem>
                               )}
-                              <DropdownMenuSeparator />
+                              {(po.status === "DRAFT" || po.status === "CANCELLED") && <DropdownMenuSeparator />}
                               {po.status === "DRAFT" && (
                                 <DropdownMenuItem className="text-destructive focus:bg-destructive/10 focus:text-destructive" onClick={() => setCancelPOId(po.id)}>
                                   <XCircle className="w-4 h-4 mr-2" /> Cancel PO
@@ -312,8 +418,34 @@ export default function PurchaseOrders() {
                 </TableBody>
               </Table>
             </div>
-          )}
-        </CardContent>
+
+            {/* Pagination */}
+            <div className="flex items-center justify-between px-4 py-3 border-t border-border/50">
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <span>Rows per page</span>
+                <Select value={String(pageSize)} onValueChange={(v) => { setPageSize(Number(v)); setCurrentPage(1); }}>
+                  <SelectTrigger className="h-7 w-[60px] text-xs"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    {PAGE_SIZE_OPTIONS.map((s) => (
+                      <SelectItem key={s} value={String(s)}>{s}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <span className="ml-2">
+                  {totalCount === 0 ? "0" : `${(currentPage - 1) * pageSize + 1}–${Math.min(currentPage * pageSize, totalCount)}`} of {totalCount}
+                </span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Button variant="ghost" size="icon" className="h-7 w-7" disabled={currentPage <= 1} onClick={() => setCurrentPage(p => p - 1)}>
+                  <ChevronLeft className="w-4 h-4" />
+                </Button>
+                <Button variant="ghost" size="icon" className="h-7 w-7" disabled={currentPage >= totalPages} onClick={() => setCurrentPage(p => p + 1)}>
+                  <ChevronRight className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+          </>
+        )}
       </Card>
 
       {/* Submit Order AlertDialog */}
